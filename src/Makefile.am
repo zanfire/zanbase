@@ -1,4 +1,7 @@
-libzanbase_a_SOURCES = \
+lib_LTLIBRARIES = libzanbase.la
+
+libzanbase_la_CPPFLAGS = -I$(top_srcdir)/include
+libzanbase_la_SOURCES = \
 	zObject.cpp \
 	zReference.cpp \
 	zBuffer.cpp \

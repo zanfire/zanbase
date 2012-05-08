@@ -6,7 +6,7 @@ AC_INIT([zanbase], [0.1], [zanfire@gmail.com])
 AM_INIT_AUTOMAKE(silent-rules)
 LT_INIT([dlopen])
 AC_CONFIG_SRCDIR([src/zString.cpp])
-AC_CONFIG_HEADERS([config.h:config.h.in])
+AC_CONFIG_HEADERS([src/config.h:config.h.in])
 AC_CONFIG_MACRO_DIR([m4])
 
 # Checks for programs.
@@ -86,7 +86,8 @@ AC_CHECK_FUNCS([floor gethostname memset sqrt socket bind])
 
 AC_CONFIG_FILES([Makefile
 		include/Makefile
-                src/Makefile])
+                src/Makefile
+		tests/Makefile])
 AC_OUTPUT
 
 echo \

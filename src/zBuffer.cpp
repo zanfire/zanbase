@@ -17,6 +17,7 @@
 #include "zBuffer.h"
 
 #include <stdlib.h>
+#include <string.h>
 
 zBuffer::zBuffer(void) : zObject() {
   buffer_ = NULL;
@@ -41,6 +42,7 @@ void zBuffer::resize(int size) {
   size_ = size;
 }
 
+
 bool zBuffer::append(unsigned char const* buffer, int bufferSize) {
   if (bufferSize < 0) return false;
   if (buffer == NULL) return false;
@@ -62,3 +64,4 @@ bool zBuffer::appendPascalString(zString const& str) {
 
   return false;
 }
+

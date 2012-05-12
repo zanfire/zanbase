@@ -19,6 +19,7 @@
 
 #include "global.h"
 #include "zObject.h"
+#include "zString.h"
 
 class zBuffer : public zObject {
 protected:

@@ -22,18 +22,17 @@
 #include <errno.h>
 #include <limits.h>
 
+#include "zLogger.h"
+
 zLogger* g_logger = NULL;
 
 void showCopyright(char* programName);
 void showHelp(char* programName);
 void showHelp(char* programName);
-
+void handleInvalidArg(char* programName, char invalidArg);
 int main(int argc, char** argv) {
-  g_logger = zLogger::getLogger("main");
-  int opt = -1;
-  int localPort = -1;
-  zString addressStr;
-  zSocketAddress* localAddress = NULL;
+  g_logger = zLogger::getLogger("zanbase_test_runner");
+  int opt = 0;
 
   while ((opt = getopt(argc, argv, "hva:p:")) != -1) {
     switch (opt) {

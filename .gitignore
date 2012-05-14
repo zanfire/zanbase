@@ -11,3 +11,19 @@ Makefile.in
 /depcomp
 /install-sh
 /missing
+
+
+# Compiled code
+*.o
+*.o.d
+*.so
+*.a
+*.la
+
+# building directory.
+
+/build/*
+
+# ctags list
+
+tags

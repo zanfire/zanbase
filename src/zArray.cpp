@@ -1,6 +1,7 @@
 #include "zArray.h"
 
-#include <stdlib.h>
+#include <stdlib.h> // malloc, free, realloc.
+#include <string.h> // memcpy.
 
 #include "zMutex.h"
 #include "zScopeMutex.h"
@@ -10,11 +11,11 @@ zArray::zArray(IsThreadSafe threadSafe, int element_size_bytes, int initial_elem
   _element_size_bytes = element_size_bytes;
   _num_elements = 0;
   _max_elements = initial_elements;
-  _elemets_per_slot = initial_elements;
+  _elements_per_block = initial_elements;
   // Allocation.
-  _elements = malloc(_max_elements * _element_size_bytes);
+  _elements = (uint8_t*)malloc(_max_elements * _element_size_bytes);
   // ThreadSafe.
-  _mtx = threadSafe == IsThreadSafe::YES ? new zMutex() : NULL;
+  _mtx = threadSafe == YES ? new zMutex() : NULL;
 }
 
 
@@ -26,7 +27,7 @@ zArray::~zArray(void) {
 
 bool zArray::append(void* element) {
   zScopeMutex scope(_mtx);
-  insert(get_count(), element);
+  return insert(get_count(), element);
 }
 
 
@@ -35,30 +36,30 @@ bool zArray::insert(int index, void* element) {
   if (element == NULL) return false;
   if (index < 0) return false;
   if (_num_elements == _max_elements) {
-    _max_elements += _elements_per_blocks;
-    _elements = realloc(_elements, _max_elements * _elements_size_bytes;
+    _max_elements += _elements_per_block;
+    _elements = (uint8_t*)realloc(_elements, _max_elements * _element_size_bytes);
   }
   // 
   _num_elements++;
   for(int i = (_num_elements -1); i > index; i--) {
     replace(i, &(_elements[(i -1) * _element_size_bytes]));
   }
-  replace(index, element);
+  return replace(index, element);
 }
 
 
 
-bool zVector::remove(int index, void* element) {
+bool zArray::remove(int index, void* element) {
   zScopeMutex scope(_mtx);
   if (index >=  _num_elements) return false;
   if (index < 0) return false;
   
-  memcpy(element, _elements[index * _element_size_bytes], _element_size_bytes);
+  memcpy(element, &(_elements[index * _element_size_bytes]), _element_size_bytes);
 
   for(int i = index; i < _num_elements -1; i++) {
     replace(i, &(_elements[ (i + 1) * _element_size_bytes]));
   }
-  _num_emenets--;
+  _num_elements--;
   return true;
 }
 
@@ -66,7 +67,7 @@ bool zVector::remove(int index, void* element) {
 void zArray::clear(void) {
   zScopeMutex scope(_mtx);
 
-  _num_element = 0;
+  _num_elements = 0;
   // Clear memory is needed? For security reason yes. But is it the case?
 }
 
@@ -76,7 +77,7 @@ bool zArray::get(int index, void* element) const {
   if (index < 0) return false;
   if (index >= _num_elements) return false;
 
-  memcpy(element, _elements[idenx * _element_size_bytes], _element_size_bytes);
+  memcpy(element, &(_elements[index * _element_size_bytes]), _element_size_bytes);
   return true;
 }
 
@@ -85,9 +86,10 @@ bool zArray::get(int index, void* element) const {
 bool zArray::replace(int index, void* element) {
   zScopeMutex scope(_mtx);
   if (index < 0) return false;
-  if (index >= _num_element) return false;
+  if (index >= _num_elements) return false;
 
   uint8_t* target = _elements + (index * _element_size_bytes);
   memcpy(target, element, _element_size_bytes);
   return true;
 }
+

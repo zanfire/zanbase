@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright 2009 Matteo Valdina
+ * Copyright 2009 - 2012 Matteo Valdina
  *      
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,21 +17,27 @@
 #ifndef ZREFERENCE_H__
 #define ZREFERENCE_H__
 
-#include "global.h"
+#include "zCommon.h"
 
+/// This class provides a reference counter with
+/// atomic operation.
+///
+/// This class can not be derived.
+/// This class is thread-safe.
+/// @author Matteo Valdina
 class zReference {
+
 private:
-	volatile zReferenceCounter count_;
+	volatile zref_t _count;
 public:
   zReference(void);
-  virtual ~zReference(void);
+  ~zReference(void);
 
-  virtual zReferenceCounter increment(void);
-  virtual zReferenceCounter decrement(void);
+  zref_t increment(void);
+  zref_t decrement(void);
 
-  inline zReferenceCounter getCount(void) const { return count_; }
- 
- protected:
+  inline zref_t get_count(void) const { return _count; }
 };
 
-#endif // REFERENCE_H__
+#endif // ZREFERENCE_H__
+

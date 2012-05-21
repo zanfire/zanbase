@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright 2009 Matteo Valdina
+ * Copyright 2009 - 2012 Matteo Valdina
  *      
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,28 +17,31 @@
 #ifndef ZBUFFER_H__
 #define ZBUFFER_H__
 
-#include "global.h"
+#include "zCommon.h"
 #include "zObject.h"
 #include "zString.h"
 
+///
+/// @author Matteo Valdina
 class zBuffer : public zObject {
 protected:
-  unsigned char* buffer_;
-  int size_;
+  uint8_t* _buffer;
+  int _size;
 public:
-
   zBuffer(int size);
-  virtual ~zBuffer(void);
 
-  virtual unsigned char* getBuffer() const { return buffer_; }
-  int getSize(void) const { return size_; }
+  /// Return the pointer to the allocated buffer
+  uint8_t* get_buffer() const { return buffer_; }
+  int get_size(void) const { return size_; }
   void resize(int size);
 
-  bool append(unsigned char const* buffer, int bufferSize);
-  bool appendPascalString(zString const& str);
+  bool append(uint8_t const* buffer, int size);
+  /// Append a zString in the buffer.
+  bool appen(zString const* str, zString::StoreFormat store);
 
 protected:
   zBuffer(void);
+  virtual ~zBuffer(void);
 };
 
 #endif // ZBUFFER_H__

@@ -17,7 +17,6 @@
 #ifndef ZSCOPEMUTEX_H__
 #define ZSCOPEMUTEX_H__
 
-#include "zObject.h"
 
 class zMutex;
 

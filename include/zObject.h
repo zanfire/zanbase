@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright 2009 Matteo Valdina
+ * Copyright 2009 - 2012 Matteo Valdina
  *      
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,25 +17,34 @@
 #ifndef ZOBJECT_H__
 #define ZOBJECT_H__
 
-#include "global.h"
+#include "zCommon.h"
 #include "zReference.h"
 
-class zLogger;
-
+/// This class provides an interface/implementation reference system.
+/// 
+/// @author Matteo Valdina
 class zObject {
 
-private:
+protected:
   zReference _reference;
+
 public:
-  virtual bool equals(zObject* obj) const;
-  
-  void acquireReference(void);
-  void releaseReference(void);
-  inline zReferenceCounter getReferenceCount(void) { return _reference.getCount(); }
+
+  /// Acquire a reference.
+  virtual zref_t acquire_reference(void);
+  /// Release a reference.
+  /// The last reference cause the destruction of the instance.
+  virtual zref_t release_reference(void);
+
+  inline zref_t get_reference_count(void) { return _reference.get_count(); }
 
 protected:
+  /// Ctor is protected because the zObject base class cannot be instantiated.
   zObject(void);
+  /// Dtor is protected because the instance must be destroyed with the last
+  /// release_reference invoke.
   virtual ~zObject(void);
 };
 
 #endif // ZOBJECT_H__
+

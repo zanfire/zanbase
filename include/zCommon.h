@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright 2009-2011 Matteo Valdina
+ * Copyright 2009-2012 Matteo Valdina
  *      
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,9 +14,10 @@
  * limitations under the License.
  *****************************************************************************/
 
-#ifndef GLOBAL_H__
-#define GLOBAL_H__
+#ifndef ZCOMMON_H__
+#define ZCOMMON_H__
 
+/// Include configuration of configure script.
 #include "config.h"
 
 // NULL define
@@ -30,11 +31,11 @@
 #else // Add GCC include
 #endif
 
-// Define base type for automic increment and decrement
+// Define base type for atomic increment and decrement.
 #if defined(_WIN32)
-  typedef long zReferenceCounter;
+  typedef long zref_t;
 #else
-  typedef long zReferenceCounter;
+  typedef long zref_t;
 #endif
 
 // Define increment and decrement
@@ -49,15 +50,21 @@
 #endif
 
 
-  // Define unit32_t etcs
+/// Include standard uint32_t, uint16_t, etc
 
 #if HAVE_INTTYPES_H
 #  include <inttypes.h>
 #elif defined(_WIN32)
 #  include <stdint.h>
 #else
+// Unimplemented
 #endif
 
+/// Enum that provides a specific text for thread safe values instead of a boolean.
+enum IsThreadSafe {
+  YES,
+  NO
+};
 
-#endif // GLOBAL_H__
+#endif // ZCOMMON_H__
 

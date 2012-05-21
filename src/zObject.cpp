@@ -16,32 +16,23 @@
 
 #include "zObject.h"
 
-#include "zLogger.h"
-
-zObject::zObject() : _reference() {
+zObject::zObject(void) : _reference() {
 }
 
 
 zObject::~zObject(void) {
-  if (getReferenceCount() > 1) {
-    CHECK_FATAL(-1, "Deleting object that is still in use.");
-  }
 }
 
 
-bool zObject::equals(zObject* obj) const {
-  return this == obj;
+zref_t zObject::acquire_reference(void) {
+  return _reference.increment();
 }
 
 
-void zObject::acquireReference(void) {
-  _reference.increment();
-}
-
-
-void zObject::releaseReference(void) {
-  _reference.decrement();
-  if (getReferenceCount() == 0) {
+zref_t zObject::release_reference(void) {
+  zref_t count = _reference.decrement();
+  if (count == 0) {
     delete this;
   }
+  return count;
 }

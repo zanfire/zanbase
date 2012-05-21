@@ -17,7 +17,7 @@
 #ifndef ZSTRING_H__
 #define ZSTRING_H__
 
-#include "global.h"
+#include "zCommon.h"
 #include "zObject.h"
 
 

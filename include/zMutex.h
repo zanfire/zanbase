@@ -17,8 +17,6 @@
 #ifndef ZMUTEX_H__
 #define ZMUTEX_H__
 
-#include "global.h"
-
 #if defined(_WIN32)
   #define MUTEX_TYPE void*
 #elif HAVE_PTHREAD_H
@@ -46,9 +44,7 @@ public:
   // Get the implementation object used by Mutex object.
   // NOTE: Return a pointer to an object valid only for the life of Mutex object.
   // NOTE: System specific method.
-  MUTEX_TYPE* getImplementationMutex(void) { return &_mutex; }
-
-  bool isLocked(void) const;
+  MUTEX_TYPE* get_impl(void) { return &_mutex; }
 };
 
 #endif // ZMUTEX_H__

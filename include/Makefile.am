@@ -1,30 +1,34 @@
 include_HEADERS = \
+  zCommon.h \
 	zObject.h \
 	zReference.h \
-	zBuffer.h \
-	zEvent.h \
-	zThread.h \
-	zFile.h \
-	zMutex.h \
-	zScopeMutex.h \
-	zEvent.h \
-	zRandom.h \
-	zString.h \
-	zStringTokenizer.h \
-	zStringBuffer.h \
-	zVector.h \
-	zVectorString.h \
-	zSocketAddress.h \
-	zSocketAddressIPv4.h \
-	zSocketAddressIPv6.h \
-	zSocketBase.h \
-	zSocketIP.h \
-	zSocketTCP.h \
-	zSocketTCPClient.h \
-	zSocketTCPServer.h \
-	zSocketTCPServerListener.h \
-	zSocketTCPConnection.h \
-	zSocketTCPConnectionListener.h \
-	zLogger.h \
-	zLoggerAppender.h \
-	zLoggerAppenderConsole.h
+	zArray.h \
+	zTester.h
+
+#	zBuffer.h
+#	zEvent.h \
+#	zThread.h \
+#	zFile.h \
+#	zMutex.h \
+#	zScopeMutex.h \
+#	zEvent.h \
+#	zRandom.h \
+#	zString.h \
+#	zStringTokenizer.h \
+#	zStringBuffer.h \
+#	zVector.h \
+#	zVectorString.h \
+#	zSocketAddress.h \
+#	zSocketAddressIPv4.h \
+#	zSocketAddressIPv6.h \
+#	zSocketBase.h \
+#	zSocketIP.h \
+#	zSocketTCP.h \
+#	zSocketTCPClient.h \
+#	zSocketTCPServer.h \
+#	zSocketTCPServerListener.h \
+#	zSocketTCPConnection.h \
+#	zSocketTCPConnectionListener.h \
+#	zLogger.h \
+#	zLoggerAppender.h \
+#	zLoggerAppenderConsole.h 

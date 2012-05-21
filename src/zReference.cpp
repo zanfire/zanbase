@@ -18,7 +18,7 @@
 
 
 zReference::zReference(void) {
-  count_ = 0;
+  _count = 0;
   increment();
 }
 
@@ -27,12 +27,12 @@ zReference::~zReference(void) {
 }
 
 
-zReferenceCounter zReference::increment(void) {
-  return ATOMIC_INC(count_);
+zref_t zReference::increment(void) {
+  return ATOMIC_INC(_count);
 }
 
 
-zReferenceCounter zReference::decrement(void) {
-  return ATOMIC_DEC(count_);
+zref_t zReference::decrement(void) {
+  return ATOMIC_DEC(_count);
 }
 

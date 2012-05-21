@@ -17,7 +17,7 @@
 #ifndef ZTESTER_H__
 #define ZTESTER_H__
 
-#include "global.h"
+#include "zCommon.h"
 
 class zVector;
 class zTest;
@@ -28,9 +28,9 @@ class zTester {
 
 protected:
   /// The set of tests that they will execute by the Tester.
-  zVector* _testSetUnprocessed;
+  zVector* _tests_unprocessed;
   /// The set of tests that they ware exectued by the Tester.
-  zVector* _testSetProcessed;
+  zVector* _tests_processed;
 
 public:
   zTester(void);
@@ -44,8 +44,10 @@ public:
   /// @return TODO: define if needed a expressive return code.
   bool process(void);
 
-  zVector* getUnprocessedTest(void) { return _testSetUnprocessed; }
-  zVector* getProcessedTest(void) { return _testSetProcessed; }
+  bool process_interactive(void);
+
+  zVector* get_unprocessed(void) { return _testSetUnprocessed; }
+  zVector* get_processed(void) { return _testSetProcessed; }
 };
 
 #endif

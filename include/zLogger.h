@@ -17,7 +17,7 @@
 #ifndef ZLOGGER_H__
 #define ZLOGGER_H__
 
-#include "global.h"
+#include "zCommon.h"
 #include "zObject.h"
 #include "zString.h"
 #include "zVector.h"
@@ -36,8 +36,6 @@ static zVector g_loggers;
 #define ZLOGGER zLogger::getLogger("base")
 
 
-/**
- */
 class zLogger : public zObject {
 
 public:
@@ -82,3 +80,4 @@ protected:
 
 
 #endif // ZLOGGER_H__
+

@@ -1,0 +1,6 @@
+*********
+* Tasks *        
+*********
+
+The main goals is the testing support. You write only class needed by this
+task.

@@ -20,26 +20,26 @@
 #include <string.h>
 
 zBuffer::zBuffer(void) : zObject() {
-  buffer_ = NULL;
-  size_ = 0;
+  _buffer = NULL;
+  _size = 0;
 }
 
 zBuffer::zBuffer(int size) : zObject() {
-  buffer_ = (unsigned char*)malloc(sizeof(unsigned char) * size);
-  size_ = size;
+  _buffer = (unsigned char*)malloc(sizeof(unsigned char) * size);
+  _size = size;
 }
 
 
 zBuffer::~zBuffer(void) {
   // Clean up memory, because this buffer can contains some sensible data.
-  memset(buffer_, 0x00, size_);
-  free(buffer_);
+  memset(_buffer, 0x00, _size);
+  free(_buffer);
 }
 
 
 void zBuffer::resize(int size) {
-  buffer_ = (unsigned char*)realloc(buffer_, (sizeof(unsigned char) * size));
-  size_ = size;
+  _buffer = (unsigned char*)realloc(_buffer, (sizeof(unsigned char) * size));
+  _size = size;
 }
 
 
@@ -47,21 +47,25 @@ bool zBuffer::append(unsigned char const* buffer, int bufferSize) {
   if (bufferSize < 0) return false;
   if (buffer == NULL) return false;
 
-  int curSize = getSize();
+  int curSize = _size;
   resize(curSize + bufferSize);
 
-  memcpy(buffer_ + curSize, buffer, bufferSize);
+  memcpy(_buffer + curSize, buffer, bufferSize);
 
   return true;
 }
 
 
-bool zBuffer::appendPascalString(zString const& str) {
-
-  int len = str.getLength();
-  append((unsigned char*)&len, 4);
-  append((unsigned char*)str.getBuffer(), len);
-
-  return false;
+bool zBuffer::append(zString const* str, zString::StoreFormat format) {
+  if (format == zString::PASCAL) {
+    int len = str->getLength();
+    append((unsigned char*)&len, 4);
+    append((unsigned char*)str->getBuffer(), len);
+  }
+  else {
+    // TODO: Ugly hack to copy the term char of str.
+    append((unsigned char*)str->getBuffer(), str->getLength() + 1);
+  }
+  return true;
 }
 

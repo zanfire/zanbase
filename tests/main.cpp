@@ -31,7 +31,7 @@ void showHelp(char* programName);
 void showHelp(char* programName);
 void handleInvalidArg(char* programName, char invalidArg);
 int main(int argc, char** argv) {
-  g_logger = zLogger::getLogger("zanbase_test_runner");
+  g_logger = zLogger::get_logger("zanbase_test_runner");
   int opt = 0;
 
   while ((opt = getopt(argc, argv, "hva:p:")) != -1) {
@@ -56,8 +56,8 @@ int main(int argc, char** argv) {
 
 
 void showCopyright(char* programName) {
-  printf("%s server version %s\n", programName, PACKAGE_VERSION);
-  printf("Copyright 2009-2011 Matteo Valdina (bugs: %s)\n", PACKAGE_BUGREPORT);
+  printf("%s version %s\n", programName, PACKAGE_VERSION);
+  printf("Copyright 2009-2012 Matteo Valdina (bugs: %s)\n", PACKAGE_BUGREPORT);
 }
 
 

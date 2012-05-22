@@ -72,7 +72,7 @@ void zArray::clear(void) {
 }
 
 
-bool zArray::get(int index, void* element) const {
+bool zArray::get(int index, void** element) const {
   zScopeMutex scope(_mtx);
   if (index < 0) return false;
   if (index >= _num_elements) return false;

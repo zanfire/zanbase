@@ -43,6 +43,7 @@ for type where size is strictly important.
  - Use as always int if is not important the type size.
  - Avoid use of unsigned.
  - Avoid use of size_t
+ - Global variables must be prefixed with "g_".
 
  *********************
  * Reference system  *
@@ -58,6 +59,13 @@ But the reference system is just for me a bad things because permit to
 delagate the destruction of object!
 
 It is not safe
+
+ ***********************
+ * Logging system.     *
+ ***********************
+
+The logger system is based on a Logger implementation and a set of Appender.
+Each appenders provides his specific logging facility.
 
 
 

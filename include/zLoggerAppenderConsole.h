@@ -17,21 +17,22 @@
 #ifndef ZLOGGERAPPENDERCONSOLE_H__
 #define ZLOGGERAPPENDERCONSOLE_H__
 
-#include "global.h"
-#include "zObject.h"
 #include "zLoggerAppender.h"
 
 
+/// Implementation of zLoggerAppender that write in the
+/// console.
+/// 
+/// @author Matteo Valdina
 class zLoggerAppenderConsole : public zLoggerAppender {
-public:
-
 
 public:
   zLoggerAppenderConsole(void);
   virtual ~zLoggerAppenderConsole(void);
 
-  virtual void writeLine(char* line);
+  virtual void line(char* line);
 };
 
 
-#endif // ZSOCKETADDRESS_H__
+#endif // ZLOGGERAPPENDERCONSOLE_H__
+

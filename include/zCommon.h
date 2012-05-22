@@ -17,7 +17,7 @@
 #ifndef ZCOMMON_H__
 #define ZCOMMON_H__
 
-/// Include configuration of configure script.
+/// Include output of configure script.
 #include "config.h"
 
 // NULL define

@@ -31,17 +31,19 @@ public:
   zBuffer(int size);
 
   /// Return the pointer to the allocated buffer
-  uint8_t* get_buffer() const { return buffer_; }
-  int get_size(void) const { return size_; }
+  uint8_t* get_buffer(void) const { return _buffer; }
+  int get_size(void) const { return _size; }
   void resize(int size);
 
   bool append(uint8_t const* buffer, int size);
   /// Append a zString in the buffer.
-  bool appen(zString const* str, zString::StoreFormat store);
+  bool append(zString const* str, zString::StoreFormat store);
 
 protected:
   zBuffer(void);
   virtual ~zBuffer(void);
 };
 
+
 #endif // ZBUFFER_H__
+

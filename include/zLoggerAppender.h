@@ -19,15 +19,20 @@
 
 #include "zObject.h"
 
-class zLoggerAppender : public zObject {
+/// Interface for an logger appender.
+/// The implementer of this interface must provides the impl of:
+///  void line(char const* line),
+/// @author Matteo Valdina
+class zLoggerAppender {
 
 public:
   zLoggerAppender(void);
   virtual ~zLoggerAppender(void);
 
-  virtual void writeLine(char* line) = 0;
-
+  /// The implementor must write as a log line the line argument.
+  virtual void line(char const* line) = 0;
 };
 
 
 #endif // ZLOGGERAPPENDER_H__
+

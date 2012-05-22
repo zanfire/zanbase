@@ -1,19 +1,3 @@
-/******************************************************************************
- * Copyright 2009-2011 Matteo Valdina
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *****************************************************************************/
-
 #include "zLogger.h"
 
 #include <stdio.h>
@@ -22,50 +6,40 @@
 
 #include "zLoggerAppenderConsole.h"
 
+// TODO: Replace array with an hash table.
+static zArray* g_loggers = new zArray(YES, sizeof(void*), 32);
 
-zLogger::zLogger(char const* loggerName) : zObject() {
-  _loggerName = zString(loggerName);
+zLogger::zLogger(char const* loggerName) : _appenders(YES, sizeof(void*), 32) {
+  _id = zString(loggerName);
   _level = LOG_LEVEL_INFO;
 }
 
 
 zLogger::~zLogger(void) {
-  while(_appenders.getCount() > 0) {
-    _appenders.removeAt(_appenders.getCount() - 1);
+  while(_appenders.get_count() > 0) {
+    zLoggerAppender* appender = 0;
+    _appenders.remove(_appenders.get_count() - 1, &appender);
   }
 }
 
 
-zLogger* zLogger::getLogger(char const* loggerName) {
-  zLogger* logger = new zLogger(loggerName);
-  int index = g_loggers.contains(logger);
-  if (index >= 0) {
-    delete logger;
-    return (zLogger*)g_loggers.getAt(index);
+zLogger* zLogger::get_logger(char const* id) {
+  for (int i = 0; i < g_loggers->get_count(); i++) {
+    zLogger* logger = NULL;
+    g_loggers->get(i, (void**)&logger);
+    if (logger != NULL) {
+      if (logger->_id.equals(id)) {
+        return logger;
+      }
+    }
   }
-  else {
-    logger->loadConfiguration();
-    return logger;
-  }
+  zLogger* logger = new zLogger(id);
+  g_loggers->append(logger);
+  return logger;
 }
 
 
-void zLogger::loadConfiguration(void) {
-  addAppender(new zLoggerAppenderConsole());
-  setLevel(LOG_LEVEL_DEBUG);
-}
-
-
-bool zLogger::equals(zObject* obj) const {
-  zLogger* logger = dynamic_cast<zLogger*>(obj);
-  if (logger != NULL) {
-    return logger->_loggerName.equals((zString*)&_loggerName);
-  }
-  return false;
-}
-
-
-void zLogger::addAppender(zLoggerAppender* appender) {
+void zLogger::add_appender(zLoggerAppender* appender) {
   if (appender == NULL) return;
   _appenders.append(appender);
 }
@@ -76,8 +50,6 @@ void zLogger::fatal(char const* format, ...) {
   va_start(args, format);
   log(LOG_LEVEL_FATAL, format, args);
   va_end(args);
-
-  exit(EXIT_FAILURE);
 }
 
 
@@ -128,9 +100,11 @@ void zLogger::log(LogLevel level, char const* format, va_list args) {
 
   vsnprintf(line, sizeof(line), format, args);
 
-  for (int i = 0; i < _appenders.getCount(); i++) {
-    zLoggerAppender* appender = (zLoggerAppender*)_appenders.getrAt(i);
-    appender->writeLine(line);
-    appender->releaseReference();
+  for (int i = 0; i < _appenders.get_count(); i++) {
+    zLoggerAppender* appender = NULL;
+    _appenders.get(i, (void**)&appender);
+    if (appender != NULL) {
+      appender->line(line);
+    }
   }
 }

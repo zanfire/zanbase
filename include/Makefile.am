@@ -3,20 +3,25 @@ include_HEADERS = \
 	zObject.h \
 	zReference.h \
 	zArray.h \
-	zTester.h
+	zTester.h \
+	zLogger.h \
+	zLoggerAppender.h \
+	zLoggerAppenderConsole.h \
+	zMutex.h \
+	zScopeMutex.h \
+	zBuffer.h \
+	zString.h \
+	zStringBuffer.h
+
 
 #	zBuffer.h
 #	zEvent.h \
 #	zThread.h \
 #	zFile.h \
-#	zMutex.h \
-#	zScopeMutex.h \
 #	zEvent.h \
 #	zRandom.h \
-#	zString.h \
 #	zStringTokenizer.h \
 #	zStringBuffer.h \
-#	zVector.h \
 #	zVectorString.h \
 #	zSocketAddress.h \
 #	zSocketAddressIPv4.h \
@@ -28,7 +33,4 @@ include_HEADERS = \
 #	zSocketTCPServer.h \
 #	zSocketTCPServerListener.h \
 #	zSocketTCPConnection.h \
-#	zSocketTCPConnectionListener.h \
-#	zLogger.h \
-#	zLoggerAppender.h \
-#	zLoggerAppenderConsole.h 
+#	zSocketTCPConnectionListener.h

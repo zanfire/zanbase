@@ -21,23 +21,23 @@
 #include "zObject.h"
 
 
+#define ZSTRING_STATIC_BUFFER_SIZE 512
 
-#define STATIC_BUFFER_SIZE 1
-
-class zVectorString;
-class zStringBuffer;
 class zBuffer;
-class zBufferSegment;
+class zStringBuffer;
 
-/******************************************************************************
-* Immutable String
-******************************************************************************/
-class zString : public zObject {
+/// Immutable String
+/// @author Matteo Valdina
+class zString {
 
 public:
-  static zString* empty;
+  enum StoreFormat {
+    C,
+    PASCAL
+  };
+
 private:
-  char _staticBuffer[STATIC_BUFFER_SIZE];
+  char _staticBuffer[ZSTRING_STATIC_BUFFER_SIZE];
   zBuffer* _dynamicBuffer;
   int _length;
 
@@ -71,3 +71,4 @@ private:
 };
 
 #endif // ZSTRING_H__
+

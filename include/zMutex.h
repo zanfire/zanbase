@@ -17,11 +17,12 @@
 #ifndef ZMUTEX_H__
 #define ZMUTEX_H__
 
+#include "config.h" // HAVE_PTHREAD_H
+
 #if defined(_WIN32)
   #define MUTEX_TYPE void*
 #elif HAVE_PTHREAD_H
   #include <pthread.h>
-
   #define MUTEX_TYPE pthread_mutex_t
 #endif
 
@@ -30,7 +31,7 @@ class zMutex {
 private:
   int _lockedCount;
   MUTEX_TYPE _mutex;
-  bool _isDestroying;
+  //bool _isDestroying;
 
 public:
   zMutex(void);
@@ -47,4 +48,5 @@ public:
   MUTEX_TYPE* get_impl(void) { return &_mutex; }
 };
 
-#endif // ZMUTEX_H__
+#endif // ZMUTEX_H_
+

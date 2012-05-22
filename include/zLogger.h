@@ -17,10 +17,8 @@
 #ifndef ZLOGGER_H__
 #define ZLOGGER_H__
 
-#include "zCommon.h"
-#include "zObject.h"
 #include "zString.h"
-#include "zVector.h"
+#include "zArray.h"
 
 #include <stdarg.h>
 #include <string.h>
@@ -28,17 +26,13 @@
 
 class zLoggerAppender;
 
-static zVector g_loggers;
-
-
-#define CHECK_FATAL(error, message) if (error != 0) { zLogger::getLogger("base")->fatal("Fatal error %d (%s), %s.", error, strerror(errno), message); }
-#define FATAL(message) zLogger::getLogger("base")->fatal("Fatal error: %s.", message);
-#define ZLOGGER zLogger::getLogger("base")
-
-
-class zLogger : public zObject {
+/// This class provides the logging facility.
+/// 
+/// @author Matteo Valdina
+class zLogger {
 
 public:
+  /// Enum of possible logging level.
   enum LogLevel {
     LOG_LEVEL_NONE      = 0x00,
     LOG_LEVEL_DEBUG,
@@ -49,33 +43,32 @@ public:
   };
 
 protected:
-  zString _loggerName;
-  zVector _appenders;
+  zString _id;
+  zArray _appenders;
   LogLevel _level;
 
 public:
-  static zLogger* getLogger(char const* loggerName);
+  static zLogger* get_logger(char const* id);
 
-  void setLevel(LogLevel level) { _level = level; }
-  void addAppender(zLoggerAppender* appender);
-
-  virtual bool equals(zObject* obj) const;
+  void set_level(LogLevel level) { _level = level; }
+  void add_appender(zLoggerAppender* appender);
 
   void fatal(char const* format, ...);
   void error(char const* format, ...);
   void warn(char const* format, ...);
   void info(char const* format, ...);
   void debug(char const* format, ...);
-
+  // Log
   void log(LogLevel level, char const* format, va_list args);
   void log(LogLevel level, char const* format, ...);
 
-
 protected:
+  /// 
   zLogger(char const* loggerName);
   virtual ~zLogger(void);
 
-  void loadConfiguration();
+  /// Load a configuration from file.
+  void load_config(void);
 };
 
 

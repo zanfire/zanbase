@@ -18,20 +18,20 @@
 
 #include "zStringBuffer.h"
 #include "zBuffer.h"
-#include "zStringTokenizer.h"
-#include "zVectorString.h"
+//#include "zStringTokenizer.h"
+//#include "zVectorString.h"
 
 #include <string.h>
 #include <stddef.h>
 #include <arpa/inet.h>
 
 
-zString::zString(void) : zObject() {
+zString::zString(void) {
   init(NULL, 0);
 }
 
 
-zString::zString(zString* str) : zObject() {
+zString::zString(zString* str) {
   if (str != NULL) {
     init(str->getBuffer(), str->getLength());
   } 
@@ -41,30 +41,31 @@ zString::zString(zString* str) : zObject() {
 }
 
 
-zString::zString(char c) : zObject() {
+zString::zString(char c) {
   init(&c, 1);
 }
 
 
-zString::zString(char const* str) : zObject() {
+zString::zString(char const* str) {
   int len = str != NULL ? strlen(str) : 0;
   init(str, len);
 }
 
 
-zString::zString(char const* str, int length) : zObject() {
+zString::zString(char const* str, int length) {
   init(str, length);
 }
 
-zString::zString(zStringBuffer const* strb) : zObject() {
+
+zString::zString(zStringBuffer const* strb) {
   char* targetBuffer = NULL;
-  if (strb->getLength() <= STATIC_BUFFER_SIZE) {
+  if (strb->getLength() <= ZSTRING_STATIC_BUFFER_SIZE) {
     targetBuffer = (char*)&_staticBuffer;
     _dynamicBuffer = NULL;
   } 
   else {
     _dynamicBuffer = new zBuffer(strb->getLength() + 1);
-    targetBuffer = (char*)_dynamicBuffer->getBuffer();
+    targetBuffer = (char*)_dynamicBuffer->get_buffer();
     _staticBuffer[0] = 0x00;
   }
 
@@ -80,22 +81,23 @@ zString::zString(zStringBuffer const* strb) : zObject() {
 }
 
 
-zString::zString(zBuffer* buffer) : zObject() {
+zString::zString(zBuffer* buffer) {
+  // TODO: This implementation is WRONG!
   _dynamicBuffer = buffer;
-  _dynamicBuffer->acquireReference();
+  _dynamicBuffer->acquire_reference();
   _staticBuffer[0] = 0x00;
-  _length = buffer->getSize() - 1;
+  _length = buffer->get_size() - 1;
 }
   
 
-zString::zString(const zString& str) : zObject() {
+zString::zString(const zString& str) {
   copyFrom(str);
 }
 
 
 zString::~zString(void) {
   if (_dynamicBuffer != NULL) {
-    _dynamicBuffer->releaseReference();
+    _dynamicBuffer->release_reference();
   }
 }
 
@@ -106,15 +108,15 @@ void zString::init(char const* str, int length) {
     _staticBuffer[0] = 0x00;
 	  _dynamicBuffer = NULL;
   } 
-  else if (length <= STATIC_BUFFER_SIZE) {
+  else if (length <= ZSTRING_STATIC_BUFFER_SIZE) {
     memcpy(_staticBuffer, str, length);
     _staticBuffer[length] = 0x00;
 	  _dynamicBuffer = NULL;
   } 
   else {
     _dynamicBuffer = new zBuffer(length + 1);
-    memcpy(_dynamicBuffer->getBuffer(), str, length);
-    _dynamicBuffer->getBuffer()[length] = 0x00;
+    memcpy(_dynamicBuffer->get_buffer(), str, length);
+    _dynamicBuffer->get_buffer()[length] = 0x00;
     _staticBuffer[0] = 0x00;
   }
   _length = length;
@@ -141,7 +143,7 @@ int zString::compareTo(zString const& str) const {
   
 char* zString::getBuffer(void) const {
   if (_dynamicBuffer != NULL) {
-    return (char*)_dynamicBuffer->getBuffer();
+    return (char*)_dynamicBuffer->get_buffer();
   }
   else {
     return (char*)&_staticBuffer;
@@ -153,7 +155,7 @@ void zString::copyFrom(const zString& str) {
   _length = str._length;
   if(str._dynamicBuffer != NULL) {
     _dynamicBuffer = str._dynamicBuffer;
-    _dynamicBuffer->acquireReference();
+    _dynamicBuffer->acquire_reference();
   }
   else {
     _dynamicBuffer = NULL;

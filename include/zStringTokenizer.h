@@ -17,7 +17,7 @@
 #ifndef ZSTRINGTOK_H__
 #define ZSTRINGTOK_H__
 
-#include "global.h"
+#include "zCommon.h"
 
 #include "zObject.h"
 #include "zString.h"

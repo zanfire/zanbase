@@ -4,8 +4,17 @@ libzanbase_la_CPPFLAGS = -I$(top_srcdir)/include
 libzanbase_la_SOURCES = \
 	zObject.cpp \
 	zReference.cpp \
-	zArray.cpp \ 
-	zTester.cpp
+	zArray.cpp \
+	zTester.cpp \
+	zLogger.cpp \
+	zLoggerAppender.cpp \
+	zLoggerAppenderConsole.cpp \
+	zMutex.cpp \
+	zScopeMutex.cpp \
+	zBuffer.cpp \
+	zString.cpp \
+	zStringBuffer.cpp 
+
 #	zBuffer.cpp \
 #	zEvent.cpp \
 #	zThread.cpp \
@@ -28,7 +37,4 @@ libzanbase_la_SOURCES = \
 #	zSocketTCPServer.cpp \
 #	zSocketTCPServerListener.cpp \
 #	zSocketTCPConnection.cpp \
-#	zSocketTCPConnectionListener.cpp \
-#	zLogger.cpp \
-#	zLoggerAppender.cpp \
-#	zLoggerAppenderConsole.cpp
+#	zSocketTCPConnectionListener.cpp

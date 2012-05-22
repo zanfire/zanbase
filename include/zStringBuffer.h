@@ -14,10 +14,10 @@
  * limitations under the License.
  *****************************************************************************/
 
-#ifndef STRINGBUFFER_H__
-#define STRINGBUFFER_H__
+#ifndef ZSTRINGBUFFER_H__
+#define ZSTRINGBUFFER_H__
 
-#include "global.h"
+#include "zCommon.h"
 #include "zObject.h"
 #include "zString.h"
 
@@ -59,9 +59,7 @@ public:
 
   void appendFormatted(char const* format, ...);
 
-  zString toString() const;
-
-private:
+  zString toString(void) const;
 };
 
-#endif // STRINGBUFFER_H__
+#endif // ZSTRINGBUFFER_H__

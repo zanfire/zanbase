@@ -60,7 +60,7 @@ public:
   /// Remove all elements.
   void clear(void);
   /// Get an element at the given index.
-  bool get(int index, void* element) const;
+  bool get(int index, void** element) const;
 
   bool replace(int index, void* element);
 };

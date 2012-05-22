@@ -19,7 +19,7 @@
 
 #include "zCommon.h"
 
-class zVector;
+class zArray;
 class zTest;
 
 /// This class execute a set of test. 
@@ -28,9 +28,9 @@ class zTester {
 
 protected:
   /// The set of tests that they will execute by the Tester.
-  zVector* _tests_unprocessed;
+  zArray* _tests_unprocessed;
   /// The set of tests that they ware exectued by the Tester.
-  zVector* _tests_processed;
+  zArray* _tests_processed;
 
 public:
   zTester(void);
@@ -43,11 +43,8 @@ public:
   /// Tester processes the test set.
   /// @return TODO: define if needed a expressive return code.
   bool process(void);
-
+  //// Tester interacts via the console to choose the executed tests.
   bool process_interactive(void);
-
-  zVector* get_unprocessed(void) { return _testSetUnprocessed; }
-  zVector* get_processed(void) { return _testSetProcessed; }
 };
 
 #endif

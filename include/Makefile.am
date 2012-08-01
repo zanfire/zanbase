@@ -11,7 +11,7 @@ include_HEADERS = \
 	zScopeMutex.h \
 	zBuffer.h \
 	zString.h \
-	zStringBuffer.h
+	zStringBuilder.h
 
 
 #	zBuffer.h

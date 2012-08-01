@@ -27,6 +27,7 @@ class zBuffer : public zObject {
 protected:
   uint8_t* _buffer;
   int _size;
+  zBuffer* _next;
 public:
   zBuffer(int size);
 
@@ -39,6 +40,8 @@ public:
   /// Append a zString in the buffer.
   bool append(zString const* str, zString::StoreFormat store);
 
+  void set_next(zBuffer* b) { _next = b; }
+  zBuffer* get_next(void) { return _next; }
 protected:
   zBuffer(void);
   virtual ~zBuffer(void);

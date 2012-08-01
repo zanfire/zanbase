@@ -17,7 +17,7 @@
 #ifndef ZVECTORSTRING_H__
 #define ZVECTORSTRING_H__
 
-#include "global.h"
+#include "zCommon.h"
 
 #include "zVector.h"
 #include "zString.h"

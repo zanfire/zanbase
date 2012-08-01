@@ -24,7 +24,7 @@
 #define ZSTRING_STATIC_BUFFER_SIZE 512
 
 class zBuffer;
-class zStringBuffer;
+class zStringBuilder;
 
 /// Immutable String
 /// @author Matteo Valdina
@@ -44,7 +44,7 @@ private:
 public:
   zString(void);
   zString(zBuffer* buffer);
-  zString(zStringBuffer const* strb);
+  zString(zStringBuilder const* strb);
   zString(zString* str);
   zString(char c);
   zString(char const* str);
@@ -55,19 +55,20 @@ public:
   zString& operator=(const zString& rhs);
 
   zString substrig(int startPos, int length) const;
-  int indexOf(zString& str, int startPos) const;
-  int lastIndexOf(zString& str, int endPos) const;
+  int index_of(zString& str, int startPos) const;
+  int last_index_of(zString& str, int endPos) const;
 
   bool equals(zString const& str) const;
-  int compareTo(zString const& str) const;
+  int compare(zString const& str) const;
   
-  char* getBuffer(void) const;
-  int getLength(void) const { return _length; }
+  char* get_buffer(void) const;
+  int get_length(void) const { return _length; }
 
-  static zString fromPascalString(unsigned char const* pascalString, int bufferSize, bool isInNetworkByteOrder = false);
-private:
+  static zString from_pascal_string(unsigned char const* pascalString, int bufferSize, bool isInNetworkByteOrder = false);
+
+protected:  
   void init(char const* str, int length);
-  void copyFrom(const zString& str);
+  void copy_from(const zString& str);
 };
 
 #endif // ZSTRING_H__

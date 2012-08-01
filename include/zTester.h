@@ -19,7 +19,8 @@
 
 #include "zCommon.h"
 
-class zArray;
+#include "zArray.h"
+
 class zTest;
 
 /// This class execute a set of test. 
@@ -28,9 +29,9 @@ class zTester {
 
 protected:
   /// The set of tests that they will execute by the Tester.
-  zArray* _tests_unprocessed;
+  zArray<zTest*> _tests_unprocessed;
   /// The set of tests that they ware exectued by the Tester.
-  zArray* _tests_processed;
+  zArray<zTest*> _tests_processed;
 
 public:
   zTester(void);

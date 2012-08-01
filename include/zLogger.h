@@ -44,7 +44,7 @@ public:
 
 protected:
   zString _id;
-  zArray _appenders;
+  zArray<zLoggerAppender*> _appenders;
   LogLevel _level;
 
 public:

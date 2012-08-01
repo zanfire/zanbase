@@ -16,9 +16,9 @@
 
 #include "zString.h"
 
-#include "zStringBuffer.h"
+#include "zStringBuilder.h"
 #include "zBuffer.h"
-//#include "zStringTokenizer.h"
+#include "zArray.h"
 //#include "zVectorString.h"
 
 #include <string.h>
@@ -33,7 +33,7 @@ zString::zString(void) {
 
 zString::zString(zString* str) {
   if (str != NULL) {
-    init(str->getBuffer(), str->getLength());
+    init(str->get_buffer(), str->get_length());
   } 
   else {
     init(NULL, 0);
@@ -57,27 +57,29 @@ zString::zString(char const* str, int length) {
 }
 
 
-zString::zString(zStringBuffer const* strb) {
+zString::zString(zStringBuilder const* strb) {
   char* targetBuffer = NULL;
-  if (strb->getLength() <= ZSTRING_STATIC_BUFFER_SIZE) {
+  if (strb->get_length() <= ZSTRING_STATIC_BUFFER_SIZE) {
     targetBuffer = (char*)&_staticBuffer;
     _dynamicBuffer = NULL;
   } 
   else {
-    _dynamicBuffer = new zBuffer(strb->getLength() + 1);
+    _dynamicBuffer = new zBuffer(strb->get_length() + 1);
     targetBuffer = (char*)_dynamicBuffer->get_buffer();
     _staticBuffer[0] = 0x00;
   }
 
   int readBytes = 0;
-  zStringBuffer::zBuffer* buffer = (zStringBuffer::zBuffer*)&(strb->first_);
-  while(buffer != NULL) {
-    memcpy(targetBuffer + readBytes, buffer->buffer_, buffer->length_);
-    readBytes +=  buffer->length_;
-    buffer = buffer->next_;
+  const zArray<zString*>* strings = &strb->_strings;
+  for (int i = 0; i < strings->get_count(); i++) {
+    zString* str = NULL;
+    if (strings->get(i, &str)) {
+      memcpy(targetBuffer + readBytes, str->get_buffer(), str->get_length());
+      readBytes +=  str->get_length();
+    }
   }
   targetBuffer[readBytes] = 0x00;
-  _length =  strb->getLength();
+  _length =  strb->get_length();
 }
 
 
@@ -91,7 +93,7 @@ zString::zString(zBuffer* buffer) {
   
 
 zString::zString(const zString& str) {
-  copyFrom(str);
+  copy_from(str);
 }
 
 
@@ -125,23 +127,23 @@ void zString::init(char const* str, int length) {
 
 zString& zString::operator=(const zString& rhs) {
   if (this != &rhs) {
-    copyFrom(rhs);
+    copy_from(rhs);
   }
 
   return *this;
 }
 
 bool zString::equals(zString const& str) const {
-  return compareTo(str) == 0;
+  return compare(str) == 0;
 }
 
 
-int zString::compareTo(zString const& str) const {
-  return strcmp(getBuffer(), str.getBuffer());
+int zString::compare(zString const& str) const {
+  return strcmp(get_buffer(), str.get_buffer());
 }
 
   
-char* zString::getBuffer(void) const {
+char* zString::get_buffer(void) const {
   if (_dynamicBuffer != NULL) {
     return (char*)_dynamicBuffer->get_buffer();
   }
@@ -151,7 +153,7 @@ char* zString::getBuffer(void) const {
 }
 
 
-void zString::copyFrom(const zString& str) {
+void zString::copy_from(const zString& str) {
   _length = str._length;
   if(str._dynamicBuffer != NULL) {
     _dynamicBuffer = str._dynamicBuffer;
@@ -166,16 +168,16 @@ void zString::copyFrom(const zString& str) {
 
 
 zString zString::substrig(int startPos, int length) const {
-  if (startPos < 0 || startPos > getLength()) return zString();
-  if (length < 0 || (startPos + length) > getLength()) return zString();
-  return zString(getBuffer() + startPos, length);
+  if (startPos < 0 || startPos > get_length()) return zString();
+  if (length < 0 || (startPos + length) > get_length()) return zString();
+  return zString(get_buffer() + startPos, length);
 }
 
 
-int zString::indexOf(zString& str, int startPos) const {
-  char* buffer = getBuffer();
-  int l = str.getLength();
-  char* strBuf = str.getBuffer();
+int zString::index_of(zString& str, int startPos) const {
+  char* buffer = get_buffer();
+  int l = str.get_length();
+  char* strBuf = str.get_buffer();
   for (int i = startPos; i < _length; i += l) {
     // Check size
     if ((_length - i) > l) {
@@ -188,10 +190,10 @@ int zString::indexOf(zString& str, int startPos) const {
 }
 
 
-int zString::lastIndexOf(zString& str, int endPos) const {
-  char* buffer = getBuffer();
-  for (int i = getLength() - str.getLength(); i >= endPos; i--) {
-    if (memcmp(buffer + i, str.getBuffer(), str.getLength()) == 0) {
+int zString::last_index_of(zString& str, int endPos) const {
+  char* buffer = get_buffer();
+  for (int i = get_length() - str.get_length(); i >= endPos; i--) {
+    if (memcmp(buffer + i, str.get_buffer(), str.get_length()) == 0) {
       return i;
     }
   }
@@ -199,10 +201,11 @@ int zString::lastIndexOf(zString& str, int endPos) const {
 }
 
 
-zString zString::fromPascalString(unsigned char const* pascalString, int bufferSize, bool isInNetworkByteOrder) {
+zString zString::from_pascal_string(unsigned char const* pascalString, int bufferSize, bool isInNetworkByteOrder) {
   if (bufferSize < 4) return zString();
   uint32_t length = ((uint32_t*)pascalString)[0];
   length = isInNetworkByteOrder ? ntohl(length) : length;
   if (bufferSize < (int)(length + 4)) return zString();
   return zString((char*)(pascalString + 4), length);
 }
+

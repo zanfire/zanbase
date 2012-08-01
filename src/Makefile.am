@@ -4,7 +4,6 @@ libzanbase_la_CPPFLAGS = -I$(top_srcdir)/include
 libzanbase_la_SOURCES = \
 	zObject.cpp \
 	zReference.cpp \
-	zArray.cpp \
 	zTester.cpp \
 	zLogger.cpp \
 	zLoggerAppender.cpp \
@@ -13,7 +12,7 @@ libzanbase_la_SOURCES = \
 	zScopeMutex.cpp \
 	zBuffer.cpp \
 	zString.cpp \
-	zStringBuffer.cpp 
+	zStringBuilder.cpp 
 
 #	zBuffer.cpp \
 #	zEvent.cpp \

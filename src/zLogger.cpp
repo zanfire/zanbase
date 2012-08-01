@@ -7,9 +7,9 @@
 #include "zLoggerAppenderConsole.h"
 
 // TODO: Replace array with an hash table.
-static zArray* g_loggers = new zArray(YES, sizeof(void*), 32);
+static zArray<zLogger*>* g_loggers = new zArray<zLogger*>(YES, 32);
 
-zLogger::zLogger(char const* loggerName) : _appenders(YES, sizeof(void*), 32) {
+zLogger::zLogger(char const* loggerName) : _appenders(YES, 32) {
   _id = zString(loggerName);
   _level = LOG_LEVEL_INFO;
 }
@@ -26,7 +26,7 @@ zLogger::~zLogger(void) {
 zLogger* zLogger::get_logger(char const* id) {
   for (int i = 0; i < g_loggers->get_count(); i++) {
     zLogger* logger = NULL;
-    g_loggers->get(i, (void**)&logger);
+    g_loggers->get(i, &logger);
     if (logger != NULL) {
       if (logger->_id.equals(id)) {
         return logger;
@@ -102,7 +102,7 @@ void zLogger::log(LogLevel level, char const* format, va_list args) {
 
   for (int i = 0; i < _appenders.get_count(); i++) {
     zLoggerAppender* appender = NULL;
-    _appenders.get(i, (void**)&appender);
+    _appenders.get(i,  &appender);
     if (appender != NULL) {
       appender->line(line);
     }

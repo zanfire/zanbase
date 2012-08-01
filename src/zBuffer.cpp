@@ -22,6 +22,7 @@
 zBuffer::zBuffer(void) : zObject() {
   _buffer = NULL;
   _size = 0;
+  _next = NULL;
 }
 
 zBuffer::zBuffer(int size) : zObject() {
@@ -58,13 +59,13 @@ bool zBuffer::append(unsigned char const* buffer, int bufferSize) {
 
 bool zBuffer::append(zString const* str, zString::StoreFormat format) {
   if (format == zString::PASCAL) {
-    int len = str->getLength();
+    int len = str->get_length();
     append((unsigned char*)&len, 4);
-    append((unsigned char*)str->getBuffer(), len);
+    append((unsigned char*)str->get_buffer(), len);
   }
   else {
     // TODO: Ugly hack to copy the term char of str.
-    append((unsigned char*)str->getBuffer(), str->getLength() + 1);
+    append((unsigned char*)str->get_buffer(), str->get_length() + 1);
   }
   return true;
 }

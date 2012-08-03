@@ -24,14 +24,19 @@
 
 #include "zLogger.h"
 
+#include "zTester.h"
+#include "zStringTest.h"
+
 zLogger* g_logger = NULL;
 
 void showCopyright(char* programName);
 void showHelp(char* programName);
-void showHelp(char* programName);
 void handleInvalidArg(char* programName, char invalidArg);
+
 int main(int argc, char** argv) {
+
   g_logger = zLogger::get_logger("zanbase_test_runner");
+  
   int opt = 0;
 
   while ((opt = getopt(argc, argv, "hva:p:")) != -1) {
@@ -51,6 +56,14 @@ int main(int argc, char** argv) {
   }
 
   showCopyright(argv[0]);
+
+  zTester tester;
+  tester.add(new zStringTest());
+
+  tester.process_interactive();
+
+  printf("terminated...\n");
+
   return 0;
 }
 

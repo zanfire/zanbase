@@ -34,6 +34,7 @@ zLogger* zLogger::get_logger(char const* id) {
     }
   }
   zLogger* logger = new zLogger(id);
+  logger->add_appender(new zLoggerAppenderConsole());
   g_loggers->append(logger);
   return logger;
 }

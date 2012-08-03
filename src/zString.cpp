@@ -19,10 +19,11 @@
 #include "zStringBuilder.h"
 #include "zBuffer.h"
 #include "zArray.h"
-//#include "zVectorString.h"
 
 #include <string.h>
 #include <stddef.h>
+#include <ctype.h>
+// Why?
 #include <arpa/inet.h>
 
 
@@ -42,7 +43,7 @@ zString::zString(zString* str) {
 
 
 zString::zString(char c) {
-  init(&c, 1);
+  init((char const*)&c, 1);
 }
 
 
@@ -58,37 +59,44 @@ zString::zString(char const* str, int length) {
 
 
 zString::zString(zStringBuilder const* strb) {
-  char* targetBuffer = NULL;
-  if (strb->get_length() <= ZSTRING_STATIC_BUFFER_SIZE) {
-    targetBuffer = (char*)&_staticBuffer;
-    _dynamicBuffer = NULL;
-  } 
-  else {
-    _dynamicBuffer = new zBuffer(strb->get_length() + 1);
-    targetBuffer = (char*)_dynamicBuffer->get_buffer();
-    _staticBuffer[0] = 0x00;
-  }
-
-  int readBytes = 0;
-  const zArray<zString*>* strings = &strb->_strings;
-  for (int i = 0; i < strings->get_count(); i++) {
-    zString* str = NULL;
-    if (strings->get(i, &str)) {
-      memcpy(targetBuffer + readBytes, str->get_buffer(), str->get_length());
-      readBytes +=  str->get_length();
+  if (strb != NULL) {
+    char* targetBuffer = NULL;
+    if (strb->get_length() <= ZSTRING_STATIC_BUFFER_SIZE) {
+      targetBuffer = (char*)&_staticBuffer;
+      _dynamicBuffer = NULL;
+    } 
+    else {
+      _dynamicBuffer = new zBuffer(strb->get_length() + 1);
+      targetBuffer = (char*)_dynamicBuffer->get_buffer();
+      _staticBuffer[0] = 0x00;
     }
+
+    int readBytes = 0;
+    const zArray<zString*>* strings = &strb->_strings;
+    for (int i = 0; i < strings->get_count(); i++) {
+      zString* str = NULL;
+      if (strings->get(i, &str)) {
+        memcpy(targetBuffer + readBytes, str->get_buffer(), str->get_length());
+        readBytes +=  str->get_length();
+      }
+    }
+    targetBuffer[readBytes] = 0x00;
+    _length =  strb->get_length();
   }
-  targetBuffer[readBytes] = 0x00;
-  _length =  strb->get_length();
+  else {
+    init(NULL, 0);
+  }
 }
 
 
 zString::zString(zBuffer* buffer) {
-  // TODO: This implementation is WRONG!
-  _dynamicBuffer = buffer;
-  _dynamicBuffer->acquire_reference();
-  _staticBuffer[0] = 0x00;
-  _length = buffer->get_size() - 1;
+  if (buffer != NULL) {
+    // NOTE: The length is double checked in the init method.
+    init((char const*)buffer->get_buffer(), buffer->get_size());
+  }
+  else {
+    init(NULL, 0);
+  }
 }
   
 
@@ -105,23 +113,30 @@ zString::~zString(void) {
 
 
 void zString::init(char const* str, int length) {
-  length = strnlen(str, length);
-  if (str == NULL) {
-    _staticBuffer[0] = 0x00;
-	  _dynamicBuffer = NULL;
-  } 
-  else if (length <= ZSTRING_STATIC_BUFFER_SIZE) {
-    memcpy(_staticBuffer, str, length);
-    _staticBuffer[length] = 0x00;
-	  _dynamicBuffer = NULL;
-  } 
-  else {
-    _dynamicBuffer = new zBuffer(length + 1);
-    memcpy(_dynamicBuffer->get_buffer(), str, length);
-    _dynamicBuffer->get_buffer()[length] = 0x00;
-    _staticBuffer[0] = 0x00;
+  if (str != NULL) {
+    length = strnlen(str, length);
+    if (str == NULL) {
+      _staticBuffer[0] = 0x00;
+      _dynamicBuffer = NULL;
+    } 
+    else if (length <= ZSTRING_STATIC_BUFFER_SIZE) {
+      memcpy(_staticBuffer, str, length);
+      _staticBuffer[length] = 0x00;
+      _dynamicBuffer = NULL;
+    } 
+    else {
+      _dynamicBuffer = new zBuffer(length + 1);
+      memcpy(_dynamicBuffer->get_buffer(), str, length);
+      _dynamicBuffer->get_buffer()[length] = 0x00;
+      _staticBuffer[0] = '\0';
+    }
+    _length = length;
   }
-  _length = length;
+  else {
+    _staticBuffer[0] = '\0';
+    _dynamicBuffer = NULL;
+    _length = 0;
+  }
 }
 
 
@@ -198,6 +213,48 @@ int zString::last_index_of(zString& str, int endPos) const {
     }
   }
   return -1;
+}
+
+
+zString zString::to_lowercase(void) const {
+  zString str(get_buffer(), get_length());
+  char* dst = str.get_buffer();
+  char* src = dst;
+  for (int i = 0; i < str.get_length(); i++) {
+    dst[i] = tolower(src[i]);
+  }
+  return str;
+}
+
+
+zString zString::to_uppercase(void) const {
+  zString str(get_buffer(), get_length());
+  char* dst = str.get_buffer();
+  char* src = dst;
+  for (int i = 0; i < str.get_length(); i++) {
+    dst[i] = toupper(src[i]);
+  }
+  return str;
+}
+
+
+bool zString::is_num(void) const {
+  if (get_length() == 0) return false;
+
+  char* str = get_buffer();
+  for (int i = 0; i < get_length(); i++) {
+    if(!isdigit(str[i])) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+
+int zString::to_int(void) const {
+  if (get_length() == 0 || !is_num()) return 0;
+  return atoi(get_buffer());
 }
 
 

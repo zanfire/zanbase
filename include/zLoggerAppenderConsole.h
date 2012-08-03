@@ -30,7 +30,7 @@ public:
   zLoggerAppenderConsole(void);
   virtual ~zLoggerAppenderConsole(void);
 
-  virtual void line(char* line);
+  virtual void line(char const* line);
 };
 
 

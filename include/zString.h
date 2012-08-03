@@ -42,6 +42,7 @@ private:
   int _length;
 
 public:
+  /// Ctor
   zString(void);
   zString(zBuffer* buffer);
   zString(zStringBuilder const* strb);
@@ -49,14 +50,25 @@ public:
   zString(char c);
   zString(char const* str);
   zString(char const* str, int length);
+  /// Dtor
   virtual ~zString(void);
 
+  /// Copy constructors.
   zString(const zString& obj);
   zString& operator=(const zString& rhs);
 
   zString substrig(int startPos, int length) const;
   int index_of(zString& str, int startPos) const;
   int last_index_of(zString& str, int endPos) const;
+
+  /// Converts string to lowercase.
+  zString to_lowercase(void) const;
+  /// Converts string to uppercase.
+  zString to_uppercase(void) const;
+
+  /// Returns true if string is a number.
+  bool is_num(void) const;
+  int to_int(void) const;
 
   bool equals(zString const& str) const;
   int compare(zString const& str) const;

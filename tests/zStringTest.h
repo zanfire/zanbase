@@ -34,7 +34,7 @@ public:
   /// zTest implementation.
 
   virtual bool execute(int index);
-  virtual int get_number_of_tests(void);
+  virtual int get_num_tests(void);
   virtual char const* get_name(void);
   virtual char const* get_description(void);
   virtual char const* get_test_name(int index);

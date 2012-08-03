@@ -26,13 +26,15 @@ bool zTester::process(void) {
 
 
 bool zTester::process_interactive(void) {
-  printf("Tester is running in the interactive mode.\n");
+
+  printf("Select the test:\n");
 
   // Main loop
   while (true) {
     // List unporcessed test.
     for (int i = 0; i < _tests_unprocessed.get_count(); i++) {
       zStringBuilder strb;
+      strb.append("\t");
       strb.append(i);
       strb.append(") ");
 
@@ -44,11 +46,35 @@ bool zTester::process_interactive(void) {
       else {
         strb.append(" test invalid.");
       }
-
-      printf("%s\n", strb.to_string().get_buffer());
+      printf("%s\n> ", strb.to_string().get_buffer());
     }
 
-    break;
+    zStringBuilder commandBuf;
+    char c = 0;
+    while ((c = getchar()) != '\n') {
+      commandBuf.append(c);
+    }
+    zString command = commandBuf.to_string().to_lowercase();
+
+    if (command.equals("quit")) {
+      break;
+    }
+    if (command.is_num()) {
+      int index = command.to_int();
+
+      zTest* test = NULL;
+      _tests_unprocessed.get(index, &test);
+      if (test != NULL) {
+        
+        printf("Running test %s\n", test->get_name());
+
+        for (int i = 0; i < test->get_num_tests(); i++) {
+          printf(" - %s, result: ", test->get_test_name(i));
+          bool result = test->execute(i);
+          printf("%s\n", result ? "passed" : "failed");
+        }
+      }
+    }
   }
 
   printf("Tester terminated.\n");

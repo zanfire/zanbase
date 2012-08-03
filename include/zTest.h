@@ -17,6 +17,8 @@
 #ifndef ZTEST_H__
 #define ZTEST_H__
 
+class zLogger;
+
 #include "zCommon.h"
 
 /// Test interface.
@@ -26,6 +28,9 @@
 /// @author Matteo Valdina
 class zTest {
 
+protected:
+  zLogger* logger_;
+
 public:
   zTest(void) {}
   virtual ~zTest(void) {}
@@ -33,7 +38,7 @@ public:
   /// Execute the test at given index.
   virtual bool execute(int index) = 0;
   /// Returns the number of test implemented.
-  virtual int get_number_of_tests(void) = 0;
+  virtual int get_num_tests(void) = 0;
   /// Returns the name of the Test implementation.
   virtual char const* get_name(void) = 0;
   /// Returns the description for the  Test implementation.

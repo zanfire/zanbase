@@ -11,7 +11,7 @@ zLoggerAppenderConsole::~zLoggerAppenderConsole() {
 }
 
 
-void zLoggerAppenderConsole::line(char* line) {
+void zLoggerAppenderConsole::line(char const* line) {
   printf("%s\n", line);
 }
 

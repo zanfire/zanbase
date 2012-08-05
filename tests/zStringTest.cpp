@@ -17,14 +17,21 @@ zStringTest::~zStringTest(void) {
 
 
 bool zStringTest::execute(int index) {
-  bool ret = false;
-  if (index == 0) ret = test_all_ctor();
-  return ret;
+  switch(index) {
+    case 0: return test_all_ctor();
+    case 1: return test_substring();
+    case 2: return test_index_of();
+    case 3: return test_last_index_of();
+    case 4: return test_to_cases();
+    case 5: return false;
+    default: return false;
+  }
+  return false;
 }
 
 
 int zStringTest::get_num_tests(void) {
-  return 1;
+  return 5;
 }
 
 
@@ -39,8 +46,17 @@ char const* zStringTest::get_description(void) {
 
 
 char const* zStringTest::get_test_name(int index) {
-  if (index == 0) return "Constructors test";
+  switch(index) {
+    case 0: return "Constructors test";
+    case 1: return "Substring";
+    case 2: return "test";
+    case 3: return "test";
+    case 4: return "test";
+    case 5: return "test";
+    default: return "??";
+  }
   return "??";
+
 }
 
 
@@ -114,6 +130,7 @@ bool zStringTest::test_all_ctor(void) {
   }
 
   {
+    // Test NULL ctor.
     zString stringStrl((char const*)NULL);
     if (stringStrl.get_length() != 0 || strlen(stringStrl.get_buffer()) != 0 || (strcmp(stringStrl.get_buffer(), "") != 0)) {
       return false;
@@ -121,12 +138,69 @@ bool zStringTest::test_all_ctor(void) {
   }
 
   {
+    // Test NULL ctor.
     zString stringStrl((zStringBuilder*)NULL);
     if (stringStrl.get_length() != 0 || strlen(stringStrl.get_buffer()) != 0 || (strcmp(stringStrl.get_buffer(), "") != 0)) {
       return false;
     }
   }
 
+  {
+    // Test copy constructor.
+    zString str("12345");
+
+    zString strc = str;
+    if (strc.get_length() != 5 || strlen(strc.get_buffer()) != 5 || (strcmp(strc.get_buffer(), "12345") != 0)) {
+      return false;
+    }
+  }
+
+
+
+  {
+    // Test copy constructor.
+    zString strc = "12345";
+    if (strc.get_length() != 5 || strlen(strc.get_buffer()) != 5 || (strcmp(strc.get_buffer(), "12345") != 0)) {
+      return false;
+    }
+  }
+
+
+
+  {
+    // Test with a BIG buffer.
+    zBuffer* buf = new zBuffer(128 * 1024);
+    buf->set('a');
+    char* strbuf = (char*)buf->get_buffer();
+    strbuf[128 * 1024 - 1] = '\0';
+
+    zString str(strbuf);
+    if (str.get_length() != (128 * 1024 - 1) || strlen(str.get_buffer()) != (128 * 1024 - 1) || (strcmp(str.get_buffer(), strbuf) != 0)) {
+      return false;
+    }
+    buf->release_reference();
+  }
+
   return true;
+}
+
+
+bool zStringTest::test_substring() {
+  return false;;
+}
+
+
+bool zStringTest::test_index_of(void) {
+  return false;
+}
+
+
+bool zStringTest::test_last_index_of(void) {
+  return false;
+}
+
+
+bool zStringTest::test_to_cases(void) {
+  return false;
 }
 

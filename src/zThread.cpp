@@ -29,18 +29,27 @@
 
 
 class zThreadMain {
+protected:
+  bool _running;
 public:
-  zThreadMain(void) {}
+  zThreadMain(void) {
+    _running = false;
+  }
+
   ~zThreadMain(void) {}
 
   int main(zThread* th) {
     th->_mtxRunning.lock();
+    _running = true;
     int result = th->_runnable->run(th->_appParam);
+    _running = false;
     th->_mtxRunning.unlock();
     return result;
   }
 };
 
+
+/// Internal namespace.
 namespace Protected  {
 
 #if defined(_WIN32)
@@ -63,7 +72,7 @@ namespace Protected  {
 zThread::zThread(zRunnable* runnable) : zObject() {
   _runnable = runnable;
   //_thread = NULL;
-  // No good use something like INVALID_THREAD
+  // No good!!!! use something like INVALID_THREAD
   _threadID = 0;
 }
 

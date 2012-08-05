@@ -17,7 +17,7 @@
 #ifndef ZRANDOM_H__
 #define ZRANDOM_H__
 
-#include "global.h"
+#include "zCommon.h"
 
 #include <stdlib.h>
 

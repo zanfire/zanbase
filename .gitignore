@@ -20,3 +20,7 @@ Makefile.in
 # ctags list
 tags
 /debug/
+/m4/
+/*.guess
+/ltmain.sh
+/config.sub

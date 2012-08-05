@@ -17,7 +17,7 @@
 #ifndef ZFILE_H__
 #define ZFILE_H__
 
-#include "global.h"
+#include "zCommon.h"
 #include "zObject.h"
 #include "zString.h"
 

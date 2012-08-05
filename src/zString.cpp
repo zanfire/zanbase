@@ -18,12 +18,13 @@
 
 #include "zStringBuilder.h"
 #include "zBuffer.h"
-#include "zArray.h"
+#include "zStringTokenizer.h"
 
 #include <string.h>
 #include <stddef.h>
 #include <ctype.h>
-// Why?
+
+// TODO: Why?
 #include <arpa/inet.h>
 
 
@@ -148,6 +149,14 @@ zString& zString::operator=(const zString& rhs) {
   return *this;
 }
 
+
+zString& zString::operator=(char const* rhs) {
+  // TODO: Improves, avoid so much copy of a single string.
+  copy_from(zString(rhs));
+  return *this;
+}
+
+
 bool zString::equals(zString const& str) const {
   return compare(str) == 0;
 }
@@ -264,5 +273,17 @@ zString zString::from_pascal_string(unsigned char const* pascalString, int buffe
   length = isInNetworkByteOrder ? ntohl(length) : length;
   if (bufferSize < (int)(length + 4)) return zString();
   return zString((char*)(pascalString + 4), length);
+}
+
+
+
+zArray<zString> zString::split(zString const& tokenizer, bool ignore_empty_token) const {
+  zArray<zString> res(YES, 12);
+
+  zStringTokenizer tkn(*this, tokenizer, ignore_empty_token);
+  while (tkn.hasMoreTokens()) {
+    res.append(tkn.nextToken());
+  }
+  return res;
 }
 

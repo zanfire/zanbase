@@ -12,28 +12,10 @@ libzanbase_la_SOURCES = \
 	zScopeMutex.cpp \
 	zBuffer.cpp \
 	zString.cpp \
-	zStringBuilder.cpp 
+	zStringBuilder.cpp \
+	zEvent.cpp \
+	zThread.cpp \
+	zFile.cpp \
+	zRandom.cpp \
+	zStringTokenizer.cpp
 
-#	zBuffer.cpp \
-#	zEvent.cpp \
-#	zThread.cpp \
-#	zFile.cpp \
-#	zMutex.cpp \
-#	zScopeMutex.cpp \
-#	zRandom.cpp \
-#	zString.cpp \
-#	zStringTokenizer.cpp \
-#	zStringBuffer.cpp \
-#	zVector.cpp \
-#	zVectorString.cpp \
-#	zSocketAddress.cpp \
-#	zSocketAddressIPv4.cpp \
-#	zSocketAddressIPv6.cpp \
-#	zSocketBase.cpp \
-#	zSocketIP.cpp \
-#	zSocketTCP.cpp \
-#	zSocketTCPClient.cpp \
-#	zSocketTCPServer.cpp \
-#	zSocketTCPServerListener.cpp \
-#	zSocketTCPConnection.cpp \
-#	zSocketTCPConnectionListener.cpp

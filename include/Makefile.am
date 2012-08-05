@@ -11,26 +11,10 @@ include_HEADERS = \
 	zScopeMutex.h \
 	zBuffer.h \
 	zString.h \
-	zStringBuilder.h
+	zStringBuilder.h \
+	zEvent.h \
+	zThread.h \
+	zFile.h \
+	zRandom.h \
+	zStringTokenizer.h
 
-
-#	zBuffer.h
-#	zEvent.h \
-#	zThread.h \
-#	zFile.h \
-#	zEvent.h \
-#	zRandom.h \
-#	zStringTokenizer.h \
-#	zStringBuffer.h \
-#	zVectorString.h \
-#	zSocketAddress.h \
-#	zSocketAddressIPv4.h \
-#	zSocketAddressIPv6.h \
-#	zSocketBase.h \
-#	zSocketIP.h \
-#	zSocketTCP.h \
-#	zSocketTCPClient.h \
-#	zSocketTCPServer.h \
-#	zSocketTCPServerListener.h \
-#	zSocketTCPConnection.h \
-#	zSocketTCPConnectionListener.h

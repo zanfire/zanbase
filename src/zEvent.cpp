@@ -24,8 +24,13 @@ zEvent::zEvent(void) {
   _event = INVALID_HANDLE;
   _event = CreateEvent(NULL, true, false, NULL);
 #elif HAVE_PTHREAD_H
-  int res = pthread_cond_init(&_event, NULL);
-  CHECK_FATAL(res, "pthread_cond_init");
+  int success = pthread_cond_init(&_event, NULL);
+  if (success == 0) {
+    // Ok.
+  }
+  else {
+    // Error.
+  }
 #endif
 }
 
@@ -55,14 +60,14 @@ void zEvent::wait(int timeoutMillis) {
   _mtx.lock();
   int success = -1;
   if (timeoutMillis < 0) {
-    success = pthread_cond_wait(&_event, _mtx.getImplementationMutex());
+    success = pthread_cond_wait(&_event, _mtx.get_impl());
   }
   else {
     timespec request_time;
 
     request_time.tv_sec = (int)(timeoutMillis / 1000);
     request_time.tv_nsec = (int)(timeoutMillis % 1000) * 1000;
-    success = pthread_cond_timedwait(&_event, _mtx.getImplementationMutex(), &request_time);
+    success = pthread_cond_timedwait(&_event, _mtx.get_impl(), &request_time);
   }
 
   if (success == 0) {

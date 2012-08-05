@@ -21,8 +21,11 @@
 
 #include "zObject.h"
 #include "zString.h"
-#include "zVectorString.h"
+#include "zArray.h"
 
+
+
+/// REFACTOR name
 class zStringTokenizer : public zObject {
 private:
   zString tokenized_;
@@ -35,8 +38,6 @@ public:
 
   bool hasMoreTokens(void) const;
   zString nextToken(void);
-
-  static zVectorString split(zString const& tokenized, zString const& tokenizer);
 
 };
 

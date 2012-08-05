@@ -60,7 +60,8 @@ int main(int argc, char** argv) {
   zTester tester;
   tester.add(new zStringTest());
 
-  tester.process_interactive();
+  //tester.process_interactive();
+  tester.process();
 
   printf("terminated...\n");
 

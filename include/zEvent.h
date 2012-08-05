@@ -17,7 +17,7 @@
 #ifndef ZEVENT_H__
 #define ZEVENT_H__
 
-#include "global.h"
+#include "zEvent.h"
 #include "zObject.h"
 #include "zMutex.h"
 
@@ -30,7 +30,7 @@
   #define EVENT_TYPE pthread_cond_t
 #endif
 
-class zEvent : public zObject {
+class zEvent {
 protected:
   EVENT_TYPE _event;
   zMutex _mtx;

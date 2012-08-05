@@ -29,14 +29,14 @@ zStringTokenizer::~zStringTokenizer(void) {
 
 
 bool zStringTokenizer::hasMoreTokens(void) const {
-  return currentPos_ < tokenized_.getLength();
+  return currentPos_ < tokenized_.get_length();
 }
 
 
 zString zStringTokenizer::nextToken(void) {
   int start = currentPos_;
-  currentPos_ = tokenized_.indexOf(tokenizer_, currentPos_);
-  currentPos_ = (currentPos_ == -1) ? tokenized_.getLength() : currentPos_;
+  currentPos_ = tokenized_.index_of(tokenizer_, currentPos_);
+  currentPos_ = (currentPos_ == -1) ? tokenized_.get_length() : currentPos_;
   if (start == currentPos_ && skipEmptyToken_) {
     return nextToken();
   }
@@ -46,14 +46,3 @@ zString zStringTokenizer::nextToken(void) {
   }
 }
 
-
-zVectorString zStringTokenizer::split(zString const& tokenized, zString const& tokenizer) {
-  zVectorString res(false, 12);
-
-  zStringTokenizer tkn(tokenized, tokenizer, true);
-  while (tkn.hasMoreTokens()) {
-    res.append(tkn.nextToken());
-  }
-  return res;
-
-}

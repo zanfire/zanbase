@@ -70,3 +70,13 @@ bool zBuffer::append(zString const* str, zString::StoreFormat format) {
   return true;
 }
 
+
+bool zBuffer::set(uint8_t value) {
+  if (_size < 0) return false;
+  if (_buffer == NULL) return false;
+
+  memset(_buffer, value, _size);
+  
+  return true;
+}
+

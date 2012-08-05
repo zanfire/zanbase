@@ -42,7 +42,7 @@ zFile* zFile::open(zString const& path, OpenMode mode) {
     fmode = "a";
   }
 
-  FILE* fd = fopen(path.getBuffer(), fmode);
+  FILE* fd = fopen(path.get_buffer(), fmode);
   if (fd != NULL) {
     return new zFile(fd, path);
   }

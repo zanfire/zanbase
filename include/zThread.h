@@ -17,7 +17,7 @@
 #ifndef ZTHREAD_H__
 #define ZTHREAD_H__
 
-#include "global.h"
+#include "zCommon.h"
 #include "zObject.h"
 
 class zRunnable;
@@ -60,7 +60,9 @@ public:
   void start(void* param = NULL);
   void stop(void);
   zRunnable* getRunnable() { return _runnable; }
-  bool isRunning() { return _mtxRunning.isLocked(); }
+  bool isRunning() { 
+    return false;
+  }
 
   void join();
 };

@@ -19,7 +19,7 @@
 
 #include "zCommon.h"
 #include "zObject.h"
-
+#include "zArray.h"
 
 #define ZSTRING_STATIC_BUFFER_SIZE 512
 
@@ -56,26 +56,43 @@ public:
   /// Copy constructors.
   zString(const zString& obj);
   zString& operator=(const zString& rhs);
+  zString& operator=(char const* rhs);
 
+  /// Returns the substring starting from startPos and with the given length.
   zString substrig(int startPos, int length) const;
+
+  /// Returns the fist index of given string.
   int index_of(zString& str, int startPos) const;
+  
+  /// Returns last index of given string.
   int last_index_of(zString& str, int endPos) const;
 
   /// Converts string to lowercase.
   zString to_lowercase(void) const;
+  
   /// Converts string to uppercase.
   zString to_uppercase(void) const;
-
+  
   /// Returns true if string is a number.
   bool is_num(void) const;
+  
+  /// Convert the string value to an integer if it is numeric otherwise returns 0.
   int to_int(void) const;
 
+  /// Returns true if string is equals to the given one.
   bool equals(zString const& str) const;
+
+  /// Compare a string with the given one.
+  /// @return 0 if equals, -1 if less or 1 if greater. 
   int compare(zString const& str) const;
+
+  zArray<zString> split(zString const& tokeinze, bool ignore_empty_token) const;
   
   char* get_buffer(void) const;
   int get_length(void) const { return _length; }
 
+  /// Create a string from a pascal format string.
+  // MOVE to constructor?
   static zString from_pascal_string(unsigned char const* pascalString, int bufferSize, bool isInNetworkByteOrder = false);
 
 protected:  

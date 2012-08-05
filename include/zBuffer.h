@@ -20,8 +20,11 @@
 #include "zCommon.h"
 #include "zObject.h"
 #include "zString.h"
-
-///
+ 
+/// A buffer wrapper that provides a reference system.
+/// NOTE: This class provides a pointer to other instance of zBuffer. ???
+/// NOTE: This class is not thread-safe.
+/// 
 /// @author Matteo Valdina
 class zBuffer : public zObject {
 protected:
@@ -33,8 +36,15 @@ public:
 
   /// Return the pointer to the allocated buffer
   uint8_t* get_buffer(void) const { return _buffer; }
+  
+  /// Get size of the buffer.
   int get_size(void) const { return _size; }
+
+  /// Resize the buffer
   void resize(int size);
+
+  /// Set a value for each byte in the buffer.
+  bool set(uint8_t value);
 
   bool append(uint8_t const* buffer, int size);
   /// Append a zString in the buffer.

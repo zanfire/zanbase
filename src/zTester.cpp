@@ -21,7 +21,21 @@ void zTester::add(zTest* test) {
 
 
 bool zTester::process(void) {
-  return true;
+  bool ret = true;
+  for (int i = 0; i < _tests_unprocessed.get_count(); i++) {
+    zTest* test = NULL;
+    _tests_unprocessed.get(i, &test);
+    if (test != NULL) {
+      for (int i = 0; i < test->get_num_tests(); i++) {
+        printf("%s: %s, result: ",test->get_name(), test->get_test_name(i));
+        bool result = test->execute(i);
+        printf("%s\n", result ? "passed" : "failed");
+
+        ret = (ret && result);
+      }
+    }
+  }
+  return ret;
 }
 
 
@@ -76,8 +90,6 @@ bool zTester::process_interactive(void) {
       }
     }
   }
-
-  printf("Tester terminated.\n");
   return true;
 }
 

@@ -43,6 +43,10 @@ public:
 protected:
   // First test
   bool test_all_ctor(void);
+  bool test_substring(void);
+  bool test_index_of(void);
+  bool test_last_index_of(void);
+  bool test_to_cases(void);
 };
 
 #endif // ZSTRINGTEST_H__

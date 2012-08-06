@@ -38,8 +38,9 @@ int main(int argc, char** argv) {
   g_logger = zLogger::get_logger("zanbase_test_runner");
   
   int opt = 0;
+  bool interactive = false;
 
-  while ((opt = getopt(argc, argv, "hva:p:")) != -1) {
+  while ((opt = getopt(argc, argv, "hvi")) != -1) {
     switch (opt) {
     case 'h':
       showHelp(argv[0]);
@@ -48,6 +49,9 @@ int main(int argc, char** argv) {
     case 'v':
       showCopyright(argv[0]);
       exit(EXIT_SUCCESS);
+      break;
+    case 'i':
+      interactive = true;
       break;
     default:
       handleInvalidArg(argv[0], opt);
@@ -60,18 +64,22 @@ int main(int argc, char** argv) {
   zTester tester;
   tester.add(new zStringTest());
 
-  //tester.process_interactive();
-  tester.process();
-
-  printf("terminated...\n");
-
-  return 0;
+  bool result = false;
+  if (interactive) {
+    result = tester.process_interactive();
+  }
+  else {
+    result = tester.process();
+  }
+  
+  return result ? EXIT_SUCCESS : EXIT_FAILURE;
 }
 
 
 void showCopyright(char* programName) {
   printf("%s version %s\n", programName, PACKAGE_VERSION);
   printf("Copyright 2009-2012 Matteo Valdina (bugs: %s)\n", PACKAGE_BUGREPORT);
+  printf("\n");
 }
 
 
@@ -84,6 +92,7 @@ void showHelp(char* programName) {
   printf("Usage: %s [OPTION]...\n", programName);
   printf("This program executes a set of tests for the zanbase library.\n");
   printf("  -v          show version information and exit\n");
+  printf("  -i          interactive mode\n");
   printf("\n");
   printf("Report %s bugs to %s.\n", programName, PACKAGE_BUGREPORT);
 }

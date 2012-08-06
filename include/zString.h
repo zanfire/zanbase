@@ -59,7 +59,7 @@ public:
   zString& operator=(char const* rhs);
 
   /// Returns the substring starting from startPos and with the given length.
-  zString substrig(int startPos, int length) const;
+  zString substring(int startPos, int length) const;
 
   /// Returns the fist index of given string.
   int index_of(zString& str, int startPos) const;
@@ -85,6 +85,8 @@ public:
   /// Compare a string with the given one.
   /// @return 0 if equals, -1 if less or 1 if greater. 
   int compare(zString const& str) const;
+
+  bool is_empty(void) { return _length == 0; }
 
   zArray<zString> split(zString const& tokeinze, bool ignore_empty_token) const;
   

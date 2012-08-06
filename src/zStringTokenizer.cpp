@@ -42,7 +42,7 @@ zString zStringTokenizer::nextToken(void) {
   }
   else {
     int length = currentPos_++ - start;
-    return tokenized_.substrig(start, length);
+    return tokenized_.substring(start, length);
   }
 }
 

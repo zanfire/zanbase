@@ -186,7 +186,40 @@ bool zStringTest::test_all_ctor(void) {
 
 
 bool zStringTest::test_substring() {
-  return false;;
+  zString target = "0123456789ABCDEF";
+
+  zString sub = target.substring(5, 5);
+  if (!sub.equals("56789")) {
+    return false;
+  }
+
+  sub = target.substring(0, 64);
+  if (!sub.equals(target)) {
+    return false;
+  }
+
+  sub = target.substring(-1, 64);
+  if (!sub.equals(target)) {
+    return false;
+  }
+
+  sub = target.substring(0, -1);
+  if (!sub.is_empty()) {
+    return false;
+  }
+
+
+  sub = target.substring(64, 64);
+  if (!sub.is_empty()) {
+    return false;
+  }
+
+  sub = target.substring(64, -1);
+  if (!sub.is_empty()) {
+    return false;
+  }
+
+  return true;
 }
 
 

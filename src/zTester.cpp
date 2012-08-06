@@ -26,11 +26,11 @@ bool zTester::process(void) {
     zTest* test = NULL;
     _tests_unprocessed.get(i, &test);
     if (test != NULL) {
-      for (int i = 0; i < test->get_num_tests(); i++) {
-        printf("%s: %s, result: ",test->get_name(), test->get_test_name(i));
-        bool result = test->execute(i);
+      printf("%d )  %s\n", (i + 1), test->get_name());
+      for (int x = 0; x < test->get_num_tests(); x++) {
+        printf("\t- %s, result: ", test->get_test_name(x));
+        bool result = test->execute(x);
         printf("%s\n", result ? "passed" : "failed");
-
         ret = (ret && result);
       }
     }
@@ -41,8 +41,8 @@ bool zTester::process(void) {
 
 bool zTester::process_interactive(void) {
 
-  printf("Select the test:\n");
-
+  printf("Select a test:\n");
+  bool res = true;
   // Main loop
   while (true) {
     // List unporcessed test.
@@ -86,10 +86,11 @@ bool zTester::process_interactive(void) {
           printf(" - %s, result: ", test->get_test_name(i));
           bool result = test->execute(i);
           printf("%s\n", result ? "passed" : "failed");
+          res = (res && result);
         }
       }
     }
   }
-  return true;
+  return res;
 }
 

@@ -59,13 +59,23 @@ public:
   zString& operator=(char const* rhs);
 
   /// Returns the substring starting from startPos and with the given length.
+  /// if arguments are invalid it returns an empty string.
+  /// startPos is less than 0 it will be traited as 0
+  /// length greater than string length will be capped to the string length.
   zString substring(int startPos, int length) const;
 
   /// Returns the fist index of given string.
-  int index_of(zString& str, int startPos) const;
+  /// If string is missing or arguments are invalid it returns -1.
+  /// If str is empty, it returns -1.
+  /// If startPos is less than 0 it will be traited as 0.
+  /// If startPos eis greater than string length it returns -1.
+  int index_of(zString const& str, int startPos) const;
   
   /// Returns last index of given string.
-  int last_index_of(zString& str, int endPos) const;
+  /// If string is missing or aguments are invalid it returns -1.
+  /// If str is empty, returns -1.
+  /// If endPos is greater than string it will the cap to string length.
+  int last_index_of(zString const& str, int endPos) const;
 
   /// Converts string to lowercase.
   zString to_lowercase(void) const;
@@ -86,7 +96,7 @@ public:
   /// @return 0 if equals, -1 if less or 1 if greater. 
   int compare(zString const& str) const;
 
-  bool is_empty(void) { return _length == 0; }
+  bool is_empty(void) const { return _length == 0; }
 
   zArray<zString> split(zString const& tokeinze, bool ignore_empty_token) const;
   

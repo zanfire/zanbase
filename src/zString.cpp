@@ -192,6 +192,7 @@ void zString::copy_from(const zString& str) {
 
 
 zString zString::substring(int startPos, int length) const {
+  if (is_empty()) return zString();
   if (startPos < 0) startPos = 0;
   if ((startPos + length) > get_length()) length = get_length() - startPos;
   if (length < 0 || startPos > get_length()) return zString();
@@ -200,14 +201,19 @@ zString zString::substring(int startPos, int length) const {
 }
 
 
-int zString::index_of(zString& str, int startPos) const {
+int zString::index_of(zString const& str, int startPos) const {
+  if (str.is_empty() || is_empty()) return -1;
+  if (startPos < 0) startPos = 0;
+  if (startPos >= get_length()) return -1;
+
   char* buffer = get_buffer();
-  int l = str.get_length();
+  int len = str.get_length();
   char* strBuf = str.get_buffer();
-  for (int i = startPos; i < _length; i += l) {
+  // Search for str.
+  for (int i = startPos; i < _length; i++) {
     // Check size
-    if ((_length - i) > l) {
-      if (memcmp(buffer + i, strBuf, l) == 0) {
+    if ((_length - i) >= len) {
+      if (memcmp(buffer + i, strBuf, len) == 0) {
         return i;
       }
     }
@@ -216,11 +222,18 @@ int zString::index_of(zString& str, int startPos) const {
 }
 
 
-int zString::last_index_of(zString& str, int endPos) const {
+int zString::last_index_of(zString const& str, int endPos) const {
+  if (str.is_empty()) return -1;
+  if (endPos <= 0) return -1;
+  if (endPos > get_length()) endPos = get_length();
+
   char* buffer = get_buffer();
-  for (int i = get_length() - str.get_length(); i >= endPos; i--) {
-    if (memcmp(buffer + i, str.get_buffer(), str.get_length()) == 0) {
-      return i;
+  int len = str.get_length();
+  for (int i = endPos; i >= 0; i--) {
+    if (i >= len) {
+      if (memcmp(buffer + i - len, str.get_buffer(), len) == 0) {
+        return i - len;
+      }
     }
   }
   return -1;

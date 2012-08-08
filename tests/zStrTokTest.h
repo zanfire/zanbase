@@ -14,42 +14,36 @@
  * limitations under the License.
  *****************************************************************************/
 
-#ifndef ZTESTER_H__
-#define ZTESTER_H__
+#ifndef ZSTRTOKTEST_H__
+#define ZSTRTOKTEST_H__
 
 #include "zCommon.h"
+#include "zTest.h"
 
-#include "zArray.h"
 
-class zTest;
-
-/// This class execute a set of test. 
+/// This class provides a test implementation for zStringTokenizer.
 /// @author Matteo Valdina
-class zTester {
+class zStrTokTest : public zTest {
 
 protected:
-  /// Tests
-  zArray<zTest*> _tests;
 
 public:
-  zTester(void);
-  virtual ~zTester(void);
+  zStrTokTest(void);
+  virtual ~zStrTokTest(void);
+  
+  /// zTest implementation.
 
-  /// Add a test to the test set.
-  /// @remarks This test will be executed in the insertion order.
-  void add(zTest* test);
+  virtual bool execute(int index);
+  virtual int get_num_tests(void);
+  virtual char const* get_name(void);
+  virtual char const* get_description(void);
+  virtual char const* get_test_name(int index);
+  virtual char const* get_test_description(int index);
 
-  /// Remove a test from the test set.
-  zTest* remove(int index);
-
-  int get_count(void) const { return _tests.get_count(); }
-
-  /// Tester processes the test set.
-  /// @return TODO: define if needed a expressive return code.
-  bool process(void);
-  //// Tester interacts via the console to choose the executed tests.
-  bool process_interactive(void);
+protected:
+  // First test
+  bool test_simple_case(void);
 };
 
-#endif
+#endif // ZSTRTOKTEST_H__
 

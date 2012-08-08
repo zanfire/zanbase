@@ -14,42 +14,36 @@
  * limitations under the License.
  *****************************************************************************/
 
-#ifndef ZTESTER_H__
-#define ZTESTER_H__
+#ifndef ZTESTTEST_H__
+#define ZTESTTEST_H__
 
 #include "zCommon.h"
+#include "zTest.h"
 
-#include "zArray.h"
 
-class zTest;
-
-/// This class execute a set of test. 
+/// This class provides a the test implementation as reference.
 /// @author Matteo Valdina
-class zTester {
+class zTestTest : public zTest {
 
 protected:
-  /// Tests
-  zArray<zTest*> _tests;
 
 public:
-  zTester(void);
-  virtual ~zTester(void);
+  zTestTest(void);
+  virtual ~zTestTest(void);
+  
+  /// zTest implementation.
 
-  /// Add a test to the test set.
-  /// @remarks This test will be executed in the insertion order.
-  void add(zTest* test);
+  virtual bool execute(int index);
+  virtual int get_num_tests(void);
+  virtual char const* get_name(void);
+  virtual char const* get_description(void);
+  virtual char const* get_test_name(int index);
+  virtual char const* get_test_description(int index);
 
-  /// Remove a test from the test set.
-  zTest* remove(int index);
-
-  int get_count(void) const { return _tests.get_count(); }
-
-  /// Tester processes the test set.
-  /// @return TODO: define if needed a expressive return code.
-  bool process(void);
-  //// Tester interacts via the console to choose the executed tests.
-  bool process_interactive(void);
+protected:
+  // First test
+  bool test_one(void);
 };
 
-#endif
+#endif // ZTESTTEST_H__
 

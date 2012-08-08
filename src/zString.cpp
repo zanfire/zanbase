@@ -164,6 +164,7 @@ zString& zString::operator=(char const* rhs) {
 
 
 bool zString::equals(zString const& str) const {
+  if (str.get_length() != get_length()) return false;
   return compare(str) == 0;
 }
 

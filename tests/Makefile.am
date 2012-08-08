@@ -4,4 +4,6 @@ bin_PROGRAMS = zanbase_tests_runner
 zanbase_tests_runner_LDADD = ../src/libzanbase.la
 zanbase_tests_runner_SOURCES = \
 	main.cpp \
-	zStringTest.cpp
+	zStringTest.cpp \
+	zStrTokTest.cpp \
+	zTestTest.cpp

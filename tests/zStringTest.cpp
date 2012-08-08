@@ -340,7 +340,8 @@ bool zStringTest::test_comparison(void) {
   // TEST compare
   str = "abc";
   if (str.compare("abc") != 0) return false;
-  if (str.compare("ABC") != -1) return false;
+
+  if (str.compare("ABC") != 1) return false;
   if (str.compare("bbc") != -1) return false;
 
   return true;
@@ -348,16 +349,26 @@ bool zStringTest::test_comparison(void) {
 
 
 bool zStringTest::test_split(void) {
-  zString str = "0 1 2 3 4 5 6  7 8 9 ";
+  zString str = "0 1 2  3 4 59 ";
 
   zArray<zString> arr = str.split(" ", true);
   
-  if (arr.get_count() != 10) return false;
+  if (arr.get_count() != 6) return false;
 
   zString tmp;
   
   arr.get(0, &tmp);
+  if (!tmp.equals("0")) return false;
+  arr.get(1, &tmp);
   if (!tmp.equals("1")) return false;
+  arr.get(2, &tmp);
+  if (!tmp.equals("2")) return false;
+  arr.get(3, &tmp);
+  if (!tmp.equals("3")) return false;
+  arr.get(4, &tmp);
+  if (!tmp.equals("4")) return false;
+  arr.get(5, &tmp);
+  if (!tmp.equals("59")) return false;
 
   return true;
 }
@@ -369,7 +380,7 @@ bool zStringTest::test_memory(void) {
   
   // Check memory.
   
-  for (int i = 0; i <= 100000; i++) {
+  for (int i = 0; i <= 1000; i++) {
     zString* tmp1 = new zString("ciao");
     zString* tmp2 = new zString((char*)buf->get_buffer(), buf->get_size() - 1);
 

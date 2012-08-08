@@ -26,6 +26,8 @@
 
 #include "zTester.h"
 #include "zStringTest.h"
+#include "zTestTest.h"
+#include "zStrTokTest.h"
 
 zLogger* g_logger = NULL;
 
@@ -61,15 +63,25 @@ int main(int argc, char** argv) {
 
   showCopyright(argv[0]);
 
+  // Initialize tests.
   zTester tester;
+  tester.add(new zTestTest());
+  tester.add(new zStrTokTest());
   tester.add(new zStringTest());
 
+  // Execute tests.
   bool result = false;
   if (interactive) {
     result = tester.process_interactive();
   }
   else {
     result = tester.process();
+  }
+
+  // Cleanup.
+  while (tester.get_count() > 0) {
+    zTest* test = tester.remove(0);
+    if (test != NULL) delete test;
   }
   
   return result ? EXIT_SUCCESS : EXIT_FAILURE;

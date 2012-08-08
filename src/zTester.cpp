@@ -5,7 +5,7 @@
 
 #include <stdio.h>
 
-zTester::zTester(void) : _tests_unprocessed(YES, 32), _tests_processed(YES, 32) {
+zTester::zTester(void) : _tests(YES, 32) {
   // 
 }
 
@@ -16,15 +16,26 @@ zTester::~zTester(void) {
 
 
 void zTester::add(zTest* test) {
-  _tests_unprocessed.append(test);
+  _tests.append(test);
+}
+
+
+zTest* zTester::remove(int index) {
+  zTest* t = NULL;
+  if (_tests.remove(index, &t)) {
+    return t;
+  }
+  else {
+    return NULL;
+  }
 }
 
 
 bool zTester::process(void) {
   bool ret = true;
-  for (int i = 0; i < _tests_unprocessed.get_count(); i++) {
+  for (int i = 0; i < _tests.get_count(); i++) {
     zTest* test = NULL;
-    _tests_unprocessed.get(i, &test);
+    _tests.get(i, &test);
     if (test != NULL) {
       printf("%d )  %s\n", (i + 1), test->get_name());
       for (int x = 0; x < test->get_num_tests(); x++) {
@@ -42,6 +53,8 @@ bool zTester::process(void) {
         #define RED 31
         #define GREEN 32
         #define BG_BLACK 4
+
+        // TODO: This is not supported under Win32.
 
         if (result) {
           printf("%c[%d;%d;%dmpassed", 0x1B, BRIGHT, GREEN, BG_BLACK);
@@ -67,14 +80,14 @@ bool zTester::process_interactive(void) {
   // Main loop
   while (true) {
     // List unporcessed test.
-    for (int i = 0; i < _tests_unprocessed.get_count(); i++) {
+    for (int i = 0; i < _tests.get_count(); i++) {
       zStringBuilder strb;
       strb.append("\t");
       strb.append(i);
       strb.append(") ");
 
       zTest* test = NULL;
-      _tests_unprocessed.get(i, &test);
+      _tests.get(i, &test);
       if (test != NULL) {
         strb.append(test->get_name());
       }
@@ -98,7 +111,7 @@ bool zTester::process_interactive(void) {
       int index = command.to_int();
 
       zTest* test = NULL;
-      _tests_unprocessed.get(index, &test);
+      _tests.get(index, &test);
       if (test != NULL) {
         
         printf("Running test %s\n", test->get_name());

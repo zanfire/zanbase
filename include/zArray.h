@@ -50,6 +50,7 @@ public:
   /// Dtor.
   virtual ~zArray(void) {
     free(_elements);
+    if (_mtx != NULL) delete _mtx;
   }
 
   /// Get count of elements.
@@ -87,13 +88,13 @@ public:
   /// @param element 
   bool remove(int index, T* element) {
     zScopeMutex scope(_mtx);
-    if (index < 0 || index > _count) return false;
+    if (index < 0 || index >= _count) return false;
 
     *element = _elements[index];
+    _count--;
     for (int i = index; i < _count; i++) {
       _elements[i] = _elements[i + 1];
     }
-    _count--;
     return true;
   }
   
@@ -101,7 +102,7 @@ public:
   /// Get an element at the given index.
   bool get(int index, T* element) const {
     zScopeMutex scope(_mtx);
-    if (index < 0 || index > _count) return false;
+    if (index < 0 || index >= _count) return false;
     
     *element = _elements[index];
     return true;
@@ -109,6 +110,8 @@ public:
 
 
   bool resize(int new_size) {
+    // TODO: Implements!!!
+    _elements = (T*)realloc(_elements, sizeof(T*) * new_size);
     return true;
   }
 };

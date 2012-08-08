@@ -28,9 +28,30 @@ bool zTester::process(void) {
     if (test != NULL) {
       printf("%d )  %s\n", (i + 1), test->get_name());
       for (int x = 0; x < test->get_num_tests(); x++) {
-        printf("\t- %s, result: ", test->get_test_name(x));
+        // Build nice string.
+        zStringBuilder strb;
+        strb.appendf("\t- %s, result: ", test->get_test_name(x));
+        while (strb.get_length() <= 64) {
+          strb.append('.');
+        }
+
         bool result = test->execute(x);
-        printf("%s\n", result ? "passed" : "failed");
+        printf("%s", strb.to_string().get_buffer());
+
+        #define BRIGHT 1
+        #define RED 31
+        #define GREEN 32
+        #define BG_BLACK 4
+
+        if (result) {
+          printf("%c[%d;%d;%dmpassed", 0x1B, BRIGHT, GREEN, BG_BLACK);
+        } 
+        else {
+           printf("%c[%d;%d;%dmfailed", 0x1B, BRIGHT, RED, BG_BLACK);
+        }
+
+        // Reset color and next line
+        printf("\n%c[%dm", 0x1B, 0);
         ret = (ret && result);
       }
     }

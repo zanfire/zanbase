@@ -24,6 +24,12 @@
 #include <stddef.h>
 #include <ctype.h>
 
+// TODO: ADD MACRO GUARD
+#include <errno.h>
+
+#include <limits.h>
+
+
 // TODO: Why?
 #include <arpa/inet.h>
 
@@ -278,7 +284,13 @@ bool zString::is_num(void) const {
 
 int zString::to_int(void) const {
   if (get_length() == 0 || !is_num()) return 0;
-  return atoi(get_buffer());
+  // TODO: macro guard!!
+  long int result = strtol(get_buffer(), (char**)NULL, 10);
+
+  if (errno == ERANGE) return 0;
+  if (result > INT_MAX) return 0;
+  if (result < INT_MIN) return 0;
+  return (int) result;
 }
 
 
@@ -296,8 +308,8 @@ zArray<zString> zString::split(zString const& tokenizer, bool ignore_empty_token
   zArray<zString> res(YES, 12);
 
   zStringTokenizer tkn(*this, tokenizer, ignore_empty_token);
-  while (tkn.hasMoreTokens()) {
-    res.append(tkn.nextToken());
+  while (tkn.has_more_tokens()) {
+    res.append(tkn.next());
   }
   return res;
 }

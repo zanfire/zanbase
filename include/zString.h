@@ -83,7 +83,8 @@ public:
   /// Converts string to uppercase.
   zString to_uppercase(void) const;
   
-  /// Returns true if string is a number.
+  /// Returns true if string is a positive number.
+  /// NOTES: Spaces ae not valid.
   bool is_num(void) const;
   
   /// Convert the string value to an integer if it is numeric otherwise returns 0.

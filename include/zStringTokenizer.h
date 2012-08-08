@@ -24,21 +24,24 @@
 #include "zArray.h"
 
 
+/// This class tokenize a string in substring.
+///
+/// @author Matteo Valdina
+class zStringTokenizer {
+protected:
+  zString _tokenized;
+  zString _tokenizer;
+  bool _skipEmptyToken;
+  int _currentPos;
 
-/// REFACTOR name
-class zStringTokenizer : public zObject {
-private:
-  zString tokenized_;
-  zString tokenizer_;
-  bool skipEmptyToken_;
-  int currentPos_;
 public:
   zStringTokenizer(zString const& tokenized, zString const& tokenizer, bool skipEmptyToken);
   virtual ~zStringTokenizer(void);
-
-  bool hasMoreTokens(void) const;
-  zString nextToken(void);
-
+ 
+  /// Returns true if it is available more tokens.
+  bool has_more_tokens(void) const;
+  /// Returns the next tokens and move internal pos to the next one.
+  zString next(void);
 };
 
-#endif // ISTRINGTOK_H__
+#endif // ZSTRINGTOK_H__

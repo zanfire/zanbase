@@ -47,6 +47,10 @@ protected:
   bool test_index_of(void);
   bool test_last_index_of(void);
   bool test_to_cases(void);
+  bool test_numeric(void);
+  bool test_comparison(void);
+  bool test_split(void);
+  bool test_memory(void);
 };
 
 #endif // ZSTRINGTEST_H__

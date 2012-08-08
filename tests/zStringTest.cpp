@@ -23,7 +23,10 @@ bool zStringTest::execute(int index) {
     case 2: return test_index_of();
     case 3: return test_last_index_of();
     case 4: return test_to_cases();
-    case 5: return false;
+    case 5: return test_numeric();
+    case 6: return test_comparison();
+    case 7: return test_split();
+    case 8: return test_memory();
     default: return false;
   }
   return false;
@@ -31,7 +34,7 @@ bool zStringTest::execute(int index) {
 
 
 int zStringTest::get_num_tests(void) {
-  return 5;
+  return 9;
 }
 
 
@@ -47,12 +50,15 @@ char const* zStringTest::get_description(void) {
 
 char const* zStringTest::get_test_name(int index) {
   switch(index) {
-    case 0: return "Constructors test";
-    case 1: return "Substring";
-    case 2: return "test";
-    case 3: return "test";
-    case 4: return "test";
-    case 5: return "test";
+    case 0: return "ctor";
+    case 1: return "substring";
+    case 2: return "index of";
+    case 3: return "last index of";
+    case 4: return "to cases";
+    case 5: return "numeric";
+    case 6: return "comparison";
+    case 7: return "split";
+    case 8: return "memory";
     default: return "??";
   }
   return "??";
@@ -186,6 +192,9 @@ bool zStringTest::test_all_ctor(void) {
 
 
 bool zStringTest::test_substring() {
+  // Test varius substring combination.
+  // 
+
   zString target = "0123456789ABCDEF";
 
   zString sub = target.substring(5, 5);
@@ -199,41 +208,179 @@ bool zStringTest::test_substring() {
   }
 
   sub = target.substring(-1, 64);
-  if (!sub.equals(target)) {
-    return false;
-  }
+  if (!sub.equals(target)) return false;
 
   sub = target.substring(0, -1);
-  if (!sub.is_empty()) {
-    return false;
-  }
-
+  if (!sub.is_empty()) return false;
 
   sub = target.substring(64, 64);
-  if (!sub.is_empty()) {
-    return false;
-  }
+  if (!sub.is_empty()) return false;
 
   sub = target.substring(64, -1);
-  if (!sub.is_empty()) {
-    return false;
-  }
+  if (!sub.is_empty()) return false;
+
+  target = "";
+  sub = target.substring(0, 1);
+  if (!sub.is_empty()) return false;
 
   return true;
 }
 
 
 bool zStringTest::test_index_of(void) {
-  return false;
+  //             0123456789_11_14_17_20_23_26_29
+  zString str = "123456789ABCDEF 123456789ABCDEF";
+
+  if (str.index_of("1", 0) != 0) return false;
+  if (str.index_of("1", 1) != 16) return false;
+  if (str.index_of("123", 0) != 0) return false;
+  if (str.index_of("FEDC", 0) != -1) return false;
+  if (str.index_of("23", 0) != 1) return false;
+  if (str.index_of("1", 128)  != -1) return false;
+  if (str.index_of("", 0) != -1) return false;
+  if (str.index_of("EF", 18) != 29) return false;
+  if (str.index_of("F", 18) != 30) return false;
+  if (str.index_of("", 0) != -1) return false;
+
+  str = "";
+  if (str.index_of("1", 0) != -1) return false;
+
+  return true;
 }
 
 
 bool zStringTest::test_last_index_of(void) {
-  return false;
+  //             0123456789_11_14_17_20_23_26_29
+  zString str = "123456789ABCDEF 123456789ABCDEF";
+
+  if (str.last_index_of("1",    str.get_length()) != 16) return false;
+  if (str.last_index_of("1",    10) != 0) return false;
+  if (str.last_index_of("123",  str.get_length()) != 16) return false;
+  if (str.last_index_of("FEDC", str.get_length()) != -1) return false;
+  if (str.last_index_of("23",   str.get_length()) != 17) return false;
+  if (str.last_index_of("1",    -1)  != -1) return false;
+  if (str.last_index_of("",     0) != -1) return false;
+  if (str.last_index_of("EF",   str.get_length()) != 29) return false;
+  if (str.last_index_of("F",    str.get_length()) != 30) return false;
+  if (str.last_index_of("",     str.get_length()) != -1) return false;
+
+  str = "";
+  if (str.last_index_of("1", 64) != -1) return false;
+
+  return true;
 }
 
 
 bool zStringTest::test_to_cases(void) {
+  zString empty = "";
+  zString from_empty = empty.to_lowercase();
+  if (!from_empty.is_empty())  return false;
+
+  zString lower = "abcdef@123-";
+  zString upper = "ABCDEF@123-";
+
+  zString from_lower = lower.to_uppercase();
+  if (!upper.equals(from_lower)) return false;
+
+  zString from_upper = upper.to_lowercase();
+  if (!lower.equals(from_upper)) return false;
+
+  return true;
+}
+
+
+bool zStringTest::test_numeric(void) {
+
+  // TEST is_num
+  zString str = "";
+  if (str.is_num()) return false;
+
+  str = "0";
+  if (!str.is_num()) return false;
+
+  str = "12a";
+  if (str.is_num()) return false;
+
+  str = " 12 ";
+  if (str.is_num()) return false;
+
+  str = "-12";
+  if (str.is_num()) return false;
+
+  str = "45555355252353464634535645354645334664645332436585663434656867654767543215687543233465877654313234567877543234657877867534231";
+  if (!str.is_num()) return false;
+
+  // TEST to_int
+  
+  str = "12";
+  if (str.to_int() != 12)  return false;
+
+  str = "";
+  if (str.to_int() != 0) return false;
+
+  str = "a13";
+  if (str.to_int() != 0) return false;
+
+  str = "12345678087657000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
+  if (str.to_int() != 0) return false;
+
+  return true;
+}
+
+
+bool zStringTest::test_comparison(void) {
+  zString str = "123456789";
+
+  // TEST equals
+  if (!str.equals("123456789")) return false;
+  if (str.equals("12")) return false;
+  if (str.equals("223456789")) return false;
+  if (str.equals("")) return false;
+
+  // TEST compare
+  str = "abc";
+  if (str.compare("abc") != 0) return false;
+  if (str.compare("ABC") != -1) return false;
+  if (str.compare("bbc") != -1) return false;
+
+  return true;
+}
+
+
+bool zStringTest::test_split(void) {
+  zString str = "0 1 2 3 4 5 6  7 8 9 ";
+
+  zArray<zString> arr = str.split(" ", true);
+  
+  if (arr.get_count() != 10) return false;
+
+  zString tmp;
+  
+  arr.get(0, &tmp);
+  if (!tmp.equals("1")) return false;
+
+  return true;
+}
+
+
+bool zStringTest::test_memory(void) {
+  zBuffer* buf = new zBuffer(1024 * 16);
+  buf->set('a');
+  
+  // Check memory.
+  
+  for (int i = 0; i <= 100000; i++) {
+    zString* tmp1 = new zString("ciao");
+    zString* tmp2 = new zString((char*)buf->get_buffer(), buf->get_size() - 1);
+
+    delete tmp1;
+    delete tmp2;
+  }
+
+  // Check memory.
+
+  buf->release_reference();
+
   return false;
 }
 

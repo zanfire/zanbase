@@ -26,6 +26,7 @@ AM_SILENT_RULES
 CXXFLAGS="-Wall -Werror -Wno-uninitialized"
 
 
+# --enable-debug
 AC_MSG_CHECKING([whether to build with debug information])
 AC_ARG_ENABLE([debug],
     [AS_HELP_STRING([--enable-debug],
@@ -41,6 +42,23 @@ else
     AC_DEFINE([NDEBUG],[],[No-debug Mode])
     CXXFLAGS="$CXXFLAGS -03"
 fi
+
+# --enable-dmalloc
+AC_MSG_CHECKING([whether to build with dmalloc library])
+AC_ARG_ENABLE([dmalloc],
+    [AS_HELP_STRING([--enable-dmalloc],
+    [enable dmalloc library (def=no)])],
+    [dmalloc="$enableval"],
+    [dmalloc=no])
+AC_MSG_RESULT([$dmalloc])
+
+if test x"$dmalloc" = x"yes"; then
+    AC_CHECK_HEADERS([dmalloc.h])
+    AC_CHECK_LIB([dmalloccxx], [malloc], ,[AC_MSG_ERROR([dmalloc library not found.])])
+    AC_DEFINE([ENABLED_DMALLOC],[],[dmalloc library support])
+    CXXFLAGS="$CXXFLAGS -DDMALLOC -DDMALLOC_FUNC_CHECK"
+fi
+
 
 #CPPFLAGS="$CFLAGS"
 #AM_CLAGS="$CPPFLAGS"
@@ -100,6 +118,7 @@ Compiler: ${CXX} ${CXXFLAGS}
 
 Package features:
   Debug: ${debugit}
+  dmalloc library: ${dmalloc}
   
 Now type 'make @<:@<target>@:>@'
   where the optional <target> is:

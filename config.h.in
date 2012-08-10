@@ -3,11 +3,17 @@
 /* Debug Mode */
 #undef DEBUG
 
+/* dmalloc library support */
+#undef ENABLED_DMALLOC
+
 /* Define to 1 if you have the `bind' function. */
 #undef HAVE_BIND
 
 /* Define to 1 if you have the <dlfcn.h> header file. */
 #undef HAVE_DLFCN_H
+
+/* Define to 1 if you have the <dmalloc.h> header file. */
+#undef HAVE_DMALLOC_H
 
 /* Define to 1 if you have the `floor' function. */
 #undef HAVE_FLOOR
@@ -17,6 +23,9 @@
 
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
+
+/* Define to 1 if you have the `dmalloccxx' library (-ldmalloccxx). */
+#undef HAVE_LIBDMALLOCCXX
 
 /* Define to 1 if your system has a GNU libc compatible `malloc' function, and
    to 0 otherwise. */

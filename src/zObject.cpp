@@ -31,7 +31,7 @@ zref_t zObject::acquire_reference(void) {
 
 zref_t zObject::release_reference(void) {
   zref_t count = _reference.decrement();
-  if (count == 0) {
+  if (count == 1) {
     delete this;
   }
   return count;

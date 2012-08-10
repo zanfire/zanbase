@@ -1,7 +1,7 @@
 #include "zLogger.h"
 
 #include <stdio.h>
-#include <stdlib.h>
+//#include <stdlib.h>
 
 
 #include "zLoggerAppenderConsole.h"

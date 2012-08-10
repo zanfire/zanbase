@@ -29,6 +29,10 @@
 #include "zTestTest.h"
 #include "zStrTokTest.h"
 
+#if defined(ENABLED_DMALLOC)
+#  include <dmalloc.h>
+#endif
+
 zLogger* g_logger = NULL;
 
 void showCopyright(char* programName);
@@ -37,7 +41,7 @@ void handleInvalidArg(char* programName, char invalidArg);
 
 int main(int argc, char** argv) {
 
-  g_logger = zLogger::get_logger("zanbase_test_runner");
+  //g_logger = zLogger::get_logger("zanbase_test_runner");
   
   int opt = 0;
   bool interactive = false;
@@ -64,26 +68,27 @@ int main(int argc, char** argv) {
   showCopyright(argv[0]);
 
   // Initialize tests.
-  zTester tester;
-  tester.add(new zTestTest());
-  tester.add(new zStrTokTest());
-  tester.add(new zStringTest());
+  zTester* tester = new zTester();
+  //tester->add(new zTestTest());
+  //tester->add(new zStrTokTest());
+  tester->add(new zStringTest());
 
   // Execute tests.
   bool result = false;
   if (interactive) {
-    result = tester.process_interactive();
+    result = tester->process_interactive();
   }
   else {
-    result = tester.process();
+    result = tester->process();
   }
 
   // Cleanup.
-  while (tester.get_count() > 0) {
-    zTest* test = tester.remove(0);
+  while (tester->get_count() > 0) {
+    zTest* test = tester->remove(0);
     if (test != NULL) delete test;
   }
-  
+  delete tester;
+
   return result ? EXIT_SUCCESS : EXIT_FAILURE;
 }
 

@@ -349,26 +349,83 @@ bool zStringTest::test_comparison(void) {
 
 
 bool zStringTest::test_split(void) {
-  zString str = "0 1 2  3 4 59 ";
+  {
+    // Simple case.
+    zString str = "1 2";
+    zArray<zString> arr = str.split(" ", true);
+    if (arr.get_count() != 2) return false;
+    zString tmp;
+    arr.get(0, &tmp);
+    if (!tmp.equals("1")) return false;
+    arr.get(1, &tmp);
+    if (!tmp.equals("2")) return false;
+  }
 
-  zArray<zString> arr = str.split(" ", true);
-  
-  if (arr.get_count() != 6) return false;
+  {
+    // Simple case, with an and space..
+    zString str = "1 2 ";
+    zArray<zString> arr = str.split(" ", true);
+    if (arr.get_count() != 2) return false;
+    zString tmp;
+    arr.get(0, &tmp);
+    if (!tmp.equals("1")) return false;
+    arr.get(1, &tmp);
+    if (!tmp.equals("2")) return false;
+  }
 
-  zString tmp;
-  
-  arr.get(0, &tmp);
-  if (!tmp.equals("0")) return false;
-  arr.get(1, &tmp);
-  if (!tmp.equals("1")) return false;
-  arr.get(2, &tmp);
-  if (!tmp.equals("2")) return false;
-  arr.get(3, &tmp);
-  if (!tmp.equals("3")) return false;
-  arr.get(4, &tmp);
-  if (!tmp.equals("4")) return false;
-  arr.get(5, &tmp);
-  if (!tmp.equals("59")) return false;
+
+  {
+    // Simple case with multiple token.
+    zString str = "1  2";
+    zArray<zString> arr = str.split(" ", true);
+    if (arr.get_count() != 2) return false;
+    zString tmp;
+    arr.get(0, &tmp);
+    if (!tmp.equals("1")) return false;
+    arr.get(1, &tmp);
+    if (!tmp.equals("2")) return false;
+  }
+
+  {
+    zString str = "0 1 2  3 4 59 ";
+
+    zArray<zString> arr = str.split(" ", true);
+
+    if (arr.get_count() != 6) return false;
+
+    zString tmp;
+
+    arr.get(0, &tmp);
+    if (!tmp.equals("0")) return false;
+    arr.get(1, &tmp);
+    if (!tmp.equals("1")) return false;
+    arr.get(2, &tmp);
+    if (!tmp.equals("2")) return false;
+    arr.get(3, &tmp);
+    if (!tmp.equals("3")) return false;
+    arr.get(4, &tmp);
+    if (!tmp.equals("4")) return false;
+    arr.get(5, &tmp);
+    if (!tmp.equals("59")) return false;
+  }
+
+  {
+    // Simple case with multiple token.
+    zString str = "ad1adad2adad";
+    zArray<zString> arr = str.split("ad", true);
+    if (arr.get_count() != 2) return false;
+    zString tmp;
+    arr.get(0, &tmp);
+    if (!tmp.equals("1")) return false;
+    arr.get(1, &tmp);
+    if (!tmp.equals("2")) return false;
+  }
+
+  {
+    zString str = "";
+    zArray<zString> arr = str.split("ab", true);
+    if (arr.get_count() != 0) return false;
+  }
 
   return true;
 }

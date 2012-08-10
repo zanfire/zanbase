@@ -21,7 +21,9 @@
 #include "zMutex.h"
 #include "zScopeMutex.h"
 
-#include <stdlib.h>
+#if !defined(DMALLOC)
+#  include <stdlib.h>
+#endif
 
 /// This class provides an implementation for a dynamic array.
 /// 
@@ -50,6 +52,7 @@ public:
   /// Dtor.
   virtual ~zArray(void) {
     free(_elements);
+    _elements = NULL;
     if (_mtx != NULL) delete _mtx;
   }
 

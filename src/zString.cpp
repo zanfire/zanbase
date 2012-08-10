@@ -308,9 +308,26 @@ zString zString::from_pascal_string(unsigned char const* pascalString, int buffe
 zArray<zString> zString::split(zString const& tokenizer, bool ignore_empty_token) const {
   zArray<zString> res(YES, 12);
 
-  zStringTokenizer tkn(*this, tokenizer, ignore_empty_token);
-  while (tkn.has_more_tokens()) {
-    res.append(tkn.next());
+  int curPos = 0;
+  while (curPos < get_length()) {
+    int lengthTok = 0;
+    int endPos = index_of(tokenizer, curPos);
+
+    if (endPos == -1) {
+      // NOT found, add this string if exists.
+      lengthTok = get_length() - curPos;
+    }
+    else {
+      lengthTok = endPos - curPos;
+    }
+    zString token = substring(curPos, lengthTok);
+
+    if (!ignore_empty_token || !token.is_empty()) {
+      res.append(token);
+    }
+
+    // Icrease by one to escape delimiter.
+    curPos += lengthTok + tokenizer.get_length();
   }
   return res;
 }

@@ -3,12 +3,11 @@
 #include "zLogger.h"
 
 zTestTest::zTestTest(void) {
-  logger_ = zLogger::get_logger("test");
+  //logger_ = zLogger::get_logger("test");
 }
 
 
 zTestTest::~zTestTest(void) {
-
 }
 
 

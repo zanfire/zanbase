@@ -26,6 +26,18 @@
 
 /// This class tokenize a string in substring.
 ///
+/// NOTE
+/// Late parsing? Parsing only when is requested a token and not at the startup?
+/// Personally I don't appreciate the has_more_tokens and next I hate them...
+/// But permits a late parsing.
+/// For fast and bla bla features use directly the the index of ...
+/// Or delete this class? Provides only split method?
+/// Or improves this class with incredible features for the parsing of text message.
+/// like INVITE.
+/// It isn't a string tokenizer but a string parser.
+//
+/// DEATH class!
+///
 /// @author Matteo Valdina
 class zStringTokenizer {
 protected:

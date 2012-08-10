@@ -21,8 +21,6 @@
 #include "zArray.h"
 
 #include <stdarg.h>
-#include <string.h>
-#include <errno.h>
 
 class zLoggerAppender;
 

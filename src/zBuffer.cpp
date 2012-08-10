@@ -19,6 +19,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <stdio.h>
+
 zBuffer::zBuffer(void) : zObject() {
   _buffer = NULL;
   _size = 0;
@@ -35,6 +37,7 @@ zBuffer::~zBuffer(void) {
   // Clean up memory, because this buffer can contains some sensible data.
   memset(_buffer, 0x00, _size);
   free(_buffer);
+  _buffer = NULL;
 }
 
 

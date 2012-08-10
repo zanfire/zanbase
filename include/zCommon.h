@@ -22,13 +22,22 @@
 
 // NULL define
 #if !defined(NULL)
-  #define NULL 0
+#  define NULL 0
 #endif
 
 // Include for intrinsic
 #if defined(_WIN32)
-  #include <intrin.h>
+#  include <intrin.h>
 #else // Add GCC include
+#endif
+
+
+#if defined(DMALLOC)
+// The dmalloc header must be placed after other includes to avoid conflicts.
+#  include <stdlib.h>
+#  include <string.h>
+// Insert other include that possible conflict with dmalloc.h
+#  include <dmalloc.h>
 #endif
 
 // Define base type for atomic increment and decrement.

@@ -35,11 +35,18 @@
 
 
 zString::zString(void) {
+  _dynamicBuffer = NULL;
+  _length = 0;
+  _staticBuffer[0] = '\0';
   init(NULL, 0);
 }
 
 
 zString::zString(zString* str) {
+  _dynamicBuffer = NULL;
+  _length = 0;
+  _staticBuffer[0] = '\0';
+
   if (str != NULL) {
     init(str->get_buffer(), str->get_length());
   } 
@@ -50,22 +57,38 @@ zString::zString(zString* str) {
 
 
 zString::zString(char c) {
+  _dynamicBuffer = NULL;
+  _length = 0;
+  _staticBuffer[0] = '\0';
+
   init((char const*)&c, 1);
 }
 
 
 zString::zString(char const* str) {
+  _dynamicBuffer = NULL;
+  _length = 0;
+  _staticBuffer[0] = '\0';
+
   int len = str != NULL ? strlen(str) : 0;
   init(str, len);
 }
 
 
 zString::zString(char const* str, int length) {
+  _dynamicBuffer = NULL;
+  _length = 0;
+  _staticBuffer[0] = '\0';
+
   init(str, length);
 }
 
 
 zString::zString(zStringBuilder const* strb) {
+  _dynamicBuffer = NULL;
+  _length = 0;
+  _staticBuffer[0] = '\0';
+
   if (strb != NULL) {
     char* targetBuffer = NULL;
     if (strb->get_length() <= ZSTRING_STATIC_BUFFER_SIZE) {
@@ -97,6 +120,10 @@ zString::zString(zStringBuilder const* strb) {
 
 
 zString::zString(zBuffer* buffer) {
+  _dynamicBuffer = NULL;
+  _length = 0;
+  _staticBuffer[0] = '\0';
+
   if (buffer != NULL) {
     // NOTE: The length is double checked in the init method.
     init((char const*)buffer->get_buffer(), buffer->get_size());
@@ -108,6 +135,10 @@ zString::zString(zBuffer* buffer) {
   
 
 zString::zString(const zString& str) {
+  _dynamicBuffer = NULL;
+  _length = 0;
+  _staticBuffer[0] = '\0';
+
   copy_from(str);
 }
 
@@ -185,8 +216,14 @@ char* zString::get_buffer(void) const {
 
 
 void zString::copy_from(const zString& str) {
+  // clean up
+  if (_dynamicBuffer != NULL) {
+    _dynamicBuffer->release_reference();
+    _dynamicBuffer = NULL;
+  }
+
   _length = str._length;
-  if(str._dynamicBuffer != NULL) {
+  if (str._dynamicBuffer != NULL) {
     _dynamicBuffer = str._dynamicBuffer;
     _dynamicBuffer->acquire_reference();
   }
@@ -306,7 +343,7 @@ zString zString::from_pascal_string(unsigned char const* pascalString, int buffe
 
 
 zArray<zString> zString::split(zString const& tokenizer, bool ignore_empty_token) const {
-  zArray<zString> res(YES, 12);
+  zArray<zString> res(YES, 12, "");
 
   int curPos = 0;
   while (curPos < get_length()) {
@@ -326,7 +363,7 @@ zArray<zString> zString::split(zString const& tokenizer, bool ignore_empty_token
       res.append(token);
     }
 
-    // Icrease by one to escape delimiter.
+    // Increase by one to escape delimiter.
     curPos += lengthTok + tokenizer.get_length();
   }
   return res;

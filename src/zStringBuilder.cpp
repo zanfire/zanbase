@@ -5,7 +5,7 @@
 #include <stdarg.h>
 
 
-zStringBuilder::zStringBuilder(void) :  _strings(YES, 32) {
+zStringBuilder::zStringBuilder(void) :  _strings(YES, 32, NULL) {
 }
 
 

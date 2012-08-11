@@ -34,19 +34,28 @@ class zArray {
 protected:
   zMutex* _mtx;
   T* _elements;
+  T _default;
   int _count;
   int _size;
 
 public:
   /// Default Ctor.
+  /// @remarks The default value is copied via memcpy if its contains sone ponter will be copied the address not the content!
+  /// 
   /// @param threadSafe is flags to set a thread safe behaviour.
   /// @param element_size_bytes is the size in bytes of each element in the class.
   /// @param elements is the number of initial elements.
-  zArray(IsThreadSafe threadSafe, int initial_size) {
+  /// @param default value for each element in the array.
+  zArray(IsThreadSafe threadSafe, int initial_size, T const& default_value) {
     _mtx = threadSafe == YES ? new zMutex() : NULL;
     _size = initial_size;
     _count = 0;
     _elements = (T*) malloc(sizeof(T) * _size);
+    _default = default_value;
+    // Initializes
+    for (int i = 0; i < _size; i++) {
+      memcpy((uint8_t*)(&_elements[i]), (uint8_t*)(&_default), sizeof(T));
+    }
   }
 
   /// Dtor.
@@ -125,6 +134,12 @@ public:
   bool resize(int new_size) {
     // TODO: Implements!!!
     _elements = (T*)realloc(_elements, sizeof(T*) * new_size);
+
+
+    for (int i = _size; i < new_size; i++) {
+      memcpy((uint8_t*)(&_elements[i]), (uint8_t*)(&_default), sizeof(T));
+    }
+    _size = new_size;
     return true;
   }
 };

@@ -5,7 +5,7 @@
 
 #include <stdio.h>
 
-zTester::zTester(void) : _tests(YES, 32) {
+zTester::zTester(void) : _tests(YES, 32, NULL) {
   // 
 }
 

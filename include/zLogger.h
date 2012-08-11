@@ -17,8 +17,12 @@
 #ifndef ZLOGGER_H__
 #define ZLOGGER_H__
 
+#include "zCommon.h"
+
+#include "zObject.h"
 #include "zString.h"
 #include "zArray.h"
+
 
 #include <stdarg.h>
 
@@ -27,7 +31,7 @@ class zLoggerAppender;
 /// This class provides the logging facility.
 /// 
 /// @author Matteo Valdina
-class zLogger {
+class zLogger : public zObject {
 
 public:
   /// Enum of possible logging level.
@@ -46,7 +50,11 @@ protected:
   LogLevel _level;
 
 public:
+  /// Get an instance of logger by id.
   static zLogger* get_logger(char const* id);
+
+  /// Shutdown the logger facility.
+  static void shutdown(void);
 
   void set_level(LogLevel level) { _level = level; }
   void add_appender(zLoggerAppender* appender);

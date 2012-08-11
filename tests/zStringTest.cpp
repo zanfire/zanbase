@@ -7,7 +7,6 @@
 #include <string.h>
 
 zStringTest::zStringTest(void) {
-  logger_ = zLogger::get_logger("test");
 }
 
 
@@ -440,6 +439,8 @@ bool zStringTest::test_memory(void) {
   for (int i = 0; i <= 1000; i++) {
     zString* tmp1 = new zString("ciao");
     zString* tmp2 = new zString((char*)buf->get_buffer(), buf->get_size() - 1);
+
+    *tmp2 = *tmp1;
 
     delete tmp1;
     delete tmp2;

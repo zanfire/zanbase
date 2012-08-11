@@ -56,6 +56,16 @@ public:
     if (_mtx != NULL) delete _mtx;
   }
 
+  
+  void lock(void) {
+    if (_mtx != NULL) _mtx->lock();
+  }
+  
+
+  void unlock(void) {
+    if (_mtx != NULL) _mtx->unlock();
+  }
+  
   /// Get count of elements.
   int get_count(void) const { return _count; }
 

@@ -3,7 +3,6 @@
 #include "zLogger.h"
 
 zTestTest::zTestTest(void) {
-  //logger_ = zLogger::get_logger("test");
 }
 
 

@@ -23,14 +23,16 @@
 /// The implementer of this interface must provides the impl of:
 ///  void line(char const* line),
 /// @author Matteo Valdina
-class zLoggerAppender {
+class zLoggerAppender : public zObject {
 
 public:
   zLoggerAppender(void);
-  virtual ~zLoggerAppender(void);
 
   /// The implementor must write as a log line the line argument.
   virtual void line(char const* line) = 0;
+
+protected:
+  virtual ~zLoggerAppender(void);
 };
 
 

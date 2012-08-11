@@ -41,7 +41,7 @@ void handleInvalidArg(char* programName, char invalidArg);
 
 int main(int argc, char** argv) {
 
-  //g_logger = zLogger::get_logger("zanbase_test_runner");
+  g_logger = zLogger::get_logger("zanbase_test_runner");
   
   int opt = 0;
   bool interactive = false;
@@ -69,8 +69,8 @@ int main(int argc, char** argv) {
 
   // Initialize tests.
   zTester* tester = new zTester();
-  //tester->add(new zTestTest());
-  //tester->add(new zStrTokTest());
+  tester->add(new zTestTest());
+  tester->add(new zStrTokTest());
   tester->add(new zStringTest());
 
   // Execute tests.
@@ -88,6 +88,9 @@ int main(int argc, char** argv) {
     if (test != NULL) delete test;
   }
   delete tester;
+
+  g_logger->shutdown();
+  g_logger->release_reference();
 
   return result ? EXIT_SUCCESS : EXIT_FAILURE;
 }

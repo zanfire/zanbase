@@ -19,8 +19,6 @@
 
 #include "zCommon.h"
 
-#include <stdlib.h>
-
 class zMutex;
 
 class zRandom {
@@ -39,8 +37,7 @@ public:
 
   uint8_t nextByte(void);
   int nextInt(void);
-
-private:
 };
 
 #endif // ZRANDOM_H__
+

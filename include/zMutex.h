@@ -17,6 +17,7 @@
 #ifndef ZMUTEX_H__
 #define ZMUTEX_H__
 
+#include "zCommon.h"
 #include "config.h" // HAVE_PTHREAD_H
 
 #if defined(_WIN32)

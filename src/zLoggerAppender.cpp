@@ -1,3 +1,4 @@
+
 /******************************************************************************
  * Copyright 2009-2011 Matteo Valdina
  *
@@ -17,7 +18,7 @@
 #include "zLoggerAppender.h"
 
 
-zLoggerAppender::zLoggerAppender() {
+zLoggerAppender::zLoggerAppender() : zObject() {
 }
 
 

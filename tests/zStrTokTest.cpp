@@ -4,7 +4,6 @@
 #include "zLogger.h"
 
 zStrTokTest::zStrTokTest(void) {
-  logger_ = zLogger::get_logger("test");
 }
 
 

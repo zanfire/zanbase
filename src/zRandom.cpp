@@ -22,17 +22,6 @@
 #include <sys/time.h>
 
 
-zMutex* zRandom::_singletonMtx = new zMutex();
-zRandom* zRandom::_singleton = NULL;
-
-
-zRandom* zRandom::getSingleton(void) {
-  _singletonMtx->lock();
-  if (_singleton == NULL) _singleton = new zRandom();
-  _singletonMtx->unlock();
-  return _singleton;
-}
-
 zRandom::zRandom(void) {
   struct timeval t;
   gettimeofday(&t, NULL);
@@ -55,3 +44,4 @@ int zRandom::nextInt(void) {
   }
   return result;
 }
+

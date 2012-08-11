@@ -1,7 +1,6 @@
 #include "zLogger.h"
 
 #include <stdio.h>
-//#include <stdlib.h>
 
 
 #include "zLoggerAppenderConsole.h"
@@ -9,7 +8,7 @@
 // TODO: Replace array with an hash table.
 static zArray<zLogger*>* g_loggers = new zArray<zLogger*>(YES, 32);
 
-zLogger::zLogger(char const* loggerName) : _appenders(YES, 32) {
+zLogger::zLogger(char const* loggerName) : zObject(), _appenders(YES, 32) {
   _id = zString(loggerName);
   _level = LOG_LEVEL_INFO;
 }
@@ -19,29 +18,57 @@ zLogger::~zLogger(void) {
   while(_appenders.get_count() > 0) {
     zLoggerAppender* appender = 0;
     _appenders.remove(_appenders.get_count() - 1, &appender);
+    appender->release_reference();
   }
 }
 
 
 zLogger* zLogger::get_logger(char const* id) {
+  if (g_loggers == NULL) return NULL;
+  g_loggers->lock();
   for (int i = 0; i < g_loggers->get_count(); i++) {
     zLogger* logger = NULL;
     g_loggers->get(i, &logger);
     if (logger != NULL) {
       if (logger->_id.equals(id)) {
+        logger->acquire_reference();
         return logger;
       }
     }
   }
   zLogger* logger = new zLogger(id);
-  logger->add_appender(new zLoggerAppenderConsole());
+  zLoggerAppender* appender = new zLoggerAppenderConsole();
+  logger->add_appender(appender);
+  appender->release_reference();
   g_loggers->append(logger);
+  g_loggers->unlock();
+
+  logger->acquire_reference();
   return logger;
+}
+
+
+void zLogger::shutdown(void) {
+  if (g_loggers == NULL) return;
+  g_loggers->lock();
+
+  while (g_loggers->get_count() > 0) {
+    zLogger* logger = NULL;
+    g_loggers->remove(0, &logger);
+    if (logger != NULL) {
+      logger->release_reference();
+    }
+  }
+  g_loggers->unlock();
+
+  delete g_loggers;
+  g_loggers = NULL;
 }
 
 
 void zLogger::add_appender(zLoggerAppender* appender) {
   if (appender == NULL) return;
+  appender->acquire_reference();
   _appenders.append(appender);
 }
 

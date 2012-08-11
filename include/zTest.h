@@ -20,6 +20,7 @@
 class zLogger;
 
 #include "zCommon.h"
+#include "zLogger.h"
 
 /// Test interface.
 /// 
@@ -32,8 +33,15 @@ protected:
   zLogger* logger_;
 
 public:
-  zTest(void) {}
-  virtual ~zTest(void) {}
+  zTest(void) {
+    logger_ = zLogger::get_logger("test");
+  }
+
+
+  virtual ~zTest(void) {
+    logger_->release_reference();
+    logger_ = NULL;
+  }
 
   /// Execute the test at given index.
   virtual bool execute(int index) = 0;

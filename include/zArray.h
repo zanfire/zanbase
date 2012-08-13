@@ -48,6 +48,7 @@ public:
   /// @param default value for each element in the array.
   zArray(IsThreadSafe threadSafe, int initial_size, T const& default_value) {
     _mtx = threadSafe == YES ? new zMutex() : NULL;
+    if (initial_size <= 0) initial_size = 32;
     _size = initial_size;
     _count = 0;
     _elements = (T*) malloc(sizeof(T) * _size);

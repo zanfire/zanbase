@@ -29,6 +29,7 @@
 #include "zTester.h"
 #include "zStringTest.h"
 #include "zTestTest.h"
+#include "zArrayTest.h"
 #include "zStrTokTest.h"
 
 #if defined(ENABLED_DMALLOC)
@@ -94,6 +95,7 @@ int main(int argc, char** argv) {
   tester->add(new zTestTest());
   tester->add(new zStrTokTest());
   tester->add(new zStringTest());
+  tester->add(new zArrayTest());
 
   // Execute tests.
   bool result = false;

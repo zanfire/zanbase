@@ -23,6 +23,8 @@
 #include <limits.h>
 
 #include "zLogger.h"
+#include "zFile.h"
+#include "zStringBuilder.h"
 
 #include "zTester.h"
 #include "zStringTest.h"
@@ -41,12 +43,12 @@ void handleInvalidArg(char* programName, char invalidArg);
 
 int main(int argc, char** argv) {
 
-  g_logger = zLogger::get_logger("zanbase_test_runner");
   
   int opt = 0;
   bool interactive = false;
+  bool use_dmalloc = false;
 
-  while ((opt = getopt(argc, argv, "hvi")) != -1) {
+  while ((opt = getopt(argc, argv, "hvid")) != -1) {
     switch (opt) {
     case 'h':
       showHelp(argv[0]);
@@ -59,6 +61,9 @@ int main(int argc, char** argv) {
     case 'i':
       interactive = true;
       break;
+    case 'd':
+      use_dmalloc = true;
+      break;
     default:
       handleInvalidArg(argv[0], opt);
       exit(EXIT_FAILURE);
@@ -66,6 +71,23 @@ int main(int argc, char** argv) {
   }
 
   showCopyright(argv[0]);
+
+#if defined(DMALLOC)
+   if (use_dmalloc) {
+     // Configure dmalloc to the high logging level and to log in the current directory.
+     // log file: $PWD/dmalloc.log
+     zStringBuilder debugstr;
+     debugstr.append("debug=0x4f4ed03,log=");
+     zString dir = zFile::get_current_directory();
+     debugstr.append(dir);
+     debugstr.append("/dmalloc.log");
+     dmalloc_debug_setup(debugstr.to_string().get_buffer());
+
+     printf("dmalloc library configured with \"%s\".\n\n", debugstr.to_string().get_buffer());
+   }
+#endif
+
+  g_logger = zLogger::get_logger("zanbase_test_runner");
 
   // Initialize tests.
   zTester* tester = new zTester();
@@ -88,7 +110,6 @@ int main(int argc, char** argv) {
     if (test != NULL) delete test;
   }
   delete tester;
-
   g_logger->shutdown();
   g_logger->release_reference();
 
@@ -111,8 +132,11 @@ void handleInvalidArg(char* programName, char invalidArg) {
 void showHelp(char* programName) {
   printf("Usage: %s [OPTION]...\n", programName);
   printf("This program executes a set of tests for the zanbase library.\n");
-  printf("  -v          show version information and exit\n");
-  printf("  -i          interactive mode\n");
+  printf("  -v          show version information and exit.\n");
+  printf("  -i          interactive mode.\n");
+#if defined(DMALLOC)
+  printf("  -d          debug memory with dmalloc.\n");
+#endif
   printf("\n");
   printf("Report %s bugs to %s.\n", programName, PACKAGE_BUGREPORT);
 }

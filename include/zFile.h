@@ -23,8 +23,7 @@
 
 #include <stdio.h>
 
-/**
- */
+/// This class needs refactoring name.
 class zFile : public zObject {
 public:
   enum OpenMode {
@@ -48,6 +47,8 @@ public:
   bool isError(void) const;
 
   void close(void);
+
+  static zString get_current_directory(void);
 
 protected:
   zFile(FILE* fd, zString const& file);

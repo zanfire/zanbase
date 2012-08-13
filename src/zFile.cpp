@@ -16,6 +16,10 @@
 
 #include "zFile.h"
 
+// TODO: Add GUARD.
+#include <unistd.h>
+// TODO: Add GUARD.
+#include <errno.h>
 
 zFile::zFile(FILE* file, zString const& path) : zObject() {
   _file = file;
@@ -83,3 +87,22 @@ void zFile::close(void) {
   ::fclose(_file);
   _file = NULL;
 }
+
+
+zString zFile::get_current_directory(void) {
+  char buf[1024];
+  // Get string with a local buffer.
+  char* path = getcwd(buf, sizeof(buf));
+  int buff_size = 1024 * 64;
+  while (path == NULL && errno == ERANGE) {
+    // Ok, buffer is to small. Try with a bigger one.
+    char* pbuff = (char*)malloc(buff_size);
+    path = getcwd(pbuff, buff_size);
+    free(pbuff);
+    buff_size *= 2;
+  }
+  // If path is NULL an empty string is returned.
+  return zString(path);
+  // TODO: But errno needs to be cleared?
+}
+

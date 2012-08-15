@@ -14,10 +14,10 @@
  * limitations under the License.
  *****************************************************************************/
 
-#ifndef RUNNABLE_H__
-#define RUNNABLE_H__
+#ifndef ZRUNNABLE_H__
+#define ZRUNNABLE_H__
 
-#include "zObject.h"
+#include "zCommon.h"
 
 class zRunnable {
 public:
@@ -26,4 +26,4 @@ public:
 	virtual int run(void* param) = 0;
 };
 
-#endif // RUNNABLE_H__
+#endif // ZRUNNABLE_H__

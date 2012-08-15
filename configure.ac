@@ -54,7 +54,7 @@ AC_MSG_RESULT([$dmalloc])
 
 if test x"$dmalloc" = x"yes"; then
     AC_CHECK_HEADERS([dmalloc.h])
-    AC_CHECK_LIB([dmalloccxx], [malloc], ,[AC_MSG_ERROR([dmalloc library not found.])])
+    AC_CHECK_LIB([dmallocthcxx], [malloc], ,[AC_MSG_ERROR([dmalloc library not found.])])
     AC_DEFINE([ENABLED_DMALLOC],[],[dmalloc library support])
     CXXFLAGS="$CXXFLAGS -DDMALLOC -DDMALLOC_FUNC_CHECK"
 fi

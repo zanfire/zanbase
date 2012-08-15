@@ -91,7 +91,7 @@ public:
 
     if (_count + 1 == _size) {
       // TODO: this code must be improved.
-      if (!resize(_size + _size)) {
+      if (!resize(_size + 1024)) {
         // TODO: Handle error!!!
         return false;
       }

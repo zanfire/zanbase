@@ -2,6 +2,9 @@
 
 #include "zLogger.h"
 #include "zArray.h"
+#include "zThread.h"
+#include "zRunnable.h"
+#include "zReference.h"
 
 zArrayTest::zArrayTest(void) {
 }
@@ -16,6 +19,7 @@ bool zArrayTest::execute(int index) {
     case 0: return test_ctor();
     case 1: return test_resize();
     case 2: return test_memory();
+    case 3: return test_multithread();
     default: return false;
   }
   return false;
@@ -23,7 +27,7 @@ bool zArrayTest::execute(int index) {
 
 
 int zArrayTest::get_num_tests(void) {
-  return 3;
+  return 4;
 }
 
 
@@ -42,6 +46,7 @@ char const* zArrayTest::get_test_name(int index) {
     case 0: return "ctor";
     case 1: return "resize";
     case 2: return "memory";
+    case 3: return "multithread";
     default: return "??";
   }
   return "??";
@@ -74,7 +79,16 @@ bool zArrayTest::test_ctor(void) {
 
 bool zArrayTest::test_resize(void) {
   zArray<int> arr(YES, 5, -1);
-  int size = 10000 * 1024;
+  int size = 16 * 1024;
+  for (int i = 0; i < size; i++) {
+    arr.append(i);
+  }
+  for(int i = 0; i < size; i++) {
+    int tmp = -2;
+    arr.remove(0, &tmp);
+    // Is expected the same order.
+    if (tmp != i) return false;
+  }
   for (int i = 0; i < size; i++) {
     arr.append(i);
   }
@@ -85,6 +99,8 @@ bool zArrayTest::test_resize(void) {
     if (tmp != i) return false;
   }
 
+
+
   return true;
 }
 
@@ -93,5 +109,64 @@ bool zArrayTest::test_memory(void) {
 
   
   return false;
+}
+
+
+#include <stdio.h>
+
+
+class MultithreadTest : public zRunnable {
+  public:
+    zArray<zref_t>* array;
+    zReference* ref;
+    int run(void* param) {
+      
+      for (int i = 0; i < 50000; i++) {
+        array->lock();
+        zref_t r = ref->increment();
+        array->append(r);
+        array->unlock();
+      }
+      return 0;
+    }
+};
+
+
+bool zArrayTest::test_multithread(void) {
+  MultithreadTest* impl = new MultithreadTest();
+  zThread* thread1 = new zThread(impl);
+  zThread* thread2 = new zThread(impl);
+
+  zArray<zref_t>* arr = new zArray<zref_t>(YES, 10, 0);
+  zReference* ref = new zReference();
+
+  impl->array = arr;
+  impl->ref = ref;
+
+
+  thread1->start(NULL);
+  thread2->start(NULL);
+
+
+  thread1->join();
+  thread2->join();
+
+  // Check data
+  for (int i = 0; i < arr->get_count(); i++) {
+    zref_t r = 0;
+    arr->get(i, &r);
+    if (r != (i +1)) return false;
+  }
+
+  // Delete
+  thread1->release_reference();
+  thread2->release_reference();
+
+  delete impl;
+  delete ref;
+  delete arr;
+
+
+  return true;
 }
 

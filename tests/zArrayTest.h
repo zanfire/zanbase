@@ -45,6 +45,7 @@ protected:
   bool test_ctor(void);
   bool test_resize(void);
   bool test_memory(void);
+  bool test_multithread(void);
 };
 
 #endif // ZARRAYTEST_H__

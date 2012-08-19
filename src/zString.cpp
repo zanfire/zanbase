@@ -332,6 +332,19 @@ int zString::to_int(void) const {
 }
 
 
+zString zString::to_hex(void) {
+  char const* map = "0123456789ABCDEF";
+  zStringBuilder strb;
+
+  char const* input = get_buffer();
+  for (int i = 0; i < get_length(); i++) {
+    strb.append(map[input[i] >> 4]);
+    strb.append(map[input[i] & 15]);
+  }
+
+  return strb.to_string();
+}
+
 zString zString::from_pascal_string(unsigned char const* pascalString, int bufferSize, bool isInNetworkByteOrder) {
   if (bufferSize < 4) return zString();
   uint32_t length = ((uint32_t*)pascalString)[0];

@@ -90,6 +90,9 @@ public:
   /// Convert the string value to an integer if it is numeric otherwise returns 0.
   int to_int(void) const;
 
+  /// Convert the string value to the hex form.
+  zString to_hex(void);
+
   /// Returns true if string is equals to the given one.
   bool equals(zString const& str) const;
 

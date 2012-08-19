@@ -7,4 +7,5 @@ zanbase_tests_runner_SOURCES = \
 	zStringTest.cpp \
 	zStrTokTest.cpp \
 	zArrayTest.cpp \
+	zThreadTest.cpp \
 	zTestTest.cpp

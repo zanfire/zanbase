@@ -23,48 +23,58 @@
 class zRunnable;
 class zThreadMain;
 
-#if defined(_WIN32)
-  #define THREAD_ID unsigned int
-  #define THREAD HANDLE
-#elif HAVE_PTHREAD_H
-  // Get header
-  #include <pthread.h>
-
-  #define THREAD_ID unsigned int
-  #define THREAD pthread_t
-#endif
-
 #include "zMutex.h"
+#include "zEvent.h"
 
+/// A Thread wrapper over the system threads.
+/// @author Matteo Valdina
 class zThread : public zObject {
+  // zThreadMain is a local class used to start the zRunnable.
+  // It is friend class that can access and set internal variables of zThread.
   friend class zThreadMain;
 
 protected:
+  // Implementation used by the zThread.
   zRunnable* _runnable;
+  // Platform specific thread handle.
   THREAD _thread;
-  THREAD_ID _threadID;
-  void* _appParam;
-  zMutex _mtxRunning;
+  // The thread ID.
+  THREAD_ID _id;
+  void* _app_param;
+  zMutex _mtx_running;
+  int _stack_size;
+  /// It is the result code of the thread function.
+  int _result;
+  volatile bool _is_running;
+  // event that is triggered when thread is started.
+  zEvent _ev_start;
 
 public:
-  zThread(zRunnable* runnable);
+  zThread(zRunnable* runnable, int stack_size = 1024 * 2048);
   virtual ~zThread(void);
 
-  //
-  // Static methods
-  //
+  /// Sleep for the amount of milliseconds.
   static void sleep(int ms);
-  static void getCurrentThreadId();
+  /// Return the current thread ID.
+  static THREAD_ID get_current_thread_id(void);
+  
+  /// Returns the thread id.
+  THREAD_ID get_thread_id(void) {return _id; }
 
-  THREAD_ID getThreadID() {return _threadID; }
-  void start(void* param = NULL);
-  void stop(void);
-  zRunnable* getRunnable() { return _runnable; }
-  bool isRunning() { 
-    return false;
-  }
+  /// Start the thread.
+  /// NOTE: If the thread is running this function returns false.
+  /// You can run multiple times the same function.
+  bool start(void* param = NULL);
 
-  void join();
+  /// Returns the runnable.
+  zRunnable* get_runnable(void) const { return _runnable; }
+
+  /// Returns true if the zRunnable instance is running.
+  bool running(void) const { return _is_running; }
+
+  /// Join the running thread.
+  /// Returns the result of thread function.
+  int join(void);
 };
 
 #endif // ZTHREAD_H__

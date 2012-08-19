@@ -24,27 +24,28 @@
   //#include <time.h>
 #endif
 
+#include <stdio.h>
 #include <time.h>
 #include <pthread.h>
+#include <unistd.h>
+#include <sys/syscall.h>
 
 
 class zThreadMain {
-protected:
-  bool _running;
 public:
-  zThreadMain(void) {
-    _running = false;
-  }
+  zThreadMain(void) {}
+  virtual ~zThreadMain(void) {}
 
-  ~zThreadMain(void) {}
-
-  int main(zThread* th) {
-    th->_mtxRunning.lock();
-    _running = true;
-    int result = th->_runnable->run(th->_appParam);
-    _running = false;
-    th->_mtxRunning.unlock();
-    return result;
+  void main(zThread* th) {
+    th->_mtx_running.lock();
+    th->_id = zThread::get_current_thread_id();
+    th->_is_running = true;
+    // Init finished.
+    th->_ev_start.signal();
+    th->_result = th->_runnable->run(th->_app_param);
+    th->_is_running = false;
+    th->_mtx_running.unlock();
+    // After this the th instance can be destroied. Pay attention.
   }
 };
 
@@ -52,33 +53,42 @@ public:
 /// Internal namespace.
 namespace Protected  {
 
+///
+/// The thread entry point for the platform API.
+///
+
 #if defined(_WIN32)
   unsigned __stdcall ThreadEntry(void* arg) {
-    ThreadMain th();
-    int result = th.entry(((Thread*)arg);
-    _endthreadex( 0 );
-    return 0;
-  }
 #else
   void* ThreadEntry(void* arg) {
-    zThreadMain th;
-    int result = th.main((zThread*)arg);
-    return (void*)result;
-  }
 #endif
+    zThreadMain th;
+    th.main((zThread*)arg);
+#if defined(_WIN32)
+#else
+    return NULL;
+#endif
+  }
 }
 
 
-zThread::zThread(zRunnable* runnable) : zObject() {
+zThread::zThread(zRunnable* runnable, int stack_size) : zObject() {
+  _result = 0;
   _runnable = runnable;
+  _app_param = NULL;
+  _is_running = false;
+  // IF invalid stack_size set default 2 MB.
+  if (stack_size <= 0) _stack_size = 1024 * 2048;
+  _stack_size = stack_size;
+
   //_thread = NULL;
-  // No good!!!! use something like INVALID_THREAD
-  _threadID = 0;
+  _id = INVALID_THREAD_ID;
 }
 
 
 zThread::~zThread(void) {
-  stop();
+  // Join to the main thread to avoid race-condition with internal data.
+  join();
 }
 
 
@@ -90,48 +100,54 @@ void zThread::sleep(int ms) {
   reqtime.tv_nsec = (int)(ms % 1000) * 1000;
 
   int success = nanosleep(&reqtime, &rentime);
-  if (success == 0) {
-    // Ok
-  }
-  else {
-    // rentime contains the remaining time that sleep has not consumed.
-  }
-
+  assert_perror(success);
 }
 
 
-void zThread::getCurrentThreadId(void) {
-}
+bool zThread::start(void* param) {
+  if (_is_running) return false;
+  if (_runnable == NULL) return false;
 
+  // Store the application param to be passed to the running thread via zThread instance.
+  _app_param = param;
 
-void zThread::start(void* param) {
-  _appParam = param;
 #if defined(_WIN32)
   //_thread = _beginthreadex( NULL, 0, &(Protected::ThreadEntry), _runnable, 0, &_threadID );
+#else // POSIX
+
+  pthread_attr_t attr;
+  // Initialize attribute.
+  int result = pthread_attr_init(&attr);
+  assert_perror(result);
+  // The library doesn't use the pthread_join method. Creates a detached thread that release system resources when thread terminate.
+  result = pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
+  assert_perror(result);
+  // Set stack size.
+  result = pthread_attr_setstacksize(&attr, _stack_size);
+  assert_perror(result);
+
+  // Create the thread,
+  result = pthread_create(&_thread, &attr, &(Protected::ThreadEntry), this);
+  assert_perror(result);
+  // Destroy attributes.
+  pthread_attr_destroy(&attr);
+#endif
+  // Wait for the running thread.
+  _ev_start.wait();
+  return true;
+}
+
+
+int zThread::join(void) { 
+  _mtx_running.sync();
+  return _result;
+}
+
+
+THREAD_ID zThread::get_current_thread_id(void) {
+#if defined(_WIN32) 
 #else
-  int result = pthread_create(&_thread, NULL, &(Protected::ThreadEntry), this);
-  if (result == 0) {
-    // thread creation success.
-  }
-  else {
-    // thread creation failed.
-  }
+  return syscall(SYS_gettid);
 #endif
 }
 
-
-void zThread::stop(void) {
-
-  _mtxRunning.sync();
-}
-
-
-void zThread::join() {
-  int success = pthread_join(_thread, NULL);
-  if (success == 0) {
-    // ok
-  }
-  else {
-    // ERROR
-  }
-}

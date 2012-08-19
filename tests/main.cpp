@@ -31,6 +31,7 @@
 #include "zTestTest.h"
 #include "zArrayTest.h"
 #include "zStrTokTest.h"
+#include "zThreadTest.h"
 
 #if defined(ENABLED_DMALLOC)
 #  include <dmalloc.h>
@@ -41,6 +42,20 @@ zLogger* g_logger = NULL;
 void showCopyright(char* programName);
 void showHelp(char* programName);
 void handleInvalidArg(char* programName, char invalidArg);
+
+void  dmalloc_track_function(const char *file, const unsigned int line, 
+                            const int func_id,
+                            const DMALLOC_SIZE byte_size,
+                            const DMALLOC_SIZE alignment,
+                            const DMALLOC_PNT old_addr,
+                            const DMALLOC_PNT new_addr) {
+  if (byte_size == 0) {
+    // For some reason deletes are invoked with byte_size == 0.
+    //printf("op %d file %s line %u size = 0\n", func_id, file, line);
+  }
+}
+                                         
+
 
 int main(int argc, char** argv) {
 
@@ -85,6 +100,8 @@ int main(int argc, char** argv) {
      dmalloc_debug_setup(debugstr.to_string().get_buffer());
 
      printf("dmalloc library configured with \"%s\".\n\n", debugstr.to_string().get_buffer());
+
+     dmalloc_track(&dmalloc_track_function);
    }
 #endif
 
@@ -96,6 +113,7 @@ int main(int argc, char** argv) {
   tester->add(new zStrTokTest());
   tester->add(new zStringTest());
   tester->add(new zArrayTest());
+  tester->add(new zThreadTest());
 
   // Execute tests.
   bool result = false;

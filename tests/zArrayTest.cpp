@@ -106,13 +106,12 @@ bool zArrayTest::test_resize(void) {
 
 
 bool zArrayTest::test_memory(void) {
+  zArray<void*>* array = new zArray<void*>(NO, 1, NULL);
 
+  delete array;
   
-  return false;
+  return true;
 }
-
-
-#include <stdio.h>
 
 
 class MultithreadTest : public zRunnable {
@@ -121,7 +120,7 @@ class MultithreadTest : public zRunnable {
     zReference* ref;
     int run(void* param) {
       
-      for (int i = 0; i < 50000; i++) {
+      for (int i = 0; i < 5000; i++) {
         array->lock();
         zref_t r = ref->increment();
         array->append(r);
@@ -146,7 +145,6 @@ bool zArrayTest::test_multithread(void) {
 
   thread1->start(NULL);
   thread2->start(NULL);
-
 
   thread1->join();
   thread2->join();

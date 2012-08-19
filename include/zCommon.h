@@ -69,6 +69,22 @@
 // Unimplemented
 #endif
 
+// TODO: Add GUARD
+#include <assert.h>
+
+#if defined(_WIN32)
+  #define THREAD_ID unsigned int
+  #define THREAD HANDLE
+#elif HAVE_PTHREAD_H
+  // Get header
+  #include <pthread.h>
+  #include <sys/types.h>
+  #define THREAD pthread_t
+  #define THREAD_ID pid_t
+#endif
+
+#define INVALID_THREAD_ID 0
+
 /// Enum that provides a specific text for thread safe values instead of a boolean.
 enum IsThreadSafe {
   YES,

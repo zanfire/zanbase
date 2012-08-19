@@ -64,7 +64,7 @@ bool zTester::process(void) {
         }
 
         // Reset color and next line
-        printf("\n%c[%dm", 0x1B, 0);
+        printf("\n%c[%dm ", 0x1B, 0);
         ret = (ret && result);
       }
     }
@@ -79,7 +79,6 @@ bool zTester::process_interactive(void) {
   bool res = true;
   // Main loop
   while (true) {
-    // List unporcessed test.
     for (int i = 0; i < _tests.get_count(); i++) {
       zStringBuilder strb;
       strb.append("\t");

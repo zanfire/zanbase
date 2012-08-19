@@ -33,6 +33,8 @@
 class zEvent {
 protected:
   EVENT_TYPE _event;
+  // Used only in the pthreats implementation.
+  bool _state_signaled;
   zMutex _mtx;
 
 public:

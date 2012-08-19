@@ -26,6 +26,7 @@
 #endif
 
 /// This class provides an implementation for a dynamic array.
+/// DON'T use this class with classes that dtor do somethings...
 /// 
 /// NOTE: Keep it simple and tiny.
 /// @author Matteo Valdina

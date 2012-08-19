@@ -25,12 +25,7 @@ zEvent::zEvent(void) {
   _event = CreateEvent(NULL, true, false, NULL);
 #elif HAVE_PTHREAD_H
   int success = pthread_cond_init(&_event, NULL);
-  if (success == 0) {
-    // Ok.
-  }
-  else {
-    // Error.
-  }
+  assert_perror(success);
 #endif
 }
 
@@ -43,12 +38,7 @@ zEvent::~zEvent(void) {
   }
 #elif HAVE_PTHREAD_H
   int success = pthread_cond_destroy(&_event);
-    if (success == 0) {
-      // Ok
-    }
-    else {
-      // Error
-    }
+  assert_perror(success);
 #endif
 }
 
@@ -57,7 +47,11 @@ void zEvent::wait(int timeoutMillis) {
 #if defined(_WIN32)
   DWORD res = WaitForSingleObject( _event, timeoutMillis);
 #elif HAVE_PTHREAD_H
-  _mtx.lock();
+  zScopeMutex scope(_mtx);
+  if (_state_signaled) {
+    _state_signaled = false;
+    return;
+  }
   int success = -1;
   if (timeoutMillis < 0) {
     success = pthread_cond_wait(&_event, _mtx.get_impl());
@@ -69,29 +63,21 @@ void zEvent::wait(int timeoutMillis) {
     request_time.tv_nsec = (int)(timeoutMillis % 1000) * 1000;
     success = pthread_cond_timedwait(&_event, _mtx.get_impl(), &request_time);
   }
-
-  if (success == 0) {
-    // Ok
-  }
-  else {
-    // Error
-  }
-  _mtx.unlock();
+  assert_perror(success);
+  _state_signaled = false;
 #endif
 }
 
 
 void zEvent::signal(void) {
 #if defined(_WIN32)
-  SetEvent( _event );
+  SetEvent(_event);
 #elif HAVE_PTHREAD_H
+  // TODO: Hummm sento puzza di bug...
+  _state_signaled = true;
+
   int success = pthread_cond_signal(&_event);
-    if (success == 0) {
-      // Ok
-    }
-    else {
-      // Error
-    }
+  assert_perror(success);
 #endif
 }
 

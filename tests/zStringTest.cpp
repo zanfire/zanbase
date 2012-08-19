@@ -436,7 +436,7 @@ bool zStringTest::test_memory(void) {
   
   // Check memory.
   
-  for (int i = 0; i <= 1000; i++) {
+  for (int i = 0; i <= 100; i++) {
     zString* tmp1 = new zString("ciao");
     zString* tmp2 = new zString((char*)buf->get_buffer(), buf->get_size() - 1);
 
@@ -446,10 +446,7 @@ bool zStringTest::test_memory(void) {
     delete tmp2;
   }
 
-  // Check memory.
-
   buf->release_reference();
-  // For now ...
   return true;
 }
 

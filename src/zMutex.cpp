@@ -2,11 +2,7 @@
 
 #include "zLogger.h"
 
-#include <stdio.h>
-
 zMutex::zMutex(void) {
-  _lockedCount = 0;
-
 #if defined(_WIN32)
   _cs = new CRITICAL_SECTION;
   InitializeMutexAndSpinCount((LPCRITICAL_SECTION)_cs, 500);
@@ -38,12 +34,10 @@ void zMutex::lock() {
 #else
   pthread_mutex_lock(&_mutex);
 #endif
-  _lockedCount++;
 }
 
 
 void zMutex::unlock() {
-  _lockedCount--;
 #if defined(_WIN32)
   LeaveMutex((LPCRITICAL_SECTION)_cs);
 #else

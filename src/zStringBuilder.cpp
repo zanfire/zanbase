@@ -12,8 +12,9 @@ zStringBuilder::zStringBuilder(void) :  _strings(YES, 32, NULL) {
 zStringBuilder::~zStringBuilder(void) {
   while(_strings.get_count() > 0) {
     zString* tmp = NULL;
-    if (_strings.remove(_strings.get_count() - 1, &tmp)) {
-      delete tmp;
+    if (_strings.remove(0, &tmp)) {
+      if (tmp != NULL) delete tmp;
+      tmp = NULL;
     }
   }
 }

@@ -30,9 +30,8 @@
 class zMutex {
   
 private:
-  int _lockedCount;
+  int _locked_count;
   MUTEX_TYPE _mutex;
-  //bool _isDestroying;
 
 public:
   zMutex(void);
@@ -40,7 +39,8 @@ public:
 
   void lock(void);
   void unlock(void);
-
+  
+  // Syncronize with the mutex.
   void sync(void) { lock(); unlock(); }
 
   // Get the implementation object used by Mutex object.

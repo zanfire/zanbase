@@ -20,6 +20,7 @@ bool zArrayTest::execute(int index) {
     case 1: return test_resize();
     case 2: return test_memory();
     case 3: return test_multithread();
+    case 4: return test_get();
     default: return false;
   }
   return false;
@@ -27,7 +28,7 @@ bool zArrayTest::execute(int index) {
 
 
 int zArrayTest::get_num_tests(void) {
-  return 4;
+  return 5;
 }
 
 
@@ -47,6 +48,7 @@ char const* zArrayTest::get_test_name(int index) {
     case 1: return "resize";
     case 2: return "memory";
     case 3: return "multithread";
+    case 4: return "get";
     default: return "??";
   }
   return "??";
@@ -167,4 +169,19 @@ bool zArrayTest::test_multithread(void) {
 
   return true;
 }
+
+
+bool zArrayTest::test_get(void) {
+  zArray<char> array(NO, 1, 0);
+  // Test on failing get.
+  char tmp = 'a';
+  if (array.get(0, &tmp) || tmp != 'a') return false;
+  // Test ok.
+  array.append('c');
+  if (!array.get(0, &tmp) || tmp != 'c') return false;
+
+  return true;
+}
+
+
 

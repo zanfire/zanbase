@@ -49,6 +49,11 @@ public:
   bool process(void);
   //// Tester interacts via the console to choose the executed tests.
   bool process_interactive(void);
+
+protected:
+  // Execute the test at given index.
+  // This method handles the gui and invoke the test method.
+  bool execute(zTest* test, int index);
 };
 
 #endif

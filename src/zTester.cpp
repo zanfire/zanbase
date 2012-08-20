@@ -39,32 +39,7 @@ bool zTester::process(void) {
     if (test != NULL) {
       printf("%d )  %s\n", (i + 1), test->get_name());
       for (int x = 0; x < test->get_num_tests(); x++) {
-        // Build nice string.
-        zStringBuilder strb;
-        strb.appendf("\t- %s, result: ", test->get_test_name(x));
-        while (strb.get_length() <= 64) {
-          strb.append('.');
-        }
-
-        bool result = test->execute(x);
-        printf("%s", strb.to_string().get_buffer());
-
-        #define BRIGHT 1
-        #define RED 31
-        #define GREEN 32
-        #define BG_BLACK 4
-
-        // TODO: This is not supported under Win32.
-
-        if (result) {
-          printf("%c[%d;%d;%dmpassed", 0x1B, BRIGHT, GREEN, BG_BLACK);
-        } 
-        else {
-           printf("%c[%d;%d;%dmfailed", 0x1B, BRIGHT, RED, BG_BLACK);
-        }
-
-        // Reset color and next line
-        printf("\n%c[%dm ", 0x1B, 0);
+        bool result = execute(test, x);
         ret = (ret && result);
       }
     }
@@ -75,15 +50,14 @@ bool zTester::process(void) {
 
 bool zTester::process_interactive(void) {
 
-  printf("Select a test:\n");
   bool res = true;
   // Main loop
   while (true) {
     for (int i = 0; i < _tests.get_count(); i++) {
       zStringBuilder strb;
-      strb.append("\t");
+      strb.append("  ");
       strb.append(i);
-      strb.append(") ");
+      strb.append(" - ");
 
       zTest* test = NULL;
       _tests.get(i, &test);
@@ -93,8 +67,10 @@ bool zTester::process_interactive(void) {
       else {
         strb.append(" test invalid.");
       }
-      printf("%s\n> ", strb.to_string().get_buffer());
+      printf("%s\n", strb.to_string().get_buffer());
     }
+
+    printf("Insert a test number or quit: ");
 
     zStringBuilder commandBuf;
     char c = 0;
@@ -112,13 +88,11 @@ bool zTester::process_interactive(void) {
       zTest* test = NULL;
       _tests.get(index, &test);
       if (test != NULL) {
-        
-        printf("Running test %s\n", test->get_name());
+
+        printf("Executing test: %s\n", test->get_name());
 
         for (int i = 0; i < test->get_num_tests(); i++) {
-          printf(" - %s, result: ", test->get_test_name(i));
-          bool result = test->execute(i);
-          printf("%s\n", result ? "passed" : "failed");
+          bool result = execute(test, i);
           res = (res && result);
         }
       }
@@ -127,3 +101,33 @@ bool zTester::process_interactive(void) {
   return res;
 }
 
+
+bool zTester::execute(zTest* test, int index) {
+  // Build nice string.
+  zStringBuilder strb;
+  strb.appendf("\t- %s, result: ", test->get_test_name(index));
+  while (strb.get_length() <= 64) {
+    strb.append('.');
+  }
+
+  printf("%s", strb.to_string().get_buffer());
+  bool result = test->execute(index);
+
+  #define BRIGHT 1
+  #define RED 31
+  #define GREEN 32
+  #define BG_BLACK 4
+
+  // TODO: This is not supported under Win32.
+
+  if (result) {
+    printf("%c[%d;%d;%dmpassed", 0x1B, BRIGHT, GREEN, BG_BLACK);
+  } 
+  else {
+     printf("%c[%d;%d;%dmfailed", 0x1B, BRIGHT, RED, BG_BLACK);
+  }
+
+  // Reset color and next line
+  printf("%c[%dm\n", 0x1B, 0);
+  return result;
+}

@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright 2009 Matteo Valdina
+ * Copyright 2009-2012 Matteo Valdina
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,8 +48,7 @@ void zEvent::wait(int timeoutMillis) {
   DWORD res = WaitForSingleObject( _event, timeoutMillis);
 #elif HAVE_PTHREAD_H
   zScopeMutex scope(_mtx);
-  if (_state_signaled) {
-    _state_signaled = false;
+  if (_waiting.increment() <= 0) {
     return;
   }
   int success = -1;
@@ -64,7 +63,7 @@ void zEvent::wait(int timeoutMillis) {
     success = pthread_cond_timedwait(&_event, _mtx.get_impl(), &request_time);
   }
   assert_perror(success);
-  _state_signaled = false;
+  _waiting.decrement();
 #endif
 }
 
@@ -73,8 +72,7 @@ void zEvent::signal(void) {
 #if defined(_WIN32)
   SetEvent(_event);
 #elif HAVE_PTHREAD_H
-  // TODO: Hummm sento puzza di bug...
-  _state_signaled = true;
+  _waiting.decrement();
 
   int success = pthread_cond_signal(&_event);
   assert_perror(success);

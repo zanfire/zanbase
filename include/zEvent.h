@@ -34,7 +34,7 @@ class zEvent {
 protected:
   EVENT_TYPE _event;
   // Used only in the pthreats implementation.
-  bool _state_signaled;
+  zReference _waiting;
   zMutex _mtx;
 
 public:

@@ -28,7 +28,7 @@
 /// @author Matteo Valdina
 class zBuffer : public zObject {
 protected:
-  uint8_t* _buffer;
+  unsigned char* _buffer;
   int _size;
   zBuffer* _next;
 public:
@@ -45,10 +45,12 @@ public:
 
   /// Set a value for each byte in the buffer.
   bool set(uint8_t value);
-
-  bool append(uint8_t const* buffer, int size);
+  
+  /// Append the content of the buffer in the zBuffer.
+  bool append(unsigned char const* buffer, int size);
+  
   /// Append a zString in the buffer.
-  bool append(zString const* str, zString::StoreFormat store);
+  //bool append(zString const* str, zString::StoreFormat store);
 
   void set_next(zBuffer* b) { _next = b; }
   zBuffer* get_next(void) { return _next; }

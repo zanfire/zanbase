@@ -28,38 +28,49 @@ zBuffer::zBuffer(void) : zObject() {
 }
 
 zBuffer::zBuffer(int size) : zObject() {
-  _buffer = (unsigned char*)malloc(sizeof(unsigned char) * size);
-  _size = size;
+  if (size > 0) {
+    _buffer = (unsigned char*)malloc(sizeof(unsigned char) * size);
+    _size = size;
+  }
+  else {
+    _buffer = NULL;
+    _size = 0;
+  }
 }
 
 
 zBuffer::~zBuffer(void) {
-  // Clean up memory, because this buffer can contains some sensible data.
-  memset(_buffer, 0x00, _size);
-  free(_buffer);
+  if (_buffer != NULL) free(_buffer);
   _buffer = NULL;
 }
 
 
 void zBuffer::resize(int size) {
-  _buffer = (unsigned char*)realloc(_buffer, (sizeof(unsigned char) * size));
-  _size = size;
+  if (size > 0) {
+    _buffer = (unsigned char*)realloc(_buffer, (sizeof(unsigned char) * size));
+    _size = size;
+  }
+  else {
+    if (_buffer != NULL) {
+      free(_buffer);
+      _buffer = NULL;
+    }
+    _size = 0;
+  }
 }
 
 
-bool zBuffer::append(unsigned char const* buffer, int bufferSize) {
-  if (bufferSize < 0) return false;
+bool zBuffer::append(unsigned char const* buffer, int size) {
+  if (size < 0) return false;
   if (buffer == NULL) return false;
 
-  int curSize = _size;
-  resize(curSize + bufferSize);
-
-  memcpy(_buffer + curSize, buffer, bufferSize);
-
+  int cur_size = _size;
+  resize(cur_size + size);
+  memcpy(_buffer + cur_size, buffer, size);
   return true;
 }
 
-
+/*
 bool zBuffer::append(zString const* str, zString::StoreFormat format) {
   if (format == zString::PASCAL) {
     int len = str->get_length();
@@ -72,14 +83,13 @@ bool zBuffer::append(zString const* str, zString::StoreFormat format) {
   }
   return true;
 }
-
+*/
 
 bool zBuffer::set(uint8_t value) {
   if (_size < 0) return false;
   if (_buffer == NULL) return false;
 
   memset(_buffer, value, _size);
-  
   return true;
 }
 

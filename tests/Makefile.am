@@ -9,4 +9,5 @@ zanbase_tests_runner_SOURCES = \
 	zArrayTest.cpp \
 	zThreadTest.cpp \
 	zFileTest.cpp \
-	zTestTest.cpp
+	zTestTest.cpp \
+	zBufferTest.cpp

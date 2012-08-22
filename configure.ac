@@ -99,7 +99,7 @@ AC_C_INLINE
 
 # Checks for library functions.
 AC_FUNC_MALLOC
-AC_FUNC_FREE
+AC_FUNC_REALLOC
 AC_CHECK_FUNCS([floor gethostname memset sqrt socket bind])
 
 AC_CONFIG_FILES([Makefile

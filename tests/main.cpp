@@ -33,6 +33,7 @@
 #include "zStrTokTest.h"
 #include "zThreadTest.h"
 #include "zFileTest.h"
+#include "zBufferTest.h"
 
 #if defined(ENABLED_DMALLOC)
 #  include <dmalloc.h>
@@ -116,6 +117,7 @@ int main(int argc, char** argv) {
   tester->add(new zArrayTest());
   tester->add(new zThreadTest());
   tester->add(new zFileTest());
+  tester->add(new zBufferTest());
 
   // Execute tests.
   bool result = false;

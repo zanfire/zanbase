@@ -89,7 +89,7 @@ fi
 
 
 # Checks for header files.
-AC_CHECK_HEADERS([stdlib.h string.h pthread.h time.h])
+AC_CHECK_HEADERS([stdlib.h string.h time.h])
 # Socket related header
 AC_CHECK_HEADERS([sys/socket.h sys/types.h])
 
@@ -99,12 +99,12 @@ AC_C_INLINE
 
 # Checks for library functions.
 AC_FUNC_MALLOC
-AC_FUNC_REALLOC
+AC_FUNC_FREE
 AC_CHECK_FUNCS([floor gethostname memset sqrt socket bind])
 
 AC_CONFIG_FILES([Makefile
 		include/Makefile
-                src/Makefile
+    src/Makefile
 		tests/Makefile])
 AC_OUTPUT
 

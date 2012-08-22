@@ -4,6 +4,7 @@
 #include "zThread.h"
 #include "zRunnable.h"
 
+
 zThreadTest::zThreadTest(void) {
 }
 
@@ -105,7 +106,7 @@ bool zThreadTest::test_memory(void) {
 
   zArray<zThread*> array(YES, 10, NULL);
   int sleep = 100;
-  for (int i = 0; i < 5; i++) {
+  for (int i = 0; i < 500; i++) {
     zThread* thread = new zThread(&impl);
     array.append(thread);
     thread->start(&sleep);
@@ -127,10 +128,9 @@ bool zThreadTest::test_threadid(void) {
   int sleep = 0;
   zThread* thread = new zThread(&impl);
   thread->start(&sleep);
-  THREAD_ID tid = thread->get_thread_id();
-  
-  THREAD_ID ret = thread->join();
 
+  THREAD_ID tid = thread->get_thread_id(); 
+  THREAD_ID ret = thread->join();
   if (ret != tid) return false;
 
   thread->release_reference();
@@ -155,5 +155,4 @@ bool zThreadTest::test_startfail(void) {
  
   return true;
 }
-
 

@@ -25,3 +25,4 @@ tags
 /ltmain.sh
 /config.sub
 /release/
+/config.h.in~

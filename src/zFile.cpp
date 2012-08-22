@@ -1,29 +1,17 @@
-/******************************************************************************
- * Copyright 2009-2011 Matteo Valdina
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *****************************************************************************/
-
 #include "zFile.h"
+
+#include "zLogger.h"
+#include "zStringBuilder.h"
 
 // TODO: Add GUARD.
 #include <unistd.h>
 // TODO: Add GUARD.
 #include <errno.h>
 
-zFile::zFile(FILE* file, zString const& path) : zObject() {
+zFile::zFile(FILE* file, zString const& path) : zStream(), zObject() {
   _file = file;
   _path = path;
+  //_flags = flags;
 }
 
 
@@ -31,53 +19,75 @@ zFile::~zFile(void) {
   close();
 }
 
-zFile* zFile::open(zString const& path, OpenMode mode) {
-  char const* fmode;
-  if (mode == OPEN_MODE_READ) {
-    fmode = "r";
-  }
-  if (mode == OPEN_MODE_WRITE) {
-    fmode = "w";
-  }
-  if (mode == OPEN_MODE_READ_WRITE) {
-    fmode = "rw";
-  }
-  if (mode == OPEN_MODE_APPEND) {
-    fmode = "a";
-  }
 
-  FILE* fd = fopen(path.get_buffer(), fmode);
+zFile* zFile::create(zString const& path) {
+  FILE* fd = fopen(path.get_buffer(), "w+");
   if (fd != NULL) {
     return new zFile(fd, path);
+  }
+  else {
+    LOG_DEBUG("Failed to open file. system reports error: %d - %s", errno, strerror(errno));
   }
   return NULL;
 }
 
 
-int zFile::readBytes(unsigned char* buffer, int bufferSize) {
-  if (buffer == NULL) return -1;
-  if (bufferSize < 0) return -1;
-  if (_file == NULL) return -1;
 
-  return fread(buffer, 1, bufferSize, _file);
+zFile* zFile::open(zString const& path) {
+  FILE* fd = fopen(path.get_buffer(), "r+");
+  if (fd != NULL) {
+    return new zFile(fd, path);
+  }
+  else {
+    LOG_DEBUG("Failed to open file. system reports error: %d - %s", errno, strerror(errno));
+  }
+  return NULL;
 }
 
 
-int zFile::writeBytes(unsigned char* buffer, int bufferSize) {
-  if (buffer == NULL) return -1;
-  if (bufferSize < 0) return -1;
-  if (_file == NULL) return -1;
-
-  return fwrite(buffer, 1, bufferSize, _file);
+zFile* zFile::append(zString const& path) {
+  FILE* fd = fopen(path.get_buffer(), "a+");
+  if (fd != NULL) {
+    return new zFile(fd, path);
+  }
+  else {
+    LOG_DEBUG("Failed to open file. system reports error: %d - %s", errno, strerror(errno));
+  }
+  return NULL;
 }
 
 
-bool zFile::isEOF(void) const {
+int zFile::read(unsigned char* buffer, int size) {
+  if (buffer == NULL) return -1;
+  if (size <= 0) return -1;
+  if (_file == NULL) return -1;
+
+  return fread(buffer, 1, size, _file);
+}
+
+
+int zFile::write(unsigned char* buffer, int size) {
+  if (buffer == NULL) return -1;
+  if (size <= 0) return -1;
+  if (_file == NULL) return -1;
+
+  return fwrite(buffer, 1, size, _file);
+}
+
+
+int zFile::seek(int pos) {
+  if (_file == NULL) return -1;
+
+  return fseek(_file, pos, SEEK_SET);
+}
+
+bool zFile::is_eof(void) const {
   return (feof(_file) != 0);
 }
 
 
-bool zFile::isError(void) const {
+bool zFile::get_error(void) const {
+  // TODO: Convert error!
   return (ferror(_file) != 0);
 }
 
@@ -106,3 +116,8 @@ zString zFile::get_current_directory(void) {
   // TODO: But errno needs to be cleared?
 }
 
+
+bool zFile::remove(zString const& path) {
+  unlink(path.get_buffer());
+  return true;
+}

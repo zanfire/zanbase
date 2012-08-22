@@ -8,4 +8,5 @@ zanbase_tests_runner_SOURCES = \
 	zStrTokTest.cpp \
 	zArrayTest.cpp \
 	zThreadTest.cpp \
+	zFileTest.cpp \
 	zTestTest.cpp

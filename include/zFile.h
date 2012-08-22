@@ -20,35 +20,62 @@
 #include "zCommon.h"
 #include "zObject.h"
 #include "zString.h"
+#include "zStream.h"
 
+// For FILE.
 #include <stdio.h>
 
 /// This class needs refactoring name.
-class zFile : public zObject {
+class zFile : public zStream, public zObject {
 public:
-  enum OpenMode {
-    OPEN_MODE_READ          = 0x01,
-    OPEN_MODE_WRITE         = 0x02,
-    OPEN_MODE_APPEND        = 0x04,
-    OPEN_MODE_READ_WRITE    = 0x08
+  enum Flag {
+    FLAG_READ          = 0x01,
+    FLAG_WRITE         = 0x02,
+    FLAG_APPEND        = 0x04
+//  APPEND
+//  EXCLUSIVE
+//  ??
   };
 
 protected:
+  // TODO: Abstract FILE handle.
   FILE* _file;
   zString _path;
 
 public:
-  static zFile* open(zString const& path, OpenMode mode);
+  // This strategy is quite simple for the common use (open/create a file in RW).
+  // But it is sufficent?
+  static zFile* create(zString const& path);
+  static zFile* open(zString const& path);
+  static zFile* append(zString const& path);
 
-  int readBytes(unsigned char* buffer, int bufferSize);
-  int writeBytes(unsigned char* buffer, int bufferSize);
+  //
+  // zStream implementation.
+  //
+  int read(unsigned char* buffer, int size);
+  int write(unsigned char* buffer, int size);
+  int seek(int pos);
 
-  bool isEOF(void) const;
-  bool isError(void) const;
+  //
+  // zFile stuff.
+  //
 
+  bool is_eof(void) const;
+  bool get_error(void) const;
+
+  /// Flush write cache.
+  void flush(void);
+  /// Close file and release al internal resources.
   void close(void);
 
+  /// Returns the current directory.
   static zString get_current_directory(void);
+
+  static bool exists(zString const& path);
+
+  /// Remove a file from the FS.
+  /// Returns true if file/directory is removed.
+  static bool remove(zString const& path);
 
 protected:
   zFile(FILE* fd, zString const& file);

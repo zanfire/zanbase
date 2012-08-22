@@ -15,6 +15,7 @@ include_HEADERS = \
 	zEvent.h \
 	zThread.h \
 	zFile.h \
+	zStream.h \
 	zRandom.h \
 	zStringTokenizer.h
 

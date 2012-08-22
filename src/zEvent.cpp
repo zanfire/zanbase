@@ -1,30 +1,11 @@
-/******************************************************************************
- * Copyright 2009-2012 Matteo Valdina
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *****************************************************************************/
-
-
 #include "zEvent.h"
-
-#include "zLogger.h"
 
 zEvent::zEvent(void) {
 #if defined(_WIN32)
   _event = INVALID_HANDLE;
   _event = CreateEvent(NULL, true, false, NULL);
 #elif HAVE_PTHREAD_H
-  int success = pthread_cond_init(&_event, NULL);
+  int success = sem_init(&_event, 0, 0);
   assert_perror(success);
 #endif
 }
@@ -36,8 +17,8 @@ zEvent::~zEvent(void) {
     CloseHandle(_event);
     _event = NULL;
   }
-#elif HAVE_PTHREAD_H
-  int success = pthread_cond_destroy(&_event);
+#else
+  int success = sem_destroy(&_event);
   assert_perror(success);
 #endif
 }
@@ -46,24 +27,19 @@ zEvent::~zEvent(void) {
 void zEvent::wait(int timeoutMillis) {
 #if defined(_WIN32)
   DWORD res = WaitForSingleObject( _event, timeoutMillis);
-#elif HAVE_PTHREAD_H
-  zScopeMutex scope(_mtx);
-  if (_waiting.increment() <= 0) {
-    return;
-  }
-  int success = -1;
+#else
+  int success = 0;
   if (timeoutMillis < 0) {
-    success = pthread_cond_wait(&_event, _mtx.get_impl());
+    success = sem_wait(&_event);
   }
   else {
     timespec request_time;
 
     request_time.tv_sec = (int)(timeoutMillis / 1000);
     request_time.tv_nsec = (int)(timeoutMillis % 1000) * 1000;
-    success = pthread_cond_timedwait(&_event, _mtx.get_impl(), &request_time);
+    success = sem_timedwait(&_event, &request_time);
   }
   assert_perror(success);
-  _waiting.decrement();
 #endif
 }
 
@@ -71,10 +47,8 @@ void zEvent::wait(int timeoutMillis) {
 void zEvent::signal(void) {
 #if defined(_WIN32)
   SetEvent(_event);
-#elif HAVE_PTHREAD_H
-  _waiting.decrement();
-
-  int success = pthread_cond_signal(&_event);
+#else
+  int success = sem_post(&_event);
   assert_perror(success);
 #endif
 }

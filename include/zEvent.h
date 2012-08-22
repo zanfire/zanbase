@@ -17,25 +17,20 @@
 #ifndef ZEVENT_H__
 #define ZEVENT_H__
 
-#include "zEvent.h"
-#include "zObject.h"
-#include "zMutex.h"
+#include "zCommon.h"
 
 #if defined(_WIN32)
   #define EVENT_TYPE void*
-#elif HAVE_PTHREAD_H
+#elif HAVE_PTHREAD_H // PTHREAD_H must be changed.
   // Get header
-  #include <pthread.h>
+  #include <semaphore.h>
 
-  #define EVENT_TYPE pthread_cond_t
+  #define EVENT_TYPE sem_t
 #endif
 
 class zEvent {
 protected:
   EVENT_TYPE _event;
-  // Used only in the pthreats implementation.
-  zReference _waiting;
-  zMutex _mtx;
 
 public:
   zEvent(void);

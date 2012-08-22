@@ -136,3 +136,29 @@ void zLogger::log(LogLevel level, char const* format, va_list args) {
     }
   }
 }
+
+
+void zLogger::log(LogLevel level, char const* file, int line, char const* format, ...) {
+  va_list args;
+  va_start(args, format);
+  log(level, file, line, format, args);
+  va_end(args);
+}
+
+
+void zLogger::log(LogLevel level, char const* file, int line, char const* format, va_list args) {
+  // TODO: Improve performances of this callbacks.
+  // For example decouple log call with a main thread that log event.
+  // But decoupling can be problematic when program crashes. (Some log lines can be lost).
+  // Other problem you cannot match the line with line.
+  //char const* module[1024];
+  //extract_module(file, &module);
+
+  char text[1024 * 4];
+  text[0] = '\n';
+
+  vsnprintf(text, sizeof(text), format, args);
+  printf("%s:%d %s\n", file, line, text);
+}
+
+

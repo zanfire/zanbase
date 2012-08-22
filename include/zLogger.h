@@ -68,6 +68,10 @@ public:
   void log(LogLevel level, char const* format, va_list args);
   void log(LogLevel level, char const* format, ...);
 
+
+  static void log(LogLevel level, char const* file, int line, char const* format, va_list args);
+  static void log(LogLevel level, char const* file, int line, char const* format, ...);
+
 protected:
   /// 
   zLogger(char const* loggerName);
@@ -77,6 +81,21 @@ protected:
   void load_config(void);
 };
 
+// Useful macro.
+
+#if defined(LOGGING_ENABLED) 
+# define LOG_FATAL(format, ...)    zLogger::log(zLogger::LOG_LEVEL_FATAL, __FILE__, __LINE__, format, __VA_ARGS___)
+# define LOG_ERROR(format, ...)    zLogger::log(zLogger::LOG_LEVEL_WARN, __FILE__, __LINE__, format, __VA_ARGS__)
+# define LOG_WARNING(format, ...)  zLogger::log(zLogger::LOG_LEVEL_WARN, __FILE__, __LINE__, format, __VA_ARGS__)
+# define LOG_INFO(format, ...)     zLogger::log(zLogger::LOG_LEVEL_INFO, __FILE__, __LINE__, format, __VA_ARGS__)
+# define LOG_DEBUG(format, ...)    zLogger::log(zLogger::LOG_LEVEL_DEBUG, __FILE__, __LINE__, format, __VA_ARGS__)
+#else 
+# define LOG_FATAL(format, ...)
+# define LOG_ERROR(format, ...)
+# define LOG_WARNING(format, ...)
+# define LOG_INFO(format, ...)
+# define LOG_DEBUG(format, ...)
+#endif
 
 #endif // ZLOGGER_H__
 

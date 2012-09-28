@@ -97,10 +97,36 @@ bool zBufferTest::test_resize(void) {
 
 
 bool zBufferTest::test_append(void) {
+  unsigned char tmp[] = { 0xAA, 0xAB, 0xAC, 0xAD};
   zBuffer* buffer = new zBuffer(1024);
+  buffer->set(0xFB);
+  if (buffer->append(NULL, 15) != false) return false;
+  if (buffer->append((unsigned char*)&tmp, -1) != false) return false;
+  if (buffer->append((unsigned char*)&tmp, 4) != true) return false;
+  if (buffer->get_size() != 1028) return false;
+
+  unsigned char* buf = buffer->get_buffer();
+  for (int i = 0; i < 1028 ; i++) {
+    if (i < 1024) {
+      if (buf[i] != 0xFB) return false;
+    }
+    else if (i == 1024) {
+      if (buf[i] != 0xAA) return false;
+    }
+    else if (i == 1025) {
+      if (buf[i] != 0xAB) return false;
+    }
+    else if (i == 1026) {
+      if (buf[i] != 0xAC) return false;
+    }
+    else if (i == 1027) {
+      if (buf[i] != 0xAD) return false;
+    }
+  }
+
   buffer->release_reference();
 
-  return false;
+  return true;
 }
 
 

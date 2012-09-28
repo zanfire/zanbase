@@ -61,7 +61,7 @@ void zBuffer::resize(int size) {
 
 
 bool zBuffer::append(unsigned char const* buffer, int size) {
-  if (size < 0) return false;
+  if (size <= 0) return false;
   if (buffer == NULL) return false;
 
   int cur_size = _size;

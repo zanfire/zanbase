@@ -32,8 +32,8 @@ class zString {
 
 public:
   enum StoreFormat {
-    C,
-    PASCAL
+    FORMAT_C,
+    FORMAT_PASCAL
   };
 
 private:

@@ -4,7 +4,9 @@
 #include "zStringBuilder.h"
 
 // TODO: Add GUARD.
-#include <unistd.h>
+#if HAVE_UNISTD_H
+# include <unistd.h>
+#endif
 // TODO: Add GUARD.
 #include <errno.h>
 

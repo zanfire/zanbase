@@ -4,8 +4,9 @@
 
 zMutex::zMutex(void) {
 #if defined(_WIN32)
-  _cs = new CRITICAL_SECTION;
-  InitializeMutexAndSpinCount((LPCRITICAL_SECTION)_cs, 500);
+  _mutex = new CRITICAL_SECTION;
+  // TODO: Check initialization values (500).
+  InitializeCriticalSectionAndSpinCount((LPCRITICAL_SECTION)_mutex, 500);
 #else
   pthread_mutexattr_t mutexAttr;
   pthread_mutexattr_init(&mutexAttr);
@@ -20,8 +21,8 @@ zMutex::~zMutex() {
   sync();
 
 #if defined(_WIN32)
-  DeleteMutex((LPCRITICAL_SECTION)_cs);
-  delete (CRITICAL_SECTION*)_cs;
+  DeleteCriticalSection((LPCRITICAL_SECTION)_mutex);
+  delete (CRITICAL_SECTION*)_mutex;
 #else
   pthread_mutex_destroy(&_mutex);
 #endif
@@ -30,7 +31,7 @@ zMutex::~zMutex() {
 
 void zMutex::lock() {
 #if defined(_WIN32)
-  EnterMutex((LPCRITICAL_SECTION)_cs);
+  EnterCriticalSection((LPCRITICAL_SECTION)_mutex);
 #else
   pthread_mutex_lock(&_mutex);
 #endif
@@ -39,7 +40,7 @@ void zMutex::lock() {
 
 void zMutex::unlock() {
 #if defined(_WIN32)
-  LeaveMutex((LPCRITICAL_SECTION)_cs);
+  LeaveCriticalSection((LPCRITICAL_SECTION)_mutex);
 #else
   pthread_mutex_unlock(&_mutex);
 #endif

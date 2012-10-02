@@ -17,19 +17,17 @@
 #include "zThread.h"
 #include "zRunnable.h"
 
+#include <stdio.h>
+#include <time.h>
+
 #if defined(_WIN32)
   #include <windows.h>
   #include <Process.h>
 #else
-  //#include <time.h>
+# include <pthread.h>
+# include <unistd.h>
+# include <sys/syscall.h>
 #endif
-
-#include <stdio.h>
-#include <time.h>
-#include <pthread.h>
-#include <unistd.h>
-#include <sys/syscall.h>
-
 
 class zThreadMain {
 public:
@@ -64,10 +62,7 @@ namespace Protected  {
 #endif
     zThreadMain th;
     th.main((zThread*)arg);
-#if defined(_WIN32)
-#else
     return NULL;
-#endif
   }
 }
 
@@ -93,6 +88,10 @@ zThread::~zThread(void) {
 
 
 void zThread::sleep(int ms) {
+#if defined(WIN32)
+	// TODO: Check if it is precise.
+	Sleep(ms);
+#else
   timespec rentime;
   timespec reqtime;
 
@@ -101,6 +100,7 @@ void zThread::sleep(int ms) {
 
   int success = nanosleep(&reqtime, &rentime);
   assert_perror(success);
+#endif
 }
 
 
@@ -146,6 +146,7 @@ int zThread::join(void) {
 
 THREAD_ID zThread::get_current_thread_id(void) {
 #if defined(_WIN32) 
+	return GetCurrentThreadId();
 #else
   return syscall(SYS_gettid);
 #endif

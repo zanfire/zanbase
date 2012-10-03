@@ -26,3 +26,5 @@ tags
 /config.sub
 /release/
 /config.h.in~
+/ms/Debug/
+/ms/Release/

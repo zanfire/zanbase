@@ -17,8 +17,20 @@
 #ifndef ZCOMMON_H__
 #define ZCOMMON_H__
 
+
+#if defined(_WIN32)
+# include <Windows.h>
+
+// Fast trick to cross-compile between Linux-Win32. 
+# define snprintf _snprintf_s
+
+#define PACKAGE_VERSION "x.z.y"
+#define PACKAGE_BUGREPORT "Zan"
+
+#else
 /// Include output of configure script.
-#include "config.h"
+# include "config.h"
+#endif
 
 // NULL define
 #if !defined(NULL)
@@ -72,7 +84,7 @@
 // TODO: Add GUARD
 #include <assert.h>
 
-#if defined(_WIN32)
+#if defined(WIN32)
   #define THREAD_ID unsigned int
   #define THREAD HANDLE
 #elif HAVE_PTHREAD_H

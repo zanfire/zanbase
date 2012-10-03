@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\zArray.h" />
+    <ClInclude Include="..\include\zBuffer.h" />
+    <ClInclude Include="..\include\zCommon.h" />
+    <ClInclude Include="..\include\zEvent.h" />
+    <ClInclude Include="..\include\zFile.h" />
+    <ClInclude Include="..\include\zLogger.h" />
+    <ClInclude Include="..\include\zLoggerAppender.h" />
+    <ClInclude Include="..\include\zLoggerAppenderConsole.h" />
+    <ClInclude Include="..\include\zMutex.h" />
+    <ClInclude Include="..\include\zObject.h" />
+    <ClInclude Include="..\include\zRandom.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\include\zReference.h" />
+    <ClInclude Include="..\include\zRunnable.h" />
+    <ClInclude Include="..\include\zScopeMutex.h" />
+    <ClInclude Include="..\include\zStream.h" />
+    <ClInclude Include="..\include\zString.h" />
+    <ClInclude Include="..\include\zStringBuilder.h" />
+    <ClInclude Include="..\include\zStringTokenizer.h" />
+    <ClInclude Include="..\include\zTest.h" />
+    <ClInclude Include="..\include\zTester.h" />
+    <ClInclude Include="..\include\zThread.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\zBuffer.cpp" />
+    <ClCompile Include="..\src\zEvent.cpp" />
+    <ClCompile Include="..\src\zFile.cpp" />
+    <ClCompile Include="..\src\zLogger.cpp" />
+    <ClCompile Include="..\src\zLoggerAppender.cpp" />
+    <ClCompile Include="..\src\zLoggerAppenderConsole.cpp" />
+    <ClCompile Include="..\src\zMutex.cpp" />
+    <ClCompile Include="..\src\zObject.cpp" />
+    <ClCompile Include="..\src\zRandom.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\src\zReference.cpp" />
+    <ClCompile Include="..\src\zScopeMutex.cpp" />
+    <ClCompile Include="..\src\zString.cpp" />
+    <ClCompile Include="..\src\zStringBuilder.cpp" />
+    <ClCompile Include="..\src\zStringTokenizer.cpp" />
+    <ClCompile Include="..\src\zTester.cpp" />
+    <ClCompile Include="..\src\zThread.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\config.h.in" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{83873E51-CC84-4FEA-9A9D-5A7B2336A59A}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>libzanbase</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>../include</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>../include</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -19,7 +19,9 @@
 #include "zMutex.h"
 #include "zLogger.h"
 
-#include <sys/time.h>
+#if HAVE_SYS_TIME_H
+# include <sys/time.h>
+#endif
 
 
 zRandom::zRandom(void) {

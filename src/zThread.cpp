@@ -1,35 +1,17 @@
-/******************************************************************************
- * Copyright 2009-2011 Matteo Valdina
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *****************************************************************************/
-
 #include "zThread.h"
 #include "zRunnable.h"
+
+#include <stdio.h>
+#include <time.h>
 
 #if defined(_WIN32)
   #include <windows.h>
   #include <Process.h>
 #else
-  //#include <time.h>
+# include <pthread.h>
+# include <unistd.h>
+# include <sys/syscall.h>
 #endif
-
-#include <stdio.h>
-#include <time.h>
-#include <pthread.h>
-#include <unistd.h>
-#include <sys/syscall.h>
-
 
 class zThreadMain {
 public:
@@ -64,10 +46,7 @@ namespace Protected  {
 #endif
     zThreadMain th;
     th.main((zThread*)arg);
-#if defined(_WIN32)
-#else
     return NULL;
-#endif
   }
 }
 
@@ -93,6 +72,10 @@ zThread::~zThread(void) {
 
 
 void zThread::sleep(int ms) {
+#if defined(WIN32)
+	// TODO: Check if it is precise.
+	Sleep(ms);
+#else
   timespec rentime;
   timespec reqtime;
 
@@ -101,6 +84,7 @@ void zThread::sleep(int ms) {
 
   int success = nanosleep(&reqtime, &rentime);
   assert_perror(success);
+#endif
 }
 
 
@@ -111,8 +95,11 @@ bool zThread::start(void* param) {
   // Store the application param to be passed to the running thread via zThread instance.
   _app_param = param;
 
-#if defined(_WIN32)
-  //_thread = _beginthreadex( NULL, 0, &(Protected::ThreadEntry), _runnable, 0, &_threadID );
+#if defined(WIN32)
+  // READ DOCs because this cast is quite hazard.
+  _thread = (HANDLE)_beginthreadex(NULL, 0, &(Protected::ThreadEntry), _runnable, 0, &_id);
+  // hThread = (HANDLE)_beginthreadex( NULL, 0, &SecondThreadFunc, NULL, 0, &threadID );
+
 #else // POSIX
 
   pthread_attr_t attr;
@@ -146,6 +133,7 @@ int zThread::join(void) {
 
 THREAD_ID zThread::get_current_thread_id(void) {
 #if defined(_WIN32) 
+	return GetCurrentThreadId();
 #else
   return syscall(SYS_gettid);
 #endif

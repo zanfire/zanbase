@@ -4,7 +4,9 @@
 #include "zStringBuilder.h"
 
 // TODO: Add GUARD.
-#include <unistd.h>
+#if HAVE_UNISTD_H
+# include <unistd.h>
+#endif
 // TODO: Add GUARD.
 #include <errno.h>
 
@@ -21,7 +23,8 @@ zFile::~zFile(void) {
 
 
 zFile* zFile::create(zString const& path) {
-  FILE* fd = fopen(path.get_buffer(), "w+");
+  FILE* fd = NULL;
+  errno_t result = fopen_s(&fd, path.get_buffer(), "w+");
   if (fd != NULL) {
     return new zFile(fd, path);
   }
@@ -102,6 +105,27 @@ void zFile::close(void) {
 zString zFile::get_current_directory(void) {
   char buf[1024];
   // Get string with a local buffer.
+  char* path = NULL;
+#if defined(WIN32)
+  // Remarks: The GetCurrentDirectroy should not used in a multi-threaded program.
+  int result = GetCurrentDirectoryA(sizeof(buf), buf);
+  if (result <= 0) {
+    // Failed get the current directory.
+  }
+  else if (result > sizeof(buf)) {
+    // The path of current directory is longer of buf. 
+    char* pBuf = (char*)malloc(sizeof(char) * result);
+    int result2 = GetCurrentDirectoryA(sizeof(char) * result, pBuf);
+    zString currentDir(pBuf, sizeof(char) * result);       
+    // Should never happen.
+    assert(result == result2);
+    free(pBuf);
+    return currentDir;
+  }
+  else {
+    return zString(buf, sizeof(char) * result);
+  }
+#else
   char* path = getcwd(buf, sizeof(buf));
   int buff_size = 1024 * 64;
   while (path == NULL && errno == ERANGE) {
@@ -113,7 +137,8 @@ zString zFile::get_current_directory(void) {
   }
   // If path is NULL an empty string is returned.
   return zString(path);
-  // TODO: But errno needs to be cleared?
+#endif
+  return zString();
 }
 
 

@@ -48,16 +48,7 @@ public:
   /// @param elements is the number of initial elements.
   /// @param default value for each element in the array.
   zArray(IsThreadSafe threadSafe, int initial_size, T const& default_value) {
-    _mtx = threadSafe == YES ? new zMutex() : NULL;
-    if (initial_size <= 0) initial_size = 32;
-    _size = initial_size;
-    _count = 0;
-    _elements = (T*) malloc(sizeof(T) * _size);
-    _default = default_value;
-    // Initializes
-    for (int i = 0; i < _size; i++) {
-      memcpy((uint8_t*)(&_elements[i]), (uint8_t*)(&_default), sizeof(T));
-    }
+    init(threadSafe, initial_size, default_value);
   }
 
   /// Dtor.
@@ -67,7 +58,22 @@ public:
     if (_mtx != NULL) delete _mtx;
   }
 
-  
+
+  /// Copy ctors
+  zArray(zArray<T> const& obj) {
+    init((obj._mtx != NULL) ? YES : NO, obj._count , obj._default);
+    
+    copy_from(obj);
+  }
+
+
+  zArray& operator=(zArray<T> const& rhs) {
+    if (this != &rhs) {
+      copy_from(rhs);
+    }
+    return *this;
+  }
+
   void lock(void) {
     if (_mtx != NULL) _mtx->lock();
   }
@@ -90,7 +96,7 @@ public:
   bool insert(int index, T element) {
     zScopeMutex scope(_mtx);
 
-    if (_count + 1 == _size) {
+    if (_count + 1 > _size) {
       // TODO: this code must be improved.
       if (!resize(_size + 1024)) {
         // TODO: Handle error!!!
@@ -135,7 +141,7 @@ public:
 
   bool resize(int new_size) {
     // TODO: Implements!!!
-    _elements = (T*)realloc(_elements, sizeof(T*) * new_size);
+    _elements = (T*)realloc(_elements, sizeof(T) * new_size);
 
 
     for (int i = _size; i < new_size; i++) {
@@ -144,6 +150,34 @@ public:
     _size = new_size;
     return true;
   }
+
+
+  /// Copy the content from argument into the array.
+  void copy_from(zArray<T> const& arr) { 
+    zScopeMutex scope(_mtx);
+    for (int i = 0; i < arr.get_count(); i++) {
+      T element;
+      if (arr.get(i, &element)) {
+        append(element);
+      }
+    }
+  }
+
+ protected:
+  void init(IsThreadSafe threadSafe, int initial_size, T const& default_value) {
+    _mtx = threadSafe == YES ? new zMutex() : NULL;
+    if (initial_size <= 0) initial_size = 32;
+    _size = initial_size;
+    _count = 0;
+    _elements = (T*) malloc(sizeof(T) * _size);
+    _default = default_value;
+    // Initializes
+    for (int i = 0; i < _size; i++) {
+      memcpy((uint8_t*)(&_elements[i]), (uint8_t*)(&_default), sizeof(T));
+    }
+  }
+
+
 };
 
 #endif

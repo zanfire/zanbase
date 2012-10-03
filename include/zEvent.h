@@ -20,7 +20,7 @@
 #include "zCommon.h"
 
 #if defined(_WIN32)
-  #define EVENT_TYPE void*
+  #define EVENT_TYPE HANDLE
 #elif HAVE_PTHREAD_H // PTHREAD_H must be changed.
   // Get header
   #include <semaphore.h>

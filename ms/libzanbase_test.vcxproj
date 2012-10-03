@@ -10,6 +10,30 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\tests\main.cpp" />
+    <ClCompile Include="..\tests\zArrayTest.cpp" />
+    <ClCompile Include="..\tests\zBufferTest.cpp" />
+    <ClCompile Include="..\tests\zFileTest.cpp" />
+    <ClCompile Include="..\tests\zStringTest.cpp" />
+    <ClCompile Include="..\tests\zStrTokTest.cpp" />
+    <ClCompile Include="..\tests\zTestTest.cpp" />
+    <ClCompile Include="..\tests\zThreadTest.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\tests\zArrayTest.h" />
+    <ClInclude Include="..\tests\zBufferTest.h" />
+    <ClInclude Include="..\tests\zFileTest.h" />
+    <ClInclude Include="..\tests\zStringTest.h" />
+    <ClInclude Include="..\tests\zStrTokTest.h" />
+    <ClInclude Include="..\tests\zTestTest.h" />
+    <ClInclude Include="..\tests\zThreadTest.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="libzanbase.vcxproj">
+      <Project>{83873e51-cc84-4fea-9a9d-5a7b2336a59a}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{D711E9BB-349E-4EE2-AF14-2E5ECD1BC1DC}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
@@ -52,10 +76,12 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>../include/</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>Ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -67,12 +93,14 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>../include/</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>Ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -3,10 +3,10 @@
 #include "zLogger.h"
 
 zMutex::zMutex(void) {
+  _locked_count = 0;
 #if defined(_WIN32)
-  _mutex = new CRITICAL_SECTION;
   // TODO: Check initialization values (500).
-  InitializeCriticalSectionAndSpinCount((LPCRITICAL_SECTION)_mutex, 500);
+  InitializeCriticalSectionAndSpinCount(&_mutex, 500);
 #else
   pthread_mutexattr_t mutexAttr;
   pthread_mutexattr_init(&mutexAttr);
@@ -21,8 +21,7 @@ zMutex::~zMutex() {
   sync();
 
 #if defined(_WIN32)
-  DeleteCriticalSection((LPCRITICAL_SECTION)_mutex);
-  delete (CRITICAL_SECTION*)_mutex;
+  DeleteCriticalSection(&_mutex);
 #else
   pthread_mutex_destroy(&_mutex);
 #endif
@@ -31,16 +30,18 @@ zMutex::~zMutex() {
 
 void zMutex::lock() {
 #if defined(_WIN32)
-  EnterCriticalSection((LPCRITICAL_SECTION)_mutex);
+  EnterCriticalSection(&_mutex);
 #else
   pthread_mutex_lock(&_mutex);
 #endif
+  _locked_count++;
 }
 
 
 void zMutex::unlock() {
+  _locked_count--;
 #if defined(_WIN32)
-  LeaveCriticalSection((LPCRITICAL_SECTION)_mutex);
+  LeaveCriticalSection(&_mutex);
 #else
   pthread_mutex_unlock(&_mutex);
 #endif

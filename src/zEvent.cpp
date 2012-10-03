@@ -2,8 +2,8 @@
 
 zEvent::zEvent(void) {
 #if defined(_WIN32)
-  _event = INVALID_HANDLE;
-  _event = CreateEvent(NULL, true, false, NULL);
+  _event = INVALID_HANDLE_VALUE;
+  _event = CreateEvent(NULL, true, false, NULL); 
 #elif HAVE_PTHREAD_H
   int success = sem_init(&_event, 0, 0);
   assert_perror(success);

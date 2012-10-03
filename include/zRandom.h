@@ -40,4 +40,3 @@ public:
 };
 
 #endif // ZRANDOM_H__
-

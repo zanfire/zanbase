@@ -31,7 +31,8 @@
 
 
 // TODO: Why?
-#include <arpa/inet.h>
+// Doesn't available under windows.
+//#include <arpa/inet.h>
 
 
 zString::zString(void) {

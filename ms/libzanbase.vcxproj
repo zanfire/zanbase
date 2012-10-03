@@ -21,7 +21,9 @@
     <ClInclude Include="..\include\zLoggerAppenderConsole.h" />
     <ClInclude Include="..\include\zMutex.h" />
     <ClInclude Include="..\include\zObject.h" />
-    <ClInclude Include="..\include\zRandom.h" />
+    <ClInclude Include="..\include\zRandom.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="..\include\zReference.h" />
     <ClInclude Include="..\include\zRunnable.h" />
     <ClInclude Include="..\include\zScopeMutex.h" />
@@ -42,7 +44,9 @@
     <ClCompile Include="..\src\zLoggerAppenderConsole.cpp" />
     <ClCompile Include="..\src\zMutex.cpp" />
     <ClCompile Include="..\src\zObject.cpp" />
-    <ClCompile Include="..\src\zRandom.cpp" />
+    <ClCompile Include="..\src\zRandom.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\src\zReference.cpp" />
     <ClCompile Include="..\src\zScopeMutex.cpp" />
     <ClCompile Include="..\src\zString.cpp" />
@@ -50,6 +54,9 @@
     <ClCompile Include="..\src\zStringTokenizer.cpp" />
     <ClCompile Include="..\src\zTester.cpp" />
     <ClCompile Include="..\src\zThread.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\config.h.in" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{83873E51-CC84-4FEA-9A9D-5A7B2336A59A}</ProjectGuid>

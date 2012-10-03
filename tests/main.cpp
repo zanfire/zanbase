@@ -14,13 +14,16 @@
  * limitations under the License.
  *****************************************************************************/
 
-#include "config.h"
+#include "zCommon.h"
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <errno.h>
 #include <limits.h>
+
+#if HAVE_UNISTD_H
+# include <unistd.h>
+#endif
 
 #include "zLogger.h"
 #include "zFile.h"
@@ -45,18 +48,19 @@ void showCopyright(char* programName);
 void showHelp(char* programName);
 void handleInvalidArg(char* programName, char invalidArg);
 
-void  dmalloc_track_function(const char *file, const unsigned int line, 
-                            const int func_id,
-                            const DMALLOC_SIZE byte_size,
-                            const DMALLOC_SIZE alignment,
-                            const DMALLOC_PNT old_addr,
-                            const DMALLOC_PNT new_addr) {
-  if (byte_size == 0) {
-    // For some reason deletes are invoked with byte_size == 0.
-    //printf("op %d file %s line %u size = 0\n", func_id, file, line);
+#if defined(DMALLOC)
+  void  dmalloc_track_function(const char *file, const unsigned int line, 
+                              const int func_id,
+                              const DMALLOC_SIZE byte_size,
+                              const DMALLOC_SIZE alignment,
+                              const DMALLOC_PNT old_addr,
+                              const DMALLOC_PNT new_addr) {
+    if (byte_size == 0) {
+      // For some reason deletes are invoked with byte_size == 0.
+      //printf("op %d file %s line %u size = 0\n", func_id, file, line);
+    }
   }
-}
-                                         
+#endif                                    
 
 
 int main(int argc, char** argv) {
@@ -66,6 +70,8 @@ int main(int argc, char** argv) {
   bool interactive = false;
   bool use_dmalloc = false;
 
+#if defined(WIN32)
+#else
   while ((opt = getopt(argc, argv, "hvid")) != -1) {
     switch (opt) {
     case 'h':
@@ -87,6 +93,7 @@ int main(int argc, char** argv) {
       exit(EXIT_FAILURE);
     }
   }
+#endif
 
   showCopyright(argv[0]);
 
@@ -114,8 +121,8 @@ int main(int argc, char** argv) {
   tester->add(new zTestTest());
   tester->add(new zStrTokTest());
   tester->add(new zStringTest());
-  tester->add(new zArrayTest());
   tester->add(new zThreadTest());
+  tester->add(new zArrayTest());
   tester->add(new zFileTest());
   tester->add(new zBufferTest());
 

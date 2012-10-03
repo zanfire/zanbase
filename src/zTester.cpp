@@ -113,6 +113,9 @@ bool zTester::execute(zTest* test, int index) {
   printf("%s", strb.to_string().get_buffer());
   bool result = test->execute(index);
 
+#if defined(WIN32)
+  printf("%s", (result) ? "passed" : "failed");
+#else
   #define BRIGHT 1
   #define RED 31
   #define GREEN 32
@@ -128,6 +131,8 @@ bool zTester::execute(zTest* test, int index) {
   }
 
   // Reset color and next line
-  printf("%c[%dm\n", 0x1B, 0);
+  printf("%c[%dm", 0x1B, 0);
+#endif
+  printf("\n");
   return result;
 }

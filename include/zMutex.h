@@ -20,7 +20,7 @@
 #include "zCommon.h"
 
 #if defined(_WIN32)
-  #define MUTEX_TYPE void*
+  #define MUTEX_TYPE CRITICAL_SECTION
 #elif HAVE_PTHREAD_H
   #include <pthread.h>
   #define MUTEX_TYPE pthread_mutex_t

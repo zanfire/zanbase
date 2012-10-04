@@ -42,6 +42,13 @@
 #  include <dmalloc.h>
 #endif
 
+#if defined(WIN32) && defined(DEBUG)
+# define _CRTDBG_MAP_ALLOC
+# include <stdlib.h>
+# include <crtdbg.h>
+#endif
+
+
 zLogger* g_logger = NULL;
 
 void showCopyright(char* programName);
@@ -144,12 +151,22 @@ int main(int argc, char** argv) {
   g_logger->shutdown();
   g_logger->release_reference();
 
+#if defined(_CRTDBG_MAP_ALLOC)
+  if (_CrtDumpMemoryLeaks()) {
+    DebugBreak();
+  }
+#endif
+
   return result ? EXIT_SUCCESS : EXIT_FAILURE;
 }
 
 
 void showCopyright(char* programName) {
-  printf("%s version %s\n", programName, PACKAGE_VERSION);
+  bool debug = false;
+#if defined(DEBUG)
+  debug = true;
+#endif
+  printf("%s version %s %s\n", programName, PACKAGE_VERSION, (debug ? "Debug" : "Release"));
   printf("Copyright 2009-2012 Matteo Valdina (bugs: %s)\n", PACKAGE_BUGREPORT);
   printf("\n");
 }

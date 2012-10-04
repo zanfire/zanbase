@@ -58,7 +58,7 @@ void zStringBuilder::appendf(char const* format, ...) {
 
   va_list args;
   va_start(args, format);
-  vsnprintf(line, sizeof(line), format, args);
+  vsnprintf_s(line, sizeof(line), format, args);
   va_end(args);
 
   append(line);

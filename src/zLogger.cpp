@@ -126,7 +126,7 @@ void zLogger::log(LogLevel level, char const* format, va_list args) {
   char line[1024 * 4];
   line[0] = '\n';
 
-  vsnprintf(line, sizeof(line), format, args);
+  vsnprintf_s(line, sizeof(line), format, args);
 
   for (int i = 0; i < _appenders.get_count(); i++) {
     zLoggerAppender* appender = NULL;
@@ -157,7 +157,7 @@ void zLogger::log(LogLevel level, char const* file, int line, char const* format
   char text[1024 * 4];
   text[0] = '\n';
 
-  vsnprintf(text, sizeof(text), format, args);
+  vsnprintf_s(text, sizeof(text), format, args);
   printf("%s:%d %s\n", file, line, text);
 }
 

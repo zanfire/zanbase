@@ -2,6 +2,7 @@
 
 #include "zStringBuilder.h"
 #include "zTest.h"
+#include "zConsole.h"
 
 #include <stdio.h>
 
@@ -113,26 +114,17 @@ bool zTester::execute(zTest* test, int index) {
   printf("%s", strb.to_string().get_buffer());
   bool result = test->execute(index);
 
-#if defined(WIN32)
-  printf("%s", (result) ? "passed" : "failed");
-#else
-  #define BRIGHT 1
-  #define RED 31
-  #define GREEN 32
-  #define BG_BLACK 4
-
-  // TODO: This is not supported under Win32.
-
   if (result) {
-    printf("%c[%d;%d;%dmpassed", 0x1B, BRIGHT, GREEN, BG_BLACK);
+    zConsole::setColor(zConsole::FG_COLOR_GREEN, zConsole::BG_COLOR_BLACK);
   } 
   else {
-     printf("%c[%d;%d;%dmfailed", 0x1B, BRIGHT, RED, BG_BLACK);
+     zConsole::setColor(zConsole::FG_COLOR_RED, zConsole::BG_COLOR_BLACK);
   }
+  printf("%s", (result) ? "passed" : "failed");
+  
+  zConsole::clearColor();
 
-  // Reset color and next line
-  printf("%c[%dm", 0x1B, 0);
-#endif
+
   printf("\n");
   return result;
 }

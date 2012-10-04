@@ -37,7 +37,8 @@ zFile* zFile::create(zString const& path) {
 
 
 zFile* zFile::open(zString const& path) {
-  FILE* fd = fopen(path.get_buffer(), "r+");
+  FILE* fd = NULL;
+  errno_t result = fopen_s(&fd, path.get_buffer(), "r+");
   if (fd != NULL) {
     return new zFile(fd, path);
   }
@@ -49,7 +50,8 @@ zFile* zFile::open(zString const& path) {
 
 
 zFile* zFile::append(zString const& path) {
-  FILE* fd = fopen(path.get_buffer(), "a+");
+  FILE* fd = NULL;
+  errno_t result = fopen_s(&fd, path.get_buffer(), "a+");
   if (fd != NULL) {
     return new zFile(fd, path);
   }
@@ -143,6 +145,6 @@ zString zFile::get_current_directory(void) {
 
 
 bool zFile::remove(zString const& path) {
-  unlink(path.get_buffer());
+  _unlink(path.get_buffer());
   return true;
 }

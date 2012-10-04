@@ -99,6 +99,7 @@ bool zBufferTest::test_resize(void) {
 bool zBufferTest::test_append(void) {
   unsigned char tmp[] = { 0xAA, 0xAB, 0xAC, 0xAD};
   zBuffer* buffer = new zBuffer(1024);
+<<<<<<< HEAD
   buffer->set(0xFB);
   if (buffer->append(NULL, 15) != false) return false;
   if (buffer->append((unsigned char*)&tmp, -1) != false) return false;
@@ -124,6 +125,9 @@ bool zBufferTest::test_append(void) {
     }
   }
 
+=======
+  buffer->set(0);
+>>>>>>> Update ignore list.
   buffer->release_reference();
 
   return true;

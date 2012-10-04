@@ -26,5 +26,10 @@ tags
 /config.sub
 /release/
 /config.h.in~
-/ms/Debug/
-/ms/Release/
+# Ms stuff.
+*.opensdf
+*.sdf
+*.suo
+*.vcxproj.user
+/ms/*/Debug/
+/ms/*/Release/

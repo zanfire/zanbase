@@ -23,6 +23,7 @@
     <ClInclude Include="..\include\zObject.h" />
     <ClInclude Include="..\include\zRandom.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="..\include\zReference.h" />
     <ClInclude Include="..\include\zRunnable.h" />
@@ -46,6 +47,7 @@
     <ClCompile Include="..\src\zObject.cpp" />
     <ClCompile Include="..\src\zRandom.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\src\zReference.cpp" />
     <ClCompile Include="..\src\zScopeMutex.cpp" />

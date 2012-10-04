@@ -60,7 +60,7 @@ zThread::zThread(zRunnable* runnable, int stack_size) : zObject() {
   if (stack_size <= 0) _stack_size = 1024 * 2048;
   _stack_size = stack_size;
 
-  //_thread = NULL;
+  _thread = NULL;
   _id = INVALID_THREAD_ID;
 }
 
@@ -97,7 +97,7 @@ bool zThread::start(void* param) {
 
 #if defined(WIN32)
   // READ DOCs because this cast is quite hazard.
-  _thread = (HANDLE)_beginthreadex(NULL, 0, &(Protected::ThreadEntry), _runnable, 0, &_id);
+  _thread = (HANDLE)_beginthreadex(NULL, 0, &(Protected::ThreadEntry), this, 0, &_id);
   // hThread = (HANDLE)_beginthreadex( NULL, 0, &SecondThreadFunc, NULL, 0, &threadID );
 
 #else // POSIX

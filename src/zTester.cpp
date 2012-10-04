@@ -115,10 +115,10 @@ bool zTester::execute(zTest* test, int index) {
   bool result = test->execute(index);
 
   if (result) {
-    zConsole::setColor(zConsole::FG_COLOR_GREEN, zConsole::BG_COLOR_BLACK);
+    zConsole::setColor(zConsole::FG_COLOR_GREEN);
   } 
   else {
-     zConsole::setColor(zConsole::FG_COLOR_RED, zConsole::BG_COLOR_BLACK);
+     zConsole::setColor(zConsole::FG_COLOR_RED);
   }
   printf("%s", (result) ? "passed" : "failed");
   

@@ -30,8 +30,8 @@ public:
   enum FgColor {
 #if defined(WIN32)
     FG_COLOR_BLUE  = FOREGROUND_BLUE,
-    FG_COLOR_RED   = FOREGROUND_GREEN,
-    FG_COLOR_GREEN = FOREGROUND_RED
+    FG_COLOR_RED   = FOREGROUND_RED,
+    FG_COLOR_GREEN = FOREGROUND_GREEN
 #else
     FG_COLOR_BLUE  = 30, // TODO: Untested!!!
     FG_COLOR_RED   = 31,
@@ -39,17 +39,9 @@ public:
 #endif
   };
 
-  enum BgColor {
-#define BACKGROUND_BLUE      0x0010 // background color contains blue.
-#define BACKGROUND_GREEN     0x0020 // background color contains green.
-#define BACKGROUND_RED       0x0040 // background color contains red.
-
-    BG_COLOR_BLACK   = 4,
-  };
-
 public:
 
-  static void setColor(FgColor fg, BgColor bg);
+  static void setColor(FgColor fg);
   static void clearColor(void);
   
 protected:

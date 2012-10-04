@@ -158,7 +158,7 @@ void zString::init(char const* str, int length) {
       _staticBuffer[0] = 0x00;
       _dynamicBuffer = NULL;
     } 
-    else if (length <= ZSTRING_STATIC_BUFFER_SIZE) {
+    else if ((length + 1) < ZSTRING_STATIC_BUFFER_SIZE) {
       memcpy(_staticBuffer, str, length);
       _staticBuffer[length] = 0x00;
       _dynamicBuffer = NULL;
@@ -290,7 +290,7 @@ zString zString::to_lowercase(void) const {
   char* dst = str.get_buffer();
   char* src = dst;
   for (int i = 0; i < str.get_length(); i++) {
-    dst[i] = tolower(src[i]);
+    dst[i] = (char)tolower(src[i]);
   }
   return str;
 }
@@ -301,7 +301,7 @@ zString zString::to_uppercase(void) const {
   char* dst = str.get_buffer();
   char* src = dst;
   for (int i = 0; i < str.get_length(); i++) {
-    dst[i] = toupper(src[i]);
+    dst[i] = (char)toupper(src[i]);
   }
   return str;
 }

@@ -14,6 +14,7 @@
     <ClInclude Include="..\include\zArray.h" />
     <ClInclude Include="..\include\zBuffer.h" />
     <ClInclude Include="..\include\zCommon.h" />
+    <ClInclude Include="..\include\zConsole.h" />
     <ClInclude Include="..\include\zEvent.h" />
     <ClInclude Include="..\include\zFile.h" />
     <ClInclude Include="..\include\zLogger.h" />
@@ -38,6 +39,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\zBuffer.cpp" />
+    <ClCompile Include="..\src\zConsole.cpp" />
     <ClCompile Include="..\src\zEvent.cpp" />
     <ClCompile Include="..\src\zFile.cpp" />
     <ClCompile Include="..\src\zLogger.cpp" />
@@ -89,12 +91,19 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)$(ProjectName)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectName)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)$(ProjectName)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectName)\$(Configuration)\</IntDir>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <PrecompiledHeader>
       </PrecompiledHeader>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>../include</AdditionalIncludeDirectories>

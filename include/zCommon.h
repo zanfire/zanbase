@@ -59,12 +59,13 @@
   typedef long zref_t;
 #endif
 
-// Define increment and decrement
+/// Define increment and decrement.
+/// The Win32 functions returns the incremeneted and decremented value. Instead the POSIX API the old value.
 #if defined(_WIN32)
   #pragma intrinsic (_InterlockedIncrement)
   #pragma intrinsic (_InterlockedDecrement)
-  #define ATOMIC_INC(X) _InterlockedIncrement(&X)
-  #define ATOMIC_DEC(X) _InterlockedDecrement(&X)
+  #define ATOMIC_INC(X) (_InterlockedIncrement(&X) - 1)
+  #define ATOMIC_DEC(X) (_InterlockedDecrement(&X) + 1)
 #else
   #define ATOMIC_INC(X) __sync_fetch_and_add(&X, 1)
   #define ATOMIC_DEC(X) __sync_fetch_and_sub(&X, 1)

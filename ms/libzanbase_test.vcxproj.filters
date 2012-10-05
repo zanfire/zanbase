@@ -30,6 +30,9 @@
     <ClCompile Include="..\tests\zThreadTest.cpp">
       <Filter>tests</Filter>
     </ClCompile>
+    <ClCompile Include="..\tests\zGetOptTest.cpp">
+      <Filter>tests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\tests\zArrayTest.h">
@@ -51,6 +54,9 @@
       <Filter>tests</Filter>
     </ClInclude>
     <ClInclude Include="..\tests\zThreadTest.h">
+      <Filter>tests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\tests\zGetOptTest.h">
       <Filter>tests</Filter>
     </ClInclude>
   </ItemGroup>

@@ -7,6 +7,9 @@
     <Filter Include="src">
       <UniqueIdentifier>{2e313868-ec7c-491a-b0ed-ea94f98d061a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="docs">
+      <UniqueIdentifier>{610b80f6-67b2-4263-a374-7acb158a737f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\zArray.h">
@@ -75,6 +78,9 @@
     <ClInclude Include="..\include\zConsole.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\zGetOpt.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\zBuffer.cpp">
@@ -128,8 +134,25 @@
     <ClCompile Include="..\src\zConsole.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\zGetOpt.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\config.h.in" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\docs\Arch.txt">
+      <Filter>docs</Filter>
+    </Text>
+    <Text Include="..\docs\dmalloc.txt">
+      <Filter>docs</Filter>
+    </Text>
+    <Text Include="..\docs\Features.txt">
+      <Filter>docs</Filter>
+    </Text>
+    <Text Include="..\docs\Overview.txt">
+      <Filter>docs</Filter>
+    </Text>
   </ItemGroup>
 </Project>

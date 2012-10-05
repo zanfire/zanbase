@@ -17,6 +17,7 @@
     <ClInclude Include="..\include\zConsole.h" />
     <ClInclude Include="..\include\zEvent.h" />
     <ClInclude Include="..\include\zFile.h" />
+    <ClInclude Include="..\include\zGetOpt.h" />
     <ClInclude Include="..\include\zLogger.h" />
     <ClInclude Include="..\include\zLoggerAppender.h" />
     <ClInclude Include="..\include\zLoggerAppenderConsole.h" />
@@ -42,6 +43,7 @@
     <ClCompile Include="..\src\zConsole.cpp" />
     <ClCompile Include="..\src\zEvent.cpp" />
     <ClCompile Include="..\src\zFile.cpp" />
+    <ClCompile Include="..\src\zGetOpt.cpp" />
     <ClCompile Include="..\src\zLogger.cpp" />
     <ClCompile Include="..\src\zLoggerAppender.cpp" />
     <ClCompile Include="..\src\zLoggerAppenderConsole.cpp" />
@@ -61,6 +63,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\config.h.in" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\docs\Arch.txt" />
+    <Text Include="..\docs\dmalloc.txt" />
+    <Text Include="..\docs\Features.txt" />
+    <Text Include="..\docs\Overview.txt" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{83873E51-CC84-4FEA-9A9D-5A7B2336A59A}</ProjectGuid>

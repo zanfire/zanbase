@@ -106,8 +106,6 @@ void zFile::close(void) {
 
 zString zFile::get_current_directory(void) {
   char buf[1024];
-  // Get string with a local buffer.
-  char* path = NULL;
 #if defined(WIN32)
   // Remarks: The GetCurrentDirectroy should not used in a multi-threaded program.
   int result = GetCurrentDirectoryA(sizeof(buf), buf);
@@ -128,6 +126,7 @@ zString zFile::get_current_directory(void) {
     return zString(buf, sizeof(char) * result);
   }
 #else
+  char* path = NULL;
   char* path = getcwd(buf, sizeof(buf));
   int buff_size = 1024 * 64;
   while (path == NULL && errno == ERANGE) {

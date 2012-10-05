@@ -75,7 +75,7 @@ class ThreadTest : public zRunnable {
 bool zThreadTest::test_join(void) {
   // Create threads.
   ThreadTest impl;
-  zArray<zThread*> array(NO, 5, NULL);
+  zArray<zThread*> array(NO, 5);
   int sleep = 500;
   for (int i = 0; i < 50; i++) {
     zThread* thread = new zThread(&impl);
@@ -104,7 +104,7 @@ bool zThreadTest::test_join(void) {
 bool zThreadTest::test_memory(void) {
   ThreadTest impl;
 
-  zArray<zThread*> array(YES, 10, NULL);
+  zArray<zThread*> array(YES, 10);
   int sleep = 100;
   for (int i = 0; i < 500; i++) {
     zThread* thread = new zThread(&impl);

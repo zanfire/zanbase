@@ -6,7 +6,7 @@
 
 #include <stdio.h>
 
-zTester::zTester(void) : _tests(YES, 32, NULL) {
+zTester::zTester(void) : _tests(YES, 32) {
   // 
 }
 
@@ -75,7 +75,7 @@ bool zTester::process_interactive(void) {
 
     zStringBuilder commandBuf;
     char c = 0;
-    while ((c = getchar()) != '\n') {
+    while ((c = (char)getchar()) != '\n') {
       commandBuf.append(c);
     }
     zString command = commandBuf.to_string().to_lowercase();

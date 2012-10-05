@@ -25,6 +25,7 @@
 # include <unistd.h>
 #endif
 
+#include "zGetOpt.h"
 #include "zLogger.h"
 #include "zFile.h"
 #include "zStringBuilder.h"
@@ -72,15 +73,20 @@ void handleInvalidArg(char* programName, char invalidArg);
 
 int main(int argc, char** argv) {
 
+  zGetOpt* getopt = new zGetOpt(argc, argv);
+  getopt->add_arg('h', "help", false, false, "Show this message.");
+  getopt->add_arg('v', "version", false, false, "Show version information and exit..");
+  getopt->add_arg('i', "interactive", false, false, "Enable the interactive mode.");
+
+  getopt->parse();
+
   
-  int opt = 0;
+  zGetOpt::Argument* arg = NULL;
   bool interactive = false;
   bool use_dmalloc = false;
 
-#if defined(WIN32)
-#else
-  while ((opt = getopt(argc, argv, "hvid")) != -1) {
-    switch (opt) {
+  while ((arg = getopt->next()) != NULL) {
+    switch (arg->arg) {
     case 'h':
       showHelp(argv[0]);
       exit(EXIT_SUCCESS);
@@ -96,12 +102,10 @@ int main(int argc, char** argv) {
       use_dmalloc = true;
       break;
     default:
-      handleInvalidArg(argv[0], opt);
+      handleInvalidArg(argv[0], arg->arg);
       exit(EXIT_FAILURE);
     }
   }
-#endif
-
   showCopyright(argv[0]);
 
 #if defined(DMALLOC)
@@ -150,6 +154,7 @@ int main(int argc, char** argv) {
   delete tester;
   g_logger->shutdown();
   g_logger->release_reference();
+  delete getopt;
 
 #if defined(_CRTDBG_MAP_ALLOC)
   if (_CrtDumpMemoryLeaks()) {
@@ -183,7 +188,7 @@ void showHelp(char* programName) {
   printf("  -v          show version information and exit.\n");
   printf("  -i          interactive mode.\n");
 #if defined(DMALLOC)
-  printf("  -d          debug memory with dmalloc.\n");
+  printf("  -d          debug memory (with dmalloc on Linux or Ms CRT).\n");
 #endif
   printf("\n");
   printf("Report %s bugs to %s.\n", programName, PACKAGE_BUGREPORT);

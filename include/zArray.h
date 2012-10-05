@@ -35,7 +35,7 @@ class zArray {
 protected:
   zMutex* _mtx;
   T* _elements;
-  T _default;
+
   int _count;
   int _size;
 
@@ -47,13 +47,14 @@ public:
   /// @param element_size_bytes is the size in bytes of each element in the class.
   /// @param elements is the number of initial elements.
   /// @param default value for each element in the array.
-  zArray(IsThreadSafe threadSafe, int initial_size, T const& default_value) {
-    init(threadSafe, initial_size, default_value);
+  zArray(IsThreadSafe threadSafe, int initial_size) {
+    init(threadSafe, initial_size);
   }
 
   /// Dtor.
   virtual ~zArray(void) {
-    free(_elements);
+    //free(_elements);
+    delete [] _elements;
     _elements = NULL;
     if (_mtx != NULL) delete _mtx;
   }
@@ -61,7 +62,7 @@ public:
 
   /// Copy ctors
   zArray(zArray<T> const& obj) {
-    init((obj._mtx != NULL) ? YES : NO, obj._count , obj._default);
+    init((obj._mtx != NULL) ? YES : NO, obj._count );
     
     copy_from(obj);
   }
@@ -140,12 +141,17 @@ public:
 
 
   bool resize(int new_size) {
-    // TODO: Implements!!!
-    _elements = (T*)realloc(_elements, sizeof(T) * new_size);
-
-
-    for (int i = _size; i < new_size; i++) {
-      memcpy((uint8_t*)(&_elements[i]), (uint8_t*)(&_default), sizeof(T));
+    // NOTE: This way is less efficent of a realloc because it doesn't extends the current memory chunk.
+    T* tmp = new T[new_size];
+    if (tmp == NULL) {
+      return false;
+    }
+    else {
+      for (int i = 0; i < _size; i++) {
+        tmp[i] = _elements[i];
+      }
+      delete [] _elements;
+      _elements = tmp;
     }
     _size = new_size;
     return true;
@@ -164,21 +170,13 @@ public:
   }
 
  protected:
-  void init(IsThreadSafe threadSafe, int initial_size, T const& default_value) {
+  void init(IsThreadSafe threadSafe, int initial_size) {
     _mtx = threadSafe == YES ? new zMutex() : NULL;
     if (initial_size <= 0) initial_size = 32;
     _size = initial_size;
     _count = 0;
-    _elements = (T*) malloc(sizeof(T) * _size);
-    _default = default_value;
-    // Initializes
-    for (int i = 0; i < _size; i++) {
-      memcpy((uint8_t*)(&_elements[i]), (uint8_t*)(&_default), sizeof(T));
-    }
+    _elements = new T[_size];
   }
-
-
 };
 
-#endif
-
+#endif // ZARRAY_H__

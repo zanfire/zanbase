@@ -357,7 +357,7 @@ zString zString::from_pascal_string(unsigned char const* pascalString, int buffe
 
 
 zArray<zString> zString::split(zString const& tokenizer, bool ignore_empty_token) const {
-  zArray<zString> res(YES, 12, "");
+  zArray<zString> res(YES, 12);
 
   int curPos = 0;
   while (curPos < get_length()) {

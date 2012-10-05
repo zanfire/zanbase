@@ -26,7 +26,7 @@ zEvent::~zEvent(void) {
 
 void zEvent::wait(int timeoutMillis) {
 #if defined(_WIN32)
-  DWORD res = WaitForSingleObject( _event, timeoutMillis);
+  WaitForSingleObject( _event, timeoutMillis);
 #else
   int success = 0;
   if (timeoutMillis < 0) {

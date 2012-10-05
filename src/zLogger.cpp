@@ -6,9 +6,9 @@
 #include "zLoggerAppenderConsole.h"
 
 // TODO: Replace array with an hash table.
-static zArray<zLogger*>* g_loggers = new zArray<zLogger*>(YES, 32, NULL);
+static zArray<zLogger*>* g_loggers = new zArray<zLogger*>(YES, 32);
 
-zLogger::zLogger(char const* loggerName) : zObject(), _appenders(YES, 32, NULL) {
+zLogger::zLogger(char const* loggerName) : zObject(), _appenders(YES, 32) {
   _id = zString(loggerName);
   _level = LOG_LEVEL_INFO;
 }

@@ -21,6 +21,9 @@
 #if defined(_WIN32)
 # include <Windows.h>
 
+// Disable "unreferenced formal parameter"
+# pragma warning( disable : 4100)
+
 // Fast trick to cross-compile between Linux-Win32. 
 # define snprintf _snprintf_s
 

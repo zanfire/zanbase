@@ -5,6 +5,7 @@
 #include "zThread.h"
 #include "zRunnable.h"
 #include "zReference.h"
+#include "zString.h"
 
 zArrayTest::zArrayTest(void) {
 }
@@ -64,13 +65,13 @@ char const* zArrayTest::get_test_description(int index) {
 bool zArrayTest::test_ctor(void) {
 
   {
-    zArray<int>* array = new zArray<int>(NO, 1024, -1);
+    zArray<int>* array = new zArray<int>(NO, 1024);
     array->append(0);
     if (array->get_count() != 1) return false;
     delete array;
   }
   {
-    zArray<int>* array = new zArray<int>(YES, 0, -1);
+    zArray<int>* array = new zArray<int>(YES, 0);
     array->append(0);
     if (array->get_count() != 1) return false;
     delete array;
@@ -80,7 +81,7 @@ bool zArrayTest::test_ctor(void) {
 
 
 bool zArrayTest::test_resize(void) {
-  zArray<int> arr(YES, 5, -1);
+  zArray<int> arr(YES, 5);
   int size = 16 * 1024;
   for (int i = 0; i < size; i++) {
     arr.append(i);
@@ -108,7 +109,13 @@ bool zArrayTest::test_resize(void) {
 
 
 bool zArrayTest::test_memory(void) {
-  zArray<void*>* array = new zArray<void*>(NO, 1, NULL);
+  zArray<zString>* array = new zArray<zString>(NO, 1);
+
+  char buf[16 * 1024];
+  memset(&buf, 'a', sizeof(buf));
+  array->append(zString(buf, sizeof(buf) -1));
+  array->append(zString(buf, sizeof(buf) -1));
+  array->append(zString(buf, sizeof(buf) -1));
 
   delete array;
   
@@ -138,7 +145,7 @@ bool zArrayTest::test_multithread(void) {
   zThread* thread1 = new zThread(impl);
   zThread* thread2 = new zThread(impl);
 
-  zArray<zref_t>* arr = new zArray<zref_t>(YES, 10, 0);
+  zArray<zref_t>* arr = new zArray<zref_t>(YES, 10);
   zReference* ref = new zReference();
 
   impl->array = arr;
@@ -172,7 +179,7 @@ bool zArrayTest::test_multithread(void) {
 
 
 bool zArrayTest::test_get(void) {
-  zArray<char> array(NO, 1, 0);
+  zArray<char> array(NO, 1);
   // Test on failing get.
   char tmp = 'a';
   if (array.get(0, &tmp) || tmp != 'a') return false;

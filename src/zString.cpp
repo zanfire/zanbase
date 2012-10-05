@@ -383,3 +383,10 @@ zArray<zString> zString::split(zString const& tokenizer, bool ignore_empty_token
   return res;
 }
 
+
+bool zString::start_with(zString const& str) const {
+  if (str.is_empty() || is_empty()) return false;
+  if (str.get_length() > get_length()) return false;
+
+  return (memcmp(get_buffer(), str.get_buffer(), str.get_length()) == 0);
+}

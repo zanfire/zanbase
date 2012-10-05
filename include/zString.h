@@ -111,6 +111,9 @@ public:
   // MOVE to constructor?
   static zString from_pascal_string(unsigned char const* pascalString, int bufferSize, bool isInNetworkByteOrder = false);
 
+  /// Check if string start with the given string.
+  bool start_with(zString const& str) const;
+
 protected:  
   void init(char const* str, int length);
   void copy_from(const zString& str);

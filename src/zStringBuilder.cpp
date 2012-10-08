@@ -78,6 +78,22 @@ void zStringBuilder::append(unsigned int value) {
   append(buffer);
 }
 
+void zStringBuilder::append_space(int count) {
+  if (count <= 0) return;
+
+  char buffer[1024];
+  if (count < sizeof(buffer)) {
+    memset(&buffer, (int)' ', count);
+    append(buffer, count);
+  }
+  else {
+    char* buf = (char*)malloc(count * sizeof(char));
+    memset(buf, (int)' ', count);
+    append(buf, count);
+    free(buf);
+  }
+}
+
 
 zString zStringBuilder::to_string() const {
   return zString(this);

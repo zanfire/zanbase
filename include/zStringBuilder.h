@@ -50,8 +50,10 @@ public:
   void append(unsigned int c);
   //void append(long c);
   //void append(unsigned long c);
-  // Append formattted.
+  /// Append a formattted string.
   void appendf(char const* format, ...);
+  /// Append a specifiy number of space.
+  void append_space(int count);
 
   zString to_string(void) const;
 };

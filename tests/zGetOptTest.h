@@ -42,8 +42,11 @@ public:
 
 protected:
   // First test
-  bool test_base(void);
+  bool test_param(void);
+  bool test_arguments(void);
+  bool test_unknown_args(void);
+  bool test_missing_param(void);
+  bool test_help_message(void);
 };
 
 #endif // ZGETOPTTEST_H__
-

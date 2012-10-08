@@ -23,7 +23,7 @@
 #include "zArray.h"
 
 
-/// This class handles the validation and parsing of a command line argument.
+/// This class handles the validation and parsing of a command line arguments.
 /// NOTE: This class is not thread-safe.
 ///
 /// @author Matteo Valdina
@@ -35,10 +35,15 @@ public:
     zString long_arg;
     bool has_param;
     zString description;
-    zString param_description;
-    bool mandatory;
+    zString param_description;;
     // Value
     zString param;
+  };
+
+  enum ErrorType {
+    ERR_NO_ERROR,
+    ERR_MISSING_PARAM,
+    ERR_UNKNOWN_ARG
   };
 
 protected:
@@ -46,12 +51,9 @@ protected:
   zArray<zString>* _command_line;
   /// Table of arguments of know args.
   zArray<Argument*>* _arguments;
-  /// Table of arguments parsed from argc, argv.
-  zArray<Argument*>* _parsed;
-  /// The index of parsed argument.
-  /// TODO: It is needed?
+  /// The index of current command line argument.
   int _index;
-  bool _valid;
+  ErrorType _error;
 
 public:
   zGetOpt(int argc,char** argv);
@@ -62,26 +64,24 @@ public:
   /// @param long_arg in the long form.
   /// @param mandatory is true if argument is mandatory.
   /// @param description is an optional description for the argument.
-  void add_arg(char arg, zString const& long_arg, bool mandatory = false, bool has_param = false, zString const& description = "", zString const& param_description = "");
-
+  void add_arg(char arg, zString const& long_arg, bool has_param = false, zString const& description = "", zString const& param_description = "");
   //// Returns an user friendly string that describe handled arguments.
-  zString get_user_friendly_help(void);
-
+  zString get_help_message(void);
+  //// Returns an user friendly string that describe handled arguments.
+  zString get_usage_message(void);
+  /// Get the error message.
+  zString get_error_message(void);
   /// Returns if the arguments are valid.
-  bool is_valid(void) const { return _valid; }
-
-  ///
-  zString get_user_friendly_error(void);
-
-  /// Retuns the parsed argument
-  Argument* next(void);
-
-  void parse(void);
-
-  Argument* search(zString const& arg);
+  ErrorType get_error(void) const { return _error; }
+  /// Retuns the next argument.
+  /// The returned Argument instance is safe between the next method invokation.
+  Argument const* next(void);
 
 private:
+  /// Parse argv and argc.
   void parse_argv(char** argv, int argc);
+  /// Search the argument "arg" in the command line and returns the Argument instance.
+  Argument* search(zString const& arg);
 };
 
 #endif // ZGETOPT_H__

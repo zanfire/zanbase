@@ -38,6 +38,7 @@
 #include "zThreadTest.h"
 #include "zFileTest.h"
 #include "zBufferTest.h"
+#include "zGetOptTest.h"
 
 #if defined(ENABLED_DMALLOC)
 #  include <dmalloc.h>
@@ -53,8 +54,7 @@
 zLogger* g_logger = NULL;
 
 void showCopyright(char* programName);
-void showHelp(char* programName);
-void handleInvalidArg(char* programName, char invalidArg);
+void showHelp(char* programName, zGetOpt* getopt);
 
 #if defined(DMALLOC)
   void  dmalloc_track_function(const char *file, const unsigned int line, 
@@ -74,21 +74,23 @@ void handleInvalidArg(char* programName, char invalidArg);
 int main(int argc, char** argv) {
 
   zGetOpt* getopt = new zGetOpt(argc, argv);
-  getopt->add_arg('h', "help", false, false, "Show this message.");
-  getopt->add_arg('v', "version", false, false, "Show version information and exit..");
-  getopt->add_arg('i', "interactive", false, false, "Enable the interactive mode.");
-
-  getopt->parse();
-
+  getopt->add_arg('h', "help", false, "Show this message.");
+  getopt->add_arg('v', "version", false, "Show version information and exit..");
+  getopt->add_arg('i', "interactive", false, "Enable the interactive mode.");
+  getopt->add_arg('f', "inputfile", true, "Enable the interactive mode.", "input.txt");
+#if defined(DMALLOC)
+  getopt->add_arg('d', "debugmem", false, false "Debug memory (with dmalloc).");
+#endif
   
-  zGetOpt::Argument* arg = NULL;
+  
+  zGetOpt::Argument const* arg = NULL;
   bool interactive = false;
   bool use_dmalloc = false;
 
   while ((arg = getopt->next()) != NULL) {
     switch (arg->arg) {
     case 'h':
-      showHelp(argv[0]);
+      showHelp(argv[0], getopt);
       exit(EXIT_SUCCESS);
       break;
     case 'v':
@@ -101,12 +103,15 @@ int main(int argc, char** argv) {
     case 'd':
       use_dmalloc = true;
       break;
-    default:
-      handleInvalidArg(argv[0], arg->arg);
-      exit(EXIT_FAILURE);
     }
   }
   showCopyright(argv[0]);
+
+  if (getopt->get_error() != zGetOpt::ERR_NO_ERROR) {
+    printf("%s\n", getopt->get_error_message().get_buffer());
+    printf("Try '%s -h' for more information.\n", argv[0]);
+    exit(EXIT_FAILURE);
+  }
 
 #if defined(DMALLOC)
    if (use_dmalloc) {
@@ -136,6 +141,7 @@ int main(int argc, char** argv) {
   tester->add(new zArrayTest());
   tester->add(new zFileTest());
   tester->add(new zBufferTest());
+  tester->add(new zGetOptTest());
 
   // Execute tests.
   bool result = false;
@@ -177,20 +183,10 @@ void showCopyright(char* programName) {
 }
 
 
-void handleInvalidArg(char* programName, char invalidArg) {
-  printf("Try '%s -h' for more information.\n", programName);
-}
-
-
-void showHelp(char* programName) {
-  printf("Usage: %s [OPTION]...\n", programName);
+void showHelp(char* programName, zGetOpt* opt) {
+  //printf("Usage: %s [OPTION]...\n", programName);
+  printf("%s\n", opt->get_usage_message().get_buffer());
   printf("This program executes a set of tests for the zanbase library.\n");
-  printf("  -v          show version information and exit.\n");
-  printf("  -i          interactive mode.\n");
-#if defined(DMALLOC)
-  printf("  -d          debug memory (with dmalloc on Linux or Ms CRT).\n");
-#endif
-  printf("\n");
+  printf("%s\n", opt->get_help_message().get_buffer());
   printf("Report %s bugs to %s.\n", programName, PACKAGE_BUGREPORT);
 }
-

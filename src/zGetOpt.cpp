@@ -1,15 +1,16 @@
 #include "zGetOpt.h"
 
+#include "zStringBuilder.h"
+
 
 zGetOpt::zGetOpt(int argc,char** argv) {
   _command_line = new zArray<zString>(NO, 32);
   _arguments = new zArray<Argument*>(NO, 32);
-  _parsed = new zArray<Argument*>(NO, 32);
-
+  
   parse_argv(argv, argc);
 
   _index = 0;
-  _valid = false;
+  _error = ERR_NO_ERROR;
 }
 
 
@@ -20,24 +21,16 @@ zGetOpt::~zGetOpt(void) {
       delete arg;
     }
   }
-  while(_parsed->get_count() > 0) {
-    Argument* arg = NULL;
-    if (_parsed->remove(0, &arg)) {
-      delete arg;
-    }
-  }
   
   delete _command_line;
   delete _arguments;
-  delete _parsed;
 }
 
 
-void zGetOpt::add_arg(char  arg, zString const& long_arg, bool mandatory, bool has_param, zString const& description, zString const& param_description) {
+void zGetOpt::add_arg(char  arg, zString const& long_arg, bool has_param, zString const& description, zString const& param_description) {
   Argument* argument = new Argument();
   argument->arg = arg;
   argument->long_arg = long_arg;
-  argument->mandatory = mandatory;
   argument->has_param = has_param;
   argument->description = description;
   argument->param_description = param_description;
@@ -46,56 +39,112 @@ void zGetOpt::add_arg(char  arg, zString const& long_arg, bool mandatory, bool h
 }
 
 
-zString zGetOpt::get_user_friendly_help(void) {
+zString zGetOpt::get_help_message(void) {
+  // printf("  -v --version          show version information and exit.\\n");
+  // printf("  -f --file input.out   Input file.\n");
+
+  zStringBuilder message;
+  for (int i = 0; i < _arguments->get_count(); i++) {
+    Argument* arg = NULL;
+    if (_arguments->get(i, &arg)) {
+      zStringBuilder line;
+      line.appendf("  -%c --%s %s ", arg->arg, arg->long_arg.get_buffer(), arg->param_description.get_buffer());
+      int delta = 25 - line.get_length();
+      if (delta > 0) {
+        line.append_space(delta);
+      }
+      line.append(arg->description);
+      message.appendf("%s\n", line.to_string().get_buffer());
+    }
+  }
+  return message.to_string();
+}
+
+
+zString zGetOpt::get_usage_message(void) {
+  // printf("  -v --version          show version information and exit.\\n");
+  // printf("  -f --file input.out   Input file.\n");
+
+  zStringBuilder message;
+  message.append("Usage: ");
+  for (int i = 0; i < _arguments->get_count(); i++) {
+    Argument* arg = NULL;
+    if (_arguments->get(i, &arg)) {
+      message.appendf(" [-%c|--%s", arg->arg, arg->long_arg.get_buffer());
+      if (arg->has_param) {
+        message.appendf(" %s",  arg->param_description.get_buffer());
+      }
+      message.append(']');
+    }
+  }
+  return message.to_string();
+}
+
+
+zString zGetOpt::get_error_message(void) {
+  if (_error == ERR_NO_ERROR) {
+    return "No error.";
+  }
+  else if (_error == ERR_MISSING_PARAM) {
+    zString str;
+    if (_command_line->get(_index, &str)) {
+      zStringBuilder strb;
+      strb.appendf("Argument %s is not recornized.", str.get_buffer());
+      return strb.to_string();
+    }
+  }
+  else if (_error == ERR_UNKNOWN_ARG) {
+    zString str;
+    if (_command_line->get(_index, &str)) {
+      zStringBuilder strb;
+      strb.appendf("Argument %s is not recornized.", str.get_buffer());
+      return strb.to_string();
+    }
+  }
+
   return "";
 }
 
 
-zString zGetOpt::get_user_friendly_error(void) {
-  return "";
-}
+zGetOpt::Argument const* zGetOpt::next(void) {
+  if (_error != ERR_NO_ERROR) {
+    // Don't continue if it is in error. PArsing terminated.
+    return NULL;
+  }
+  if (_index >= _command_line->get_count()) {
+    // Terminated, arguments.
+    return NULL;
+  }
 
-
-zGetOpt::Argument* zGetOpt::next(void) {
-  Argument* argument = NULL;
-  if (_parsed->get(_index, &argument)) {
+  zString str;
+  _command_line->get(_index, &str);
+  // Search cur in the argument table.
+  Argument* arg = search(str);
+  if (arg != NULL) {
     _index++;
-    return argument;
+    // Validate param
+    // if ok add in parsed.
+    if (arg->has_param) {
+      // Check if next arg is available (is expected)
+      if ((_index) < _command_line->get_count()) {
+        _command_line->get(_index, &(arg->param));
+        _index++;
+      }
+      else {
+        _index--;
+        _error = ERR_MISSING_PARAM;
+      }
+    }
+    // Return argument.
+    return arg;
+  }
+  else {
+    // Unhandled param ... ignore or interupt.
+    _error = ERR_UNKNOWN_ARG;
   }
   return NULL;
 }
 
-
-void zGetOpt::parse(void) {
-  for (int i = 1; i < _command_line->get_count(); i++) {
-    zString str;
-    _command_line->get(i, &str);
-    // Search cur in the argument table.
-    Argument* arg = search(str);
-    
-    if (arg != NULL) {
-      // Validate param
-      // if ok add in parsed.
-      Argument* parsed = new Argument(*arg);
-      if (arg->has_param) {
-        // Check if next arg is available (is expected)
-        if ((i  + 1) < _command_line->get_count()) {
-          i++;
-          _command_line->get(i, &(parsed->param));
-        }
-        else {
-          // Error missing parameters.
-          break;
-        }
-      }
-      //
-      _parsed->append(parsed);
-    }
-    else {
-      // Unhandled param ... ignore or interupt.
-    }
-  }
-}
 
 
 zGetOpt::Argument* zGetOpt::search(zString const& arg) {

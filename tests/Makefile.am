@@ -10,4 +10,5 @@ zanbase_tests_runner_SOURCES = \
 	zThreadTest.cpp \
 	zFileTest.cpp \
 	zTestTest.cpp \
+	zGetOptTest.cpp \
 	zBufferTest.cpp

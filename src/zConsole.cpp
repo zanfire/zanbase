@@ -1,5 +1,7 @@
 #include "zConsole.h"
 
+#include <stdio.h>
+
 // TODO: todo...
 #define BRIGHT 1
 

@@ -53,8 +53,8 @@
 
 zLogger* g_logger = NULL;
 
-void showCopyright(char* programName);
-void showHelp(char* programName, zGetOpt* getopt);
+void showCopyright(char const* programName);
+void showHelp(char const* programName, zGetOpt* getopt);
 
 #if defined(DMALLOC)
   void  dmalloc_track_function(const char *file, const unsigned int line, 
@@ -71,15 +71,14 @@ void showHelp(char* programName, zGetOpt* getopt);
 #endif                                    
 
 
-int main(int argc, char** argv) {
+int main(int argc, char const** argv) {
 
   zGetOpt* getopt = new zGetOpt(argc, argv);
   getopt->add_arg('h', "help", false, "Show this message.");
   getopt->add_arg('v', "version", false, "Show version information and exit..");
   getopt->add_arg('i', "interactive", false, "Enable the interactive mode.");
-  getopt->add_arg('f', "inputfile", true, "Enable the interactive mode.", "input.txt");
 #if defined(DMALLOC)
-  getopt->add_arg('d', "debugmem", false, false "Debug memory (with dmalloc).");
+  getopt->add_arg('d', "debugmem", false, "Debug memory (with dmalloc).");
 #endif
   
   
@@ -172,7 +171,7 @@ int main(int argc, char** argv) {
 }
 
 
-void showCopyright(char* programName) {
+void showCopyright(char const* programName) {
   bool debug = false;
 #if defined(DEBUG)
   debug = true;
@@ -183,7 +182,7 @@ void showCopyright(char* programName) {
 }
 
 
-void showHelp(char* programName, zGetOpt* opt) {
+void showHelp(char const* programName, zGetOpt* opt) {
   //printf("Usage: %s [OPTION]...\n", programName);
   printf("%s\n", opt->get_usage_message().get_buffer());
   printf("This program executes a set of tests for the zanbase library.\n");

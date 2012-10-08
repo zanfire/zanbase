@@ -6,6 +6,9 @@
 /* dmalloc library support */
 #undef ENABLED_DMALLOC
 
+/* Define to 1 if you have the <arpa/inet.h> header file. */
+#undef HAVE_ARPA_INET_H
+
 /* Define to 1 if you have the `bind' function. */
 #undef HAVE_BIND
 

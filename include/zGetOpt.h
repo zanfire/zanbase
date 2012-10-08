@@ -56,7 +56,7 @@ protected:
   ErrorType _error;
 
 public:
-  zGetOpt(int argc,char** argv);
+  zGetOpt(int argc,char const** argv);
   virtual ~zGetOpt(void);
 
   /// Add an arguments that zGetOpt can handle.
@@ -79,7 +79,7 @@ public:
 
 private:
   /// Parse argv and argc.
-  void parse_argv(char** argv, int argc);
+  void parse_argv(char const** argv, int argc);
   /// Search the argument "arg" in the command line and returns the Argument instance.
   Argument* search(zString const& arg);
 };

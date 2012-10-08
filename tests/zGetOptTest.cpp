@@ -60,8 +60,7 @@ char const* zGetOptTest::get_test_description(int index) {
 
 
 bool zGetOptTest::test_param(void) {
-  // Test impl.
-  char* argv[] = { "c:\\path\\executable.exe", "--file", "C:\\out.txt"};
+  char const* argv[] = { "c:\\path\\executable.exe", "--file", "C:\\out.txt"};
   int argc = 3;
   
   zGetOpt opt(argc, argv);
@@ -86,13 +85,13 @@ bool zGetOptTest::test_arguments(void) {
 
 
 bool zGetOptTest::test_unknown_args(void) {
-    char* argv[] = { "c:\\path\\executable.exe", "--file", "C:\\out.txt"};
+  char const* argv[] = { "c:\\path\\executable.exe", "--file", "C:\\out.txt"};
   int argc = 3;
   
   zGetOpt opt(argc, argv);
   opt.add_arg('v', "verbose", false, "Enable verbose logging");
   opt.add_arg('h', "help", false, "Show help");
-  zGetOpt::Argument const* arg = NULL;
+  //zGetOpt::Argument const* arg = NULL;
   if (opt.next() != NULL) {
     return false;
   }

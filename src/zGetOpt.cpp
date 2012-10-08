@@ -3,7 +3,7 @@
 #include "zStringBuilder.h"
 
 
-zGetOpt::zGetOpt(int argc,char** argv) {
+zGetOpt::zGetOpt(int argc,char const** argv) {
   _command_line = new zArray<zString>(NO, 32);
   _arguments = new zArray<Argument*>(NO, 32);
   
@@ -173,7 +173,7 @@ zGetOpt::Argument* zGetOpt::search(zString const& arg) {
 }
 
 
-void zGetOpt::parse_argv(char** argv, int argc) {
+void zGetOpt::parse_argv(char const** argv, int argc) {
   // Get first arg as program path.
 
   for (int i = 1; i < argc; i++) {

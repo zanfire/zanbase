@@ -60,7 +60,7 @@ zThread::zThread(zRunnable* runnable, int stack_size) : zObject() {
   if (stack_size <= 0) _stack_size = 1024 * 2048;
   _stack_size = stack_size;
 
-  _thread = NULL;
+  _thread = 0;
   _id = INVALID_THREAD_ID;
 }
 

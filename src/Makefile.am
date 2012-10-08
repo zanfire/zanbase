@@ -17,5 +17,8 @@ libzanbase_la_SOURCES = \
 	zThread.cpp \
 	zFile.cpp \
 	zRandom.cpp \
+	zGetOpt.cpp \
+	zConsole.cpp \
 	zStringTokenizer.cpp
+
 

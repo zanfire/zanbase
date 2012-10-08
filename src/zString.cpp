@@ -30,9 +30,9 @@
 #include <limits.h>
 
 
-// TODO: Why?
-// Doesn't available under windows.
-//#include <arpa/inet.h>
+#if HAVE_ARPA_INET_H
+# include <arpa/inet.h> // ntohl
+#endif
 
 
 zString::zString(void) {

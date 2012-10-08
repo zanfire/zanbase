@@ -91,7 +91,7 @@ fi
 # Checks for header files.
 AC_CHECK_HEADERS([stdlib.h string.h time.h])
 # Socket related header
-AC_CHECK_HEADERS([sys/socket.h sys/types.h])
+AC_CHECK_HEADERS([sys/socket.h sys/types.h arpa/inet.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_HEADER_STDBOOL

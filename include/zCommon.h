@@ -26,6 +26,7 @@
 
 // Fast trick to cross-compile between Linux-Win32. 
 # define snprintf _snprintf_s
+# define vsnprintf vsnprintf_s
 
 #define PACKAGE_VERSION "x.z.y"
 #define PACKAGE_BUGREPORT "Zan"

@@ -58,7 +58,7 @@ void zStringBuilder::appendf(char const* format, ...) {
 
   va_list args;
   va_start(args, format);
-  vsnprintf_s(line, sizeof(line), format, args);
+  vsnprintf(line, sizeof(line), format, args);
   va_end(args);
 
   append(line);
@@ -82,7 +82,7 @@ void zStringBuilder::append_space(int count) {
   if (count <= 0) return;
 
   char buffer[1024];
-  if (count < sizeof(buffer)) {
+  if (count < (int)sizeof(buffer)) {
     memset(&buffer, (int)' ', count);
     append(buffer, count);
   }

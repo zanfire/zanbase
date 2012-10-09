@@ -44,9 +44,8 @@ char const* zGetOptTest::get_test_name(int index) {
     case 0: return "param";
     case 1: return "arguments";
     case 2: return "unknown_args";
-    case 3: return "missing_mandatory";
-    case 4: return "missing_param";
-    case 5: return "help_message";
+    case 3: return "missing_param";
+    case 4: return "help_message";
     default: return "??";
   }
   return "??";
@@ -74,13 +73,42 @@ bool zGetOptTest::test_param(void) {
       return false;
     }
   }
+  // Check no error.
+  if (opt.get_error() != zGetOpt::ERR_NO_ERROR) return false;
 
   return true;
 }
  
 
 bool zGetOptTest::test_arguments(void) {
-  return false;
+  char const* argv[] = { "c:\\path\\executable.exe", "-hv", "-f"};
+  int argc = 3;
+  
+  zGetOpt opt(argc, argv);
+  opt.add_arg('v', "verbose", false, "Enable verbose logging");
+  opt.add_arg('h', "help", false, "Show help");
+  opt.add_arg('f', "file", false, "Input file");
+  zGetOpt::Argument const* arg = NULL;
+  bool have_v = false;
+  bool have_h = false;
+  bool have_f = false;
+  while ((arg = opt.next()) != NULL) {
+    if (arg->arg == 'v') {
+      have_v = true;
+    }
+    else if (arg->arg == 'h') {
+      have_h = true;
+    }
+    else if (arg->arg == 'f') {
+      have_f = true;
+    }
+  }
+  // Check no error.
+  if (opt.get_error() != zGetOpt::ERR_NO_ERROR) return false;
+  // DEtect if one arg is missing.
+  if (!have_v || !have_h || !have_f) return false;
+
+  return true;
 }
 
 

@@ -19,15 +19,14 @@
 
 
 #if defined(_WIN32)
-
+// Disable secure warning because the project is cross.-compiled on different platform.
+// This define must be placed before Windows.h header inclusion.
 # define  _CRT_SECURE_NO_WARNINGS 1
 
 # include <Windows.h>
 
 // Disable "unreferenced formal parameter"
 # pragma warning( disable : 4100)
-
-//# define _CRT_NONSTDC_NO_WARNINGS
 
 // Fast trick to cross-compile between Linux-Win32.
 # define snprintf _snprintf

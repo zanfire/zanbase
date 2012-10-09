@@ -18,6 +18,7 @@ bool zGetOptTest::execute(int index) {
     case 2: return test_unknown_args();
     case 3: return test_missing_param();
     case 4: return test_help_message();
+    case 5: return test_usage_message();
     default: return false;
   }
   return false;
@@ -25,7 +26,7 @@ bool zGetOptTest::execute(int index) {
 
 
 int zGetOptTest::get_num_tests(void) {
-  return 5;
+  return 6;
 }
 
 
@@ -46,6 +47,7 @@ char const* zGetOptTest::get_test_name(int index) {
     case 2: return "unknown_args";
     case 3: return "missing_param";
     case 4: return "help_message";
+    case 5: return "test_usage_message";
     default: return "??";
   }
   return "??";
@@ -130,21 +132,48 @@ bool zGetOptTest::test_unknown_args(void) {
   return true;
 }
 
+#include <stdio.h>
 
 bool zGetOptTest::test_missing_param(void) {
-  return false;
+  char const* argv[] = { "c:\\path\\executable.exe", "-f"};
+  int argc = 2;
+  
+  zGetOpt opt(argc, argv);
+  opt.add_arg('f', "file", true, "Input file", "input.txt");
+  zGetOpt::Argument const* arg = NULL;
+  if (opt.next() != NULL) return false;
+  // Check no error.
+  if (opt.get_error() != zGetOpt::ERR_MISSING_PARAM) return false;
+
+  zString msg = opt.get_error_message();
+
+  return true;
 }
 
 
-#include <stdio.h>
-
 bool zGetOptTest::test_help_message(void) {
-  zGetOpt opt(0, NULL);
-
+  char const* argv[] = { "c:\\path\\executable.exe", "--file", "C:\\out.txt"};
+  int argc = 3;
+  
+  zGetOpt opt(argc, argv);
   opt.add_arg('h', "help", false, "Show help message.");
   opt.add_arg('v', "version", false, "Show the version.");
   opt.add_arg('f', "file", false, "Specify the input file.", "file");
   
   if (opt.get_help_message().is_empty()) return false;
+  return true;
+}
+
+
+bool zGetOptTest::test_usage_message(void) {
+  char const* argv[] = { "c:/path/executable.exe", "--file", "C:\\out.txt"};
+  int argc = 3;
+  
+  zGetOpt opt(argc, argv);
+  opt.add_arg('h', "help", false, "Show help message.");
+  opt.add_arg('v', "version", false, "Show the version.");
+  opt.add_arg('f', "file", false, "Specify the input file.", "file");
+  
+  if (opt.get_usage_message().is_empty()) return false;
   return true;
 }

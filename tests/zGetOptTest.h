@@ -25,8 +25,6 @@
 /// @author Matteo Valdina
 class zGetOptTest : public zTest {
 
-protected:
-
 public:
   zGetOptTest(void);
   virtual ~zGetOptTest(void);
@@ -47,6 +45,7 @@ protected:
   bool test_unknown_args(void);
   bool test_missing_param(void);
   bool test_help_message(void);
+  bool test_usage_message(void);
 };
 
 #endif // ZGETOPTTEST_H__

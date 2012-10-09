@@ -66,7 +66,7 @@ zString zGetOpt::get_usage_message(void) {
   // printf("  -f --file input.out   Input file.\n");
 
   zStringBuilder message;
-  message.append("Usage: ");
+  message.appendf("Usage: %s", _program_name.get_buffer());
   for (int i = 0; i < _arguments->get_count(); i++) {
     Argument* arg = NULL;
     if (_arguments->get(i, &arg)) {
@@ -89,7 +89,7 @@ zString zGetOpt::get_error_message(void) {
     zString str;
     if (_command_line->get(_index, &str)) {
       zStringBuilder strb;
-      strb.appendf("Argument %s is not recornized.", str.get_buffer());
+      strb.appendf("It is expected for argument %s a parameter that it is missing.", str.get_buffer());
       return strb.to_string();
     }
   }
@@ -133,6 +133,7 @@ zGetOpt::Argument const* zGetOpt::next(void) {
       else {
         _index--;
         _error = ERR_MISSING_PARAM;
+        return NULL;
       }
     }
     // Return argument.
@@ -175,6 +176,23 @@ zGetOpt::Argument* zGetOpt::search(zString const& arg) {
 
 void zGetOpt::parse_argv(char const** argv, int argc) {
   // Get first arg as program path.
+  if (argc >= 1) {
+    zString path(argv[0]);
+    int index = -1;
+    if ((index = path.last_index_of("\\", path.get_length())) >= 0) {
+      _program_name = path.substring(index + 1, path.get_length() - index - 1);
+    }
+    else if ((index = path.last_index_of("/", path.get_length())) >= 0) {
+      _program_name = path.substring(index + 1, path.get_length() - index - 1);
+    }
+    else {
+      _program_name = path;
+    }
+
+    if ((index = _program_name.last_index_of(".", _program_name.get_length())) >= 0) {
+      _program_name = _program_name.substring(0, index);
+    }
+  }
 
   for (int i = 1; i < argc; i++) {
     zString cur(argv[i]);

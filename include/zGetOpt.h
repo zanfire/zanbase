@@ -47,6 +47,7 @@ public:
   };
 
 protected:
+  zString _program_name;
   // Parsed (splitted) command line.
   zArray<zString>* _command_line;
   /// Table of arguments of know args.
@@ -77,6 +78,7 @@ public:
   /// The returned Argument instance is safe between the next method invokation.
   Argument const* next(void);
 
+  zString get_program_name(void) const { return _program_name; }
 private:
   /// Parse argv and argc.
   void parse_argv(char const** argv, int argc);

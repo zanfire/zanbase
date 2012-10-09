@@ -93,7 +93,7 @@ int main(int argc, char const** argv) {
       exit(EXIT_SUCCESS);
       break;
     case 'v':
-      showCopyright(argv[0]);
+      showCopyright(getopt->get_program_name().get_buffer());
       exit(EXIT_SUCCESS);
       break;
     case 'i':
@@ -104,11 +104,11 @@ int main(int argc, char const** argv) {
       break;
     }
   }
-  showCopyright(argv[0]);
+  showCopyright(getopt->get_program_name().get_buffer());
 
   if (getopt->get_error() != zGetOpt::ERR_NO_ERROR) {
     printf("%s\n", getopt->get_error_message().get_buffer());
-    printf("Try '%s -h' for more information.\n", argv[0]);
+    printf("Try '%s -h' for more information.\n", getopt->get_program_name().get_buffer());
     exit(EXIT_FAILURE);
   }
 

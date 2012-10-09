@@ -69,7 +69,7 @@ bool zGetOptTest::test_param(void) {
   opt.add_arg('f', "file", true, "Input file");
   zGetOpt::Argument const* arg = NULL;
   while ((arg = opt.next()) != NULL) {
-    if (!arg->arg != 'f')
+    if (arg->arg != 'f')
     if (!arg->param.equals("C:\\out.txt")) {
       return false;
     }

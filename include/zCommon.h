@@ -19,14 +19,18 @@
 
 
 #if defined(_WIN32)
+
+# define  _CRT_SECURE_NO_WARNINGS 1
+
 # include <Windows.h>
 
 // Disable "unreferenced formal parameter"
 # pragma warning( disable : 4100)
 
-// Fast trick to cross-compile between Linux-Win32. 
-# define snprintf _snprintf_s
-# define vsnprintf vsnprintf_s
+//# define _CRT_NONSTDC_NO_WARNINGS
+
+// Fast trick to cross-compile between Linux-Win32.
+# define snprintf _snprintf
 
 #define PACKAGE_VERSION "x.z.y"
 #define PACKAGE_BUGREPORT "Zan"

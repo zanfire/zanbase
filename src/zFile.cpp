@@ -143,6 +143,7 @@ zString zFile::get_current_directory(void) {
 
 
 bool zFile::remove(zString const& path) {
-  unlink(path.get_buffer());
-  return true;
+  // TODO: Linux should use the C++ conformant unlink function. Check this.
+  int res = _unlink(path.get_buffer());
+  return res == 0;
 }

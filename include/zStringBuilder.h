@@ -17,6 +17,8 @@
 #ifndef ZSTRINGBUILDER_H__
 #define ZSTRINGBUILDER_H__
 
+#include "zCommon.h"
+
 #include "zString.h"
 #include "zArray.h"
 

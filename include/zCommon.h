@@ -111,5 +111,10 @@ enum IsThreadSafe {
   NO
 };
 
-#endif // ZCOMMON_H__
+typedef struct {
+  float x;
+  float y;
+  float z;
+} zVertex3D;
 
+#endif // ZCOMMON_H__

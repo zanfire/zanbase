@@ -121,7 +121,9 @@ public:
     zScopeMutex scope(_mtx);
     if (index < 0 || index >= _count) return false;
 
-    *element = _elements[index];
+    if (element != NULL) {
+      *element = _elements[index];
+    }
     _count--;
     for (int i = index; i < _count; i++) {
       _elements[i] = _elements[i + 1];

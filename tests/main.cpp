@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright 2009-2011 Matteo Valdina
+ * Copyright 2009-2012 Matteo Valdina
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,9 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <limits.h>
+
+
+#include "zRect.h"
 
 #if HAVE_UNISTD_H
 # include <unistd.h>
@@ -72,6 +75,19 @@ void showHelp(char const* programName, zGetOpt* getopt);
 
 
 int main(int argc, char const** argv) {
+
+
+
+
+  zRect area(0, 450, 800, 1150);
+  zRect tex(0, 450, 352, 450 + 288);
+
+  zRect res = zRect::scale(area, tex);
+  zRect centered = zRect::center(area, res);
+
+
+
+
 
   zGetOpt* getopt = new zGetOpt(argc, argv);
   getopt->add_arg('h', "help", false, "Show this message.");

@@ -32,6 +32,7 @@ zLogger* zLogger::get_logger(char const* id) {
     if (logger != NULL) {
       if (logger->_id.equals(id)) {
         logger->acquire_reference();
+        g_loggers->unlock();
         return logger;
       }
     }

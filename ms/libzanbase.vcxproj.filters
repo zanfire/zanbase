@@ -84,6 +84,9 @@
     <ClInclude Include="..\include\zRect.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\zColor.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\zBuffer.cpp">
@@ -141,6 +144,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\src\zRect.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\zColor.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

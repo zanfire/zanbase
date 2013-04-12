@@ -33,3 +33,4 @@ tags
 *.vcxproj.user
 /ms/*/Debug/
 /ms/*/Release/
+/Makefile

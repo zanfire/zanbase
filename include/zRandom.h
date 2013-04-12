@@ -26,8 +26,8 @@ private:
   static zMutex* _singletonMtx;
   static zRandom* _singleton;
 
-  char _randstate[256];
-  random_data _randdata;
+  //char _randstate[256];
+  //random_data _randdata;
 
 public:
   static zRandom* getSingleton(void);

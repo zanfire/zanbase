@@ -28,7 +28,7 @@ zRandom::zRandom(void) {
   struct timeval t;
   gettimeofday(&t, NULL);
 
-  /*int ret =*/ initstate_r(t.tv_sec, (char*)(&_randstate), sizeof(_randstate), &_randdata);
+  // initstate_r(t.tv_sec, (char*)(&_randstate), sizeof(_randstate), &_randdata);
   //CHECK_FATAL(ret, "initstate_r");
 }
 
@@ -39,11 +39,12 @@ zRandom::~zRandom(void) {
 
 
 int zRandom::nextInt(void) {
-  int32_t result;
-  int ret = random_r(&_randdata, &result);
-  if (ret == -1) {
+  //int32_t result;
+  //int ret = random_r(&_randdata, &result);
+  //if (ret == -1) {
     //CHECK_FATAL(errno, "random_r");
-  }
-  return result;
+  //}
+  //return result;
+  return 0;
 }
 

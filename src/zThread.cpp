@@ -82,8 +82,7 @@ void zThread::sleep(int ms) {
   reqtime.tv_sec = (int)(ms / 1000);
   reqtime.tv_nsec = (int)(ms % 1000) * 1000;
 
-  int success = nanosleep(&reqtime, &rentime);
-  assert_perror(success);
+  nanosleep(&reqtime, &rentime);
 #endif
 }
 
@@ -104,18 +103,14 @@ bool zThread::start(void* param) {
 
   pthread_attr_t attr;
   // Initialize attribute.
-  int result = pthread_attr_init(&attr);
-  assert_perror(result);
+  pthread_attr_init(&attr);
   // The library doesn't use the pthread_join method. Creates a detached thread that release system resources when thread terminate.
-  result = pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
-  assert_perror(result);
+  pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
   // Set stack size.
-  result = pthread_attr_setstacksize(&attr, _stack_size);
-  assert_perror(result);
+  pthread_attr_setstacksize(&attr, _stack_size);
 
   // Create the thread,
-  result = pthread_create(&_thread, &attr, &(Protected::ThreadEntry), this);
-  assert_perror(result);
+  pthread_create(&_thread, &attr, &(Protected::ThreadEntry), this);
   // Destroy attributes.
   pthread_attr_destroy(&attr);
 #endif

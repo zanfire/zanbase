@@ -52,12 +52,13 @@ void zStringBuilder::append(char c) {
 }
 
 void zStringBuilder::appendf(char const* format, ...) {
+  // TODO: This is a bug. Limiting the format!!!!
   char line[1024 * 4];
-  line[1024 * 4 - 1] = '\0';
+  line[0] = '\n';
 
   va_list args;
   va_start(args, format);
-  vsnprintf(line, sizeof(line) - 1, format, args);
+  vsnprintf(line, sizeof(line), format, args);
   va_end(args);
 
   append(line);

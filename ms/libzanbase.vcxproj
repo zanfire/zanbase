@@ -13,7 +13,6 @@
   <ItemGroup>
     <ClInclude Include="..\include\zArray.h" />
     <ClInclude Include="..\include\zBuffer.h" />
-    <ClInclude Include="..\include\zColor.h" />
     <ClInclude Include="..\include\zCommon.h" />
     <ClInclude Include="..\include\zConsole.h" />
     <ClInclude Include="..\include\zEvent.h" />
@@ -28,7 +27,6 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClInclude>
-    <ClInclude Include="..\include\zRect.h" />
     <ClInclude Include="..\include\zReference.h" />
     <ClInclude Include="..\include\zRunnable.h" />
     <ClInclude Include="..\include\zScopeMutex.h" />
@@ -42,7 +40,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\zBuffer.cpp" />
-    <ClCompile Include="..\src\zColor.cpp" />
     <ClCompile Include="..\src\zConsole.cpp" />
     <ClCompile Include="..\src\zEvent.cpp" />
     <ClCompile Include="..\src\zFile.cpp" />
@@ -56,7 +53,6 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\src\zRect.cpp" />
     <ClCompile Include="..\src\zReference.cpp" />
     <ClCompile Include="..\src\zScopeMutex.cpp" />
     <ClCompile Include="..\src\zString.cpp" />
@@ -75,7 +71,7 @@
     <Text Include="..\docs\Overview.txt" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{302E5CD0-DC82-4A4F-BEC6-B549ADB7D03F}</ProjectGuid>
+    <ProjectGuid>{83873E51-CC84-4FEA-9A9D-5A7B2336A59A}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>libzanbase</RootNamespace>
   </PropertyGroup>

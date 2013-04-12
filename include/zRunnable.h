@@ -23,7 +23,6 @@ class zRunnable {
 public:
 	zRunnable(void) {}
 	virtual ~zRunnable(void) {}
-
 	virtual int run(void* param) = 0;
 };
 

@@ -53,7 +53,11 @@ bool zTester::process_interactive(void) {
 
   bool res = true;
   // Main loop
+<<<<<<< HEAD
   for (;;) {
+=======
+  while (true) {
+>>>>>>> cmake
     for (int i = 0; i < _tests.get_count(); i++) {
       zStringBuilder strb;
       strb.append("  ");

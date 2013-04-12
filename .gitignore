@@ -1,0 +1,35 @@
+# http://www.gnu.org/software/automake
+
+Makefile.in
+# http://www.gnu.org/software/autoconf
+/autom4te.cache
+/aclocal.m4
+/compile
+/configure
+/depcomp
+/install-sh
+/missing
+# Compiled code
+*.o
+*.o.d
+*.so
+*.a
+*.la
+# building directory.
+/build/*
+# ctags list
+tags
+/debug/
+/m4/
+/*.guess
+/ltmain.sh
+/config.sub
+/release/
+/config.h.in~
+# Ms stuff.
+*.opensdf
+*.sdf
+*.suo
+*.vcxproj.user
+/ms/*/Debug/
+/ms/*/Release/

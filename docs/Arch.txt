@@ -1,0 +1,139 @@
+===============================================================================
+
+ Architecture & Design
+
+===============================================================================
+
+This documentation describes the architecture concept and decision behind the 
+zanbase library.
+
+ **********************
+ * Naming convention  *
+ **********************
+
+- The types are all lowercase, start with prefix "z" and postfix "_t". Must be
+the shortest as possible.
+- The class name have the prefix "z". This prefix is required in each class of
+zanbase library because the library must avoid name collision. The class name 
+start with upper case (except z). For example zObject.
+- The method name must use the lower case word with "_" char to separate each
+  word. 
+- Class members have the prefix "_".
+- Method implementation must be spaced by two lines.
+
+ ************************
+ * Copyright disclaimer *
+ ************************
+Copyright disclaimer is present only in the header file.
+
+ **********************
+ * Coding convention  *
+ **********************
+
+- Prefer passing parameter as pointer or reference?
+   a) Pointer doesn't require the header file.
+   b) Reference avoid passing NULL, but if you pass an invalid address is not
+      clear what happens.
+Prefer pointer
+ 
+ - Prefer uintXX_t types instead to the std types
+    unit8_t <--> unsigned char
+          etcetera
+for type where size is strictly important.
+ - Use as always int if is not important the type size.
+ - Avoid use of unsigned.
+ - Avoid use of size_t
+ - Global variables must be prefixed with "g_".
+
+ *********************
+ * Reference system  *
+ *********************
+The reference system is a useful feature but can be used evilly. 
+Basic type should derive from zObject?
+ a) Use natively the reference system.
+ b) Cannot be allocated on the stack!
+
+For example a vector of 
+
+But the reference system is just for me a bad things because permit to
+delagate the destruction of object!
+
+It is not safe
+
+ ***********************
+ * Logging system.     *
+ ***********************
+
+The logger system is based on a Logger implementation and a set of Appender.
+Each appenders provides his specific logging facility.
+
+
+
+ * zReference *
+This basic type provides atomic increment and atomic decrement operation.
+
+ * zObject *
+This base class provides a reference system for the object model.
+Implementation based upon zReference.
+  
+ * zArray *
+A dynamic array that contains an arbitrary contents.
+A common problem of a specialized vector of pointers is:
+ a) It doesn't usable with integer or fixed size objects.
+Does it improved to pass the allocation size per element? Yes, what is the
+shape:
+
+   zArray arr(IsThreadSafe::YES, sizeof(void*), 32);
+   // The append operation copy the value in the vector.
+   void append(void* address);
+
+   if integer:
+   arr->append(&integer_value);
+   if pointer:
+   arr->append(&pointer); // Double poniter
+
+
+
+ * zObjectArray * 
+NEEDED?
+The acquire/release method naming: The hard decision is based upon the code 
+clear. The name must be clear what means.
+
+It is more clear:
+v
+ acquire_reference()
+ or
+ acquireReference
+
+The reference 
+
+
+
+ * zString * 
+An immutable string stored in C format.
+
+
+
+ * zStringBuilder *
+
+A string builder based upon a list of buffer.
+
+ Basic approach:
+  A big buffer resized as need.
+ Another approach is to use a vector of string. OK
+
+ * zBuffer *
+Is it without sense place in this class a pointer to the same class for a
+linked list implementation?
+
+Not at all
+
+ Pro 
+ * add the possibility to handle a list of zBuffer.
+ Con
+ * a zBuffer doesn't mean linked list
+
+A correct way is to bhoo
+  
+
+

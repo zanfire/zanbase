@@ -1,0 +1,5 @@
+Usage of dmalloc
+--------------------
+
+dmalloc -b -l /home/user/dmalloc.log -i 1 high > /tmp/out
+. /tmp out

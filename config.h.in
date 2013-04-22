@@ -10,14 +10,18 @@
 // Threads studd
 #cmakedefine01 HAVE_PTHREAD_H
 
-// 
+// Check includes 
 #cmakedefine01 HAVE_INTTYPES_H
-
+#cmakedefine01 HAVE_ARPA_INET_H
+#cmakedefine01 HAVE_UNISTD_H
+ 
 /* Define to the version of this package. */
 #define VERSION_MAJOR @zanbase_VERSION_MAJOR@
 #define VERSION_MINOR @zanbase_VERSION_MINOR@
 #define VERSION_PATCH @zanbase_VERSION_PATCH@
 #define VERSION_REVISION @zanbase_VERSION_REVISION@
+#define PACKAGE_VERSION "@zanbase_VERSION_MAJOR@.zanbase_VERSION_MINOR@.@zanbase_VERSION_PATCH@-@zanbase_VERSION_REVISION@"
+
 
 
 /* Define to `__inline__' or `__inline' if that's what the C compiler

@@ -3,7 +3,6 @@
 #include "zLogger.h"
 #include "zStringBuilder.h"
 
-// TODO: Add GUARD.
 #if HAVE_UNISTD_H
 # include <unistd.h>
 #endif
@@ -144,6 +143,6 @@ zString zFile::get_current_directory(void) {
 
 bool zFile::remove(zString const& path) {
   // TODO: Linux should use the C++ conformant unlink function. Check this.
-  int res = _unlink(path.get_buffer());
+  int res = unlink(path.get_buffer());
   return res == 0;
 }

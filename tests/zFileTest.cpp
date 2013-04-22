@@ -3,6 +3,8 @@
 #include "zLogger.h"
 #include "zFile.h"
 
+#include <memory.h>
+
 zFileTest::zFileTest(void) {
 }
 

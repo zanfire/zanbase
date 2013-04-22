@@ -22,8 +22,9 @@ set(zanbase_VERSION_PATCH 0)
 find_package(Threads REQUIRED)
 
 check_include_files(pthread.h HAVE_PTHREAD_H)
-
 check_include_files(inttypes.h HAVE_INTTYPES_H)
+check_include_files(arpa/inet.h HAVE_ARPA_INET_H)
+check_include_files(arpa/inet.h HAVE_UNISTD_H)
 
 
 #
@@ -39,8 +40,9 @@ configure_file(
     "${PROJECT_SOURCE_DIR}/config.h.in"
     "${PROJECT_BINARY_DIR}/config.h"
 )
-include_directories(${PROJECT_BINARY_DIR})
-include_directories(${PROJECT_BINARY_DIR}/include)
+
+include_directories("${PROJECT_BINARY_DIR}")
+include_directories("${PROJECT_SOURCE_DIR}/include")
 
 
 set(CMAKE_CXX_FLAGS "-g -Wall")

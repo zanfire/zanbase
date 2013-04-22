@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright 2009-2012 Matteo Valdina
+ * Copyright 2009-2013 Matteo Valdina
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -75,19 +75,6 @@ void showHelp(char const* programName, zGetOpt* getopt);
 
 
 int main(int argc, char const** argv) {
-
-
-
-
-  zRect area(0, 450, 800, 1150);
-  zRect tex(0, 450, 352, 450 + 288);
-
-  zRect res = zRect::scale(area, tex);
-  zRect centered = zRect::center(area, res);
-
-
-
-
 
   zGetOpt* getopt = new zGetOpt(argc, argv);
   getopt->add_arg('h', "help", false, "Show this message.");
@@ -193,7 +180,7 @@ void showCopyright(char const* programName) {
   debug = true;
 #endif
   printf("%s version %s %s\n", programName, PACKAGE_VERSION, (debug ? "Debug" : "Release"));
-  printf("Copyright 2009-2012 Matteo Valdina (bugs: %s)\n", PACKAGE_BUGREPORT);
+  printf("Copyright 2009-2012 Matteo Valdina (bugs: %s)\n", /*PACKAGE_BUGREPORT*/ "tmp@nodomain.XXX");
   printf("\n");
 }
 
@@ -203,5 +190,5 @@ void showHelp(char const* programName, zGetOpt* opt) {
   printf("%s\n", opt->get_usage_message().get_buffer());
   printf("This program executes a set of tests for the zanbase library.\n");
   printf("%s\n", opt->get_help_message().get_buffer());
-  printf("Report %s bugs to %s.\n", programName, PACKAGE_BUGREPORT);
+  printf("Report %s bugs to %s.\n", programName, /*PACKAGE_BUGREPORT*/ "tmp@nodomain.XXX");
 }

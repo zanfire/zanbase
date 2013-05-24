@@ -34,14 +34,14 @@
 #include "zStringBuilder.h"
 
 #include "zTester.h"
-#include "zStringTest.h"
-#include "zTestTest.h"
-#include "zArrayTest.h"
-#include "zStrTokTest.h"
-#include "zThreadTest.h"
-#include "zFileTest.h"
-#include "zBufferTest.h"
-#include "zGetOptTest.h"
+#include "base/zStringTest.h"
+#include "base/zTestTest.h"
+#include "base/zArrayTest.h"
+#include "base/zStrTokTest.h"
+#include "base/zThreadTest.h"
+#include "base/zFileTest.h"
+#include "base/zBufferTest.h"
+#include "base/zGetOptTest.h"
 
 #if defined(ENABLED_DMALLOC)
 #  include <dmalloc.h>

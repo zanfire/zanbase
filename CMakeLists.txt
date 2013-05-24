@@ -61,4 +61,4 @@ install (FILES "${PROJECT_BINARY_DIR}/config.h" DESTINATION include/zanbase)
 install (DIRECTORY "${PROJECT_SOURCE_DIR}/include/" DESTINATION include/zanbase FILES_MATCHING PATTERN "*.h")
 
 
-add_test (NAME TestOne COMMAND tests/test_runner)
+add_test (NAME TestOne COMMAND tests/tests_runner)

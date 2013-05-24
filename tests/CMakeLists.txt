@@ -3,14 +3,14 @@
 link_directories(${zanbase_BINARY_DIR}/)
 add_executable(tests_runner	
   main.cpp
-	zStringTest.cpp
-	zStrTokTest.cpp
-	zArrayTest.cpp
-	zThreadTest.cpp
-	zFileTest.cpp
-	zTestTest.cpp
-	zGetOptTest.cpp
-	zBufferTest.cpp
+  base/zStringTest.cpp
+  base/zStrTokTest.cpp
+  base/zArrayTest.cpp
+  base/zThreadTest.cpp
+  base/zFileTest.cpp
+  base/zTestTest.cpp
+  base/zGetOptTest.cpp
+  base/zBufferTest.cpp
 )
 
 target_link_libraries(tests_runner zanbase)

@@ -142,7 +142,6 @@ bool zThreadTest::test_threadid(void) {
 bool zThreadTest::test_startfail(void) {
   
   zThread* thread = new zThread(NULL);
-  thread = NULL;
   if (thread->start()) return false;
   thread->release_reference();
 

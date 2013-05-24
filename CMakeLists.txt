@@ -6,11 +6,13 @@
 cmake_minimum_required(VERSION 2.8)
 project(zanbase)
 
-#
-# CMake modules
-#
+# CMake modules.
 include(CheckIncludeFiles)
 include(CheckLibraryExists)
+
+# Testing requirements.
+enable_testing()
+include(Dart)
 
 set(zanbase_VERSION_MAJOR 1)
 set(zanbase_VERSION_MINOR 0)
@@ -50,8 +52,13 @@ set(CMAKE_CXX_FLAGS_DEBUG "-gdbb3")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 
 # Subproject
-#add_subdirectory(include)
 add_subdirectory(src)
 add_subdirectory(tests)
 
 
+# Install
+install (FILES "${PROJECT_BINARY_DIR}/config.h" DESTINATION include/zanbase)
+install (DIRECTORY "${PROJECT_SOURCE_DIR}/include/" DESTINATION include/zanbase FILES_MATCHING PATTERN "*.h")
+
+
+add_test (NAME TestOne COMMAND tests/test_runner)

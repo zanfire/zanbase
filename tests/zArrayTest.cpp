@@ -67,8 +67,6 @@ char const* zArrayTest::get_test_description(int index) {
 
 
 bool zArrayTest::test_ctor(void) {
-  char* xxx = NULL;
-  xxx[0] = 'a';
   {
     zArray<int>* array = new zArray<int>(NO, 1024);
     array->append(0);

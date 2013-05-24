@@ -1,4 +1,4 @@
-#include_directories(${zanbase_SOURCE_DIR}/include)
+# Test stuff.
 
 link_directories(${zanbase_BINARY_DIR}/)
 add_executable(tests_runner	
@@ -15,3 +15,6 @@ add_executable(tests_runner
 
 target_link_libraries(tests_runner zanbase)
 target_link_libraries(tests_runner ${CMAKE_THREAD_LIBS_INIT} )
+
+# Test
+

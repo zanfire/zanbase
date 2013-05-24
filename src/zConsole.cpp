@@ -26,5 +26,6 @@ void zConsole::clearColor(void) {
 #else
   printf("%c[%dm", 0x1B, 0);
 #endif
+
 }
   

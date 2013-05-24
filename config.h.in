@@ -7,7 +7,7 @@
 #cmakedefine01 HAVE_LIBDMALLOCTHCXX
 
 
-// Threads studd
+// Threads stuff.
 #cmakedefine01 HAVE_PTHREAD_H
 
 // Check includes 

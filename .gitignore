@@ -34,3 +34,7 @@ tags
 /ms/*/Debug/
 /ms/*/Release/
 /Makefile
+/CMakeFiles/
+/Testing/
+/*.cmake
+/CMakeCache.txt

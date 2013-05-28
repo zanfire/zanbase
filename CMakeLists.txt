@@ -1,8 +1,6 @@
+# Build file for zanbase project.
 # Author: Matteo Valdina
 
-#
-# 
-#
 cmake_minimum_required(VERSION 2.8)
 project(zanbase)
 
@@ -14,6 +12,7 @@ include(CheckLibraryExists)
 enable_testing()
 include(Dart)
 
+# Version.
 set(zanbase_VERSION_MAJOR 1)
 set(zanbase_VERSION_MINOR 0)
 set(zanbase_VERSION_PATCH 0)
@@ -59,7 +58,31 @@ add_subdirectory(src)
 add_subdirectory(tests)
 
 
-# Install
+# Docs
+option(GEN_DOC "Create and install the HTML based API documentation (requires Doxygen)" ON)
+if(GEN_DOC)
+  find_package(Doxygen)
+  if(NOT DOXYGEN_FOUND)
+    message(FATAL_ERROR "Doxygen is needed to build the documentation.")
+  endif(NOT DOXYGEN_FOUND)
+  set(doxyfile_in  ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in)
+  set(doxyfile ${PROJECT_BINARY_DIR}/Doxyfile)
+  set(doxy_html_index_file ${CMAKE_CURRENT_BINARY_DIR}/docs/gen/html/index.html )
+  set(doxy_output_root ${CMAKE_CURRENT_BINARY_DIR}/docs/gen)
+  set(doxy_input ${PROJECT_SOURCE_DIR}/src)
+  #set(doxy_extra_files ${CMAKE_CURRENT_SOURCE_DIR}/mainpage.dox) # Pasted into Doxyfile.in                                 
+  
+  configure_file( ${doxyfile_in} ${doxyfile} @ONLY )
+  add_custom_command( OUTPUT ${doxy_html_index_file}  
+    COMMAND ${DOXYGEN_EXECUTABLE} ${doxyfile} 
+    MAIN_DEPENDENCY ${doxyfile} ${doxyfile_in} ${doxy_extra_files} COMMENT "Generating HTML documentation")
+                                                 
+  add_custom_target(doc ALL DEPENDS ${doxy_html_index_file} )
+
+  install(DIRECTORY ${doxy_output_root}/html DESTINATION share/doc )
+  install(DIRECTORY ${doxy_output_root}/man DESTINATION share )
+endif(GEN_DOC)
+                                                                                              
 install (FILES "${PROJECT_BINARY_DIR}/config.h" DESTINATION include/zanbase)
 install (DIRECTORY "${PROJECT_SOURCE_DIR}/include/" DESTINATION include/zanbase FILES_MATCHING PATTERN "*.h")
 

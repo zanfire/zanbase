@@ -24,6 +24,13 @@ add_library(zanbase STATIC
   base/zStringTokenizer.cpp
 )
 
-install (TARGETS zanbase DESTINATION lib)
 
+
+AUX_SOURCE_DIRECTORY(net zanbase_net_SOURCES)
+add_library(zannet STATIC ${zanbase_net_SOURCES})
+
+
+
+install (TARGETS zanbase DESTINATION lib)
+install (TARGETS zannet DESTINATION lib)
 

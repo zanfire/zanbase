@@ -14,6 +14,10 @@
 #cmakedefine01 HAVE_INTTYPES_H
 #cmakedefine01 HAVE_ARPA_INET_H
 #cmakedefine01 HAVE_UNISTD_H
+#cmakedefine01 HAVE_SYS_SOCKET_H
+#cmakedefine01 HAVE_NETINET_IN_H
+
+
  
 /* Define to the version of this package. */
 #define VERSION_MAJOR @zanbase_VERSION_MAJOR@

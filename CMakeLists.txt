@@ -17,6 +17,14 @@ set(zanbase_VERSION_MAJOR 1)
 set(zanbase_VERSION_MINOR 0)
 set(zanbase_VERSION_PATCH 0)
 
+# Tracing
+set(CMAKE_VERBOSE_MAKEFILE ON )
+
+option(ENABLED_FUNC_TRACE "Enable function traceing." OFF)
+if(ENABLED_FUNC_TRACE)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -finstrument-functions")
+endif(ENABLED_FUNC_TRACE)
+
 #
 # Required modules.
 #
@@ -30,7 +38,6 @@ check_include_files(netinet/in.h HAVE_NETINET_IN_H)
 check_include_files(sys/socket.h HAVE_SYS_SOCKET_H)
 
 
-
 #
 # Optional modules.
 #
@@ -40,18 +47,26 @@ if(ENABLED_DMALLOC)
   check_library_exists(dmallocthcxx malloc "" HAVE_LIBDMALLOCTHCXX)
 endif(ENABLED_DMALLOC)
 
+
+option(ENABLED_FUNC_TRACE "Enable function traceing." OFF)
+if(ENABLED_FUNC_TRACE)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -finstrument-functions")
+endif(ENABLED_FUNC_TRACE)
+
+
 configure_file(
     "${PROJECT_SOURCE_DIR}/config.h.in"
     "${PROJECT_BINARY_DIR}/config.h"
 )
 
 include_directories("${PROJECT_BINARY_DIR}")
-include_directories("${PROJECT_SOURCE_DIR}/include")
+include_directories("${PROJECT_SOURCE_DIR}/src/base")
+include_directories("${PROJECT_SOURCE_DIR}/src/net")
 
 
-set(CMAKE_CXX_FLAGS "-g -Wall")
-set(CMAKE_CXX_FLAGS_DEBUG "-gdbb3")
-set(CMAKE_CXX_FLAGS_RELEASE "-O3")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -gdbb3")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
 
 # Subproject
 add_subdirectory(src)

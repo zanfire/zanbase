@@ -19,6 +19,8 @@ bool zThreadTest::execute(int index) {
     case 1: return test_memory();
     case 2: return test_threadid();
     case 3: return test_startfail();
+    case 4: return test_loop();
+    case 5: return test_loop_stop();
     default: return false;
   }
   return false;
@@ -26,7 +28,7 @@ bool zThreadTest::execute(int index) {
 
 
 int zThreadTest::get_num_tests(void) {
-  return 4;
+  return 6;
 }
 
 
@@ -46,6 +48,8 @@ char const* zThreadTest::get_test_name(int index) {
     case 1: return "memory";
     case 2: return "threadid";
     case 3: return "start fail";
+    case 4: return "loop";
+    case 5: return "loop stop";
     default: return "??";
   }
   return "??";
@@ -54,7 +58,7 @@ char const* zThreadTest::get_test_name(int index) {
 
 char const* zThreadTest::get_test_description(int index) {
   return "??";
-}
+}\
 
 
 class ThreadTest : public zRunnable {
@@ -155,3 +159,57 @@ bool zThreadTest::test_startfail(void) {
   return true;
 }
 
+
+class ThreadLoopTest : public zRunnableLoop {
+  public:
+    int _loop_count;
+
+    ThreadLoopTest(int timeout_ms) {
+      _loop_timeout_ms = timeout_ms;
+      _loop_count = 0;
+    }
+    
+    virtual ~ThreadLoopTest(void) {}
+
+    virtual int execute(void* param) {
+      _loop_count++;
+
+      if (_loop_count == 10) stop(false);
+      return 0;
+    }
+};
+
+
+
+bool zThreadTest::test_loop(void) {
+  ThreadLoopTest impl(100);
+
+  zThread* thread = new zThread(&impl);
+  thread->start();
+
+  zThread::sleep(500);
+  impl.stop(true);
+
+  // Check if loop is expected value with a little tolerance.
+  int c = impl._loop_count - 5;
+  if (c < -1 || c > 1) return false;
+  
+  thread->release_reference();
+  return true;
+}
+
+
+bool zThreadTest::test_loop_stop(void) {
+  ThreadLoopTest impl(10);
+
+  zThread* thread = new zThread(&impl);
+  thread->start();
+
+  thread->join();
+
+  if (impl._loop_count != 10) return false;
+  
+  thread->release_reference();
+  return true;
+
+}

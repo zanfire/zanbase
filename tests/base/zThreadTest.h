@@ -47,6 +47,8 @@ protected:
   bool test_join(void);
   bool test_threadid(void);
   bool test_startfail(void);
+  bool test_loop(void);
+  bool test_loop_stop(void);
 };
 
 #endif // ZTHREADEST_H__

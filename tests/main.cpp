@@ -192,3 +192,4 @@ void showHelp(char const* programName, zGetOpt* opt) {
   printf("%s\n", opt->get_help_message().get_buffer());
   printf("Report %s bugs to %s.\n", programName, /*PACKAGE_BUGREPORT*/ "tmp@nodomain.XXX");
 }
+

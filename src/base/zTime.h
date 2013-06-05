@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright 2011 Matteo Valdina
+ * Copyright 2013-2013 Matteo Valdina
  *      
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,25 +14,29 @@
  * limitations under the License.
  *****************************************************************************/
 
-#ifndef ZLOGGERAPPENDERCONSOLE_H__
-#define ZLOGGERAPPENDERCONSOLE_H__
+#ifndef ZTIME_H__
+#define ZTIME_H__
 
-#include "zLoggerAppender.h"
+#include "zCommon.h"
 
-
-/// Implementation of zLoggerAppender that write in the
-/// console.
 /// 
-/// @author Matteo Valdina
-class zLoggerAppenderConsole : public zLoggerAppender {
+class zTime {
+protected:
+  zTime(void);
+  virtual ~zTime(void);
 
 public:
-  zLoggerAppenderConsole(void);
-  virtual ~zLoggerAppenderConsole(void);
+  /// Get current milliseconds (10^-3).
+  static uint32_t current_millis(void);
+  /// Get current microseconds (10^-6).
+  static uint32_t current_micros(void);
+  /// Get current nanoseconds (10^-9).
+  static uint32_t current_nanos(void);
 
-  virtual void line(char const* line);
+
+  /// Get time precision.
+  static uint32_t get_precision(void);
 };
 
 
-#endif // ZLOGGERAPPENDERCONSOLE_H__
-
+#endif // ZTIME_H__

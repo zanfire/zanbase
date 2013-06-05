@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright 2009-2011 Matteo Valdina
+ * Copyright 2009-2013 Matteo Valdina
  *      
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,54 +19,48 @@
 
 #include "zCommon.h"
 
+
+class zEvent;
+
+/// Interface for a runnable object.
+/// The implementor must implement run method to execute somethings.
+/// @remarks If you need a runnable object that execute a loop you should use zRunnableLoop.
 class zRunnable {
 public:
-  zRunnable(void) {}
-  virtual ~zRunnable(void) {}
+  zRunnable(void);
+  virtual ~zRunnable(void);
 
-protected:
-  /// Interface
+  /// This method is called by the executor (ex: zThread).
   virtual int run(void* param) = 0;
 };
 
-
-class zRunnableLoop {
-public:
+/// Interface for a runnable object that it implements a loop. 
+class zRunnableLoop : public zRunnable {
+protected:
+  /// 
   bool _must_continue;
   zEvent* _continue;
-  int _loop_timeout_ms:
+  int _loop_timeout_ms;
+  THREAD_ID _threadID;
+
+
 public:
-  zRunnableLoop(void) {
-    _must_continue = true;
-    _loop_timeout_ms = -1; 
-    _continue = new zEvent(),
-  }
+  zRunnableLoop(void);
+  virtual ~zRunnableLoop(void);
 
-  virtual ~zRunnableLoop(void) {
-    delete _continue;
-  }
-
-protected:
-
-  void stop(void) {
-    _must_continue = false;
-    _event.signal(),
-  }
-
-  virtual int run(void* param) {
-    int ret = 0;
-    while (must_continue) {
-      execute();
-      if (_loop_timeout_ms != 0) {
-        _event.wait(loop_timeout);
-      }
-    }
-    return ret;
-  }
-
-  virtual int execute(void);
+  /// Configure the loop timeout in milliseconds. A value of -1 means an infinite timeout.
+  void set_loop_timeout(int ms);
+  /// Signals to the loop to run, ignoring the timeout.
+  void signal_continue(void);
+  /// It stops the loop of of the run method.
+  void stop(bool sync);
+  /// Function called by the executor (ex: zThread).
+  /// NOTE: This method should not be implemented by derived classes.
+  virtual int run(void* param);
+  /// Interface 
+  /// This method is called every _loop_timeout_ms or when the _continue event is triggered.
+  virtual int execute(void* param) = 0;
 };
-
 
 
 #endif // ZRUNNABLE_H__

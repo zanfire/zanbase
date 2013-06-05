@@ -1,8 +1,16 @@
 # Test stuff.
 
+#if(ENABLED_FUNC_TRACE)
+#  #  set(FUNC_TRACE_CXX_FLAGS "-finstrument-functions")
+#  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${FUNC_TRACE_CXX_FLAGS}")
+#endif(ENABLED_FUNC_TRACE)
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -finstrument-functions")
+
+
 link_directories(${zanbase_BINARY_DIR}/)
 add_executable(tests_runner	
   main.cpp
+  trace.c
   base/zStringTest.cpp
   base/zStrTokTest.cpp
   base/zArrayTest.cpp

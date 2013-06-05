@@ -73,8 +73,8 @@ zThread::~zThread(void) {
 
 void zThread::sleep(int ms) {
 #if defined(WIN32)
-	// TODO: Check if it is precise.
-	Sleep(ms);
+  // TODO: Check if it is precise.
+  Sleep(ms);
 #else
   timespec rentime;
   timespec reqtime;

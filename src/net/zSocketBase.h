@@ -18,11 +18,11 @@
 #define ZSOCKETBASE_H__
 
 #include "zObject.h"
-#include "zSocketAddress.h"
 
+class zSocketAddress;
 
 #if defined(_WIN32)
-  #define SOCKET_DESC void*
+  #define SOCKET_DESC SOCKET
 #elif HAVE_SYS_SOCKET_H
   #include <sys/socket.h>
 

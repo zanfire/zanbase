@@ -28,8 +28,8 @@ class zTestTest : public zTest {
 protected:
 
 public:
-  zTestTest(void);
-  virtual ~zTestTest(void);
+  zTestTest(void) {}
+  virtual ~zTestTest(void) {}
   
   /// zTest implementation.
 

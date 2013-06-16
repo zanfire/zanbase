@@ -23,21 +23,19 @@
 // This define must be placed before Windows.h header inclusion.
 # define  _CRT_SECURE_NO_WARNINGS 1
 
+# include <Winsock2.h>
 # include <Windows.h>
+
 
 // Disable "unreferenced formal parameter"
 # pragma warning( disable : 4100)
 
 // Fast trick to cross-compile between Linux-Win32.
 # define snprintf _snprintf
+#endif
 
-#define PACKAGE_VERSION "x.z.y"
-#define PACKAGE_BUGREPORT "Zan"
-
-#else
 /// Include output of configure script.
 # include "config.h"
-#endif
 
 // NULL define
 #if !defined(NULL)

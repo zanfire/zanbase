@@ -17,7 +17,6 @@
 #ifndef ZSOCKETIP_H__
 #define ZSOCKETIP_H__
 
-#include "zObject.h"
 #include "zSocketBase.h"
 
 

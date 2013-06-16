@@ -30,11 +30,6 @@
 #include <limits.h>
 
 
-#if HAVE_ARPA_INET_H
-# include <arpa/inet.h> // ntohl
-#endif
-
-
 zString::zString(void) {
   _dynamicBuffer = NULL;
   _length = 0;
@@ -349,7 +344,9 @@ zString zString::to_hex(void) {
 zString zString::from_pascal_string(unsigned char const* pascalString, int bufferSize, bool isInNetworkByteOrder) {
   if (bufferSize < 4) return zString();
   uint32_t length = ((uint32_t*)pascalString)[0];
-  length = isInNetworkByteOrder ? ntohl(length) : length;
+  if (isInNetworkByteOrder) {
+    length = (length & 0x00ff0000) << 8| (length & 0xff000000) >> 8 | (length & 0x000000ff) << 8| (length & 0x0000ff00) >> 8;
+  }
   if (bufferSize < (int)(length + 4)) return zString();
   return zString((char*)(pascalString + 4), length);
 }

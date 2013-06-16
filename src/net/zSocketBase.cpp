@@ -15,6 +15,7 @@
  *****************************************************************************/
 
 #include "zSocketBase.h"
+#include "zSocketAddress.h"
 
 
 zSocketBase::zSocketBase(SocketType type) : zObject() {

@@ -29,6 +29,7 @@
 # include <netinet/in.h>
 #endif
 
+#include <Ws2tcpip.h>
 
 class zSocketAddressIPv6 : public zSocketAddress {
 protected:

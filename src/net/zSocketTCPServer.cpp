@@ -27,7 +27,10 @@
 #include "zSocketTCPClient.h"
 
 #include <errno.h>
-#include <netinet/in.h>
+
+#if HAVE_NETINET_IN_H
+# include <netinet/in.h>
+#endif
 
 zSocketTCPServer::zSocketTCPServer(void) : zSocketTCP(), zRunnable() {
   _listener = NULL;
@@ -66,8 +69,7 @@ zSocketBase::SocketError zSocketTCPServer::startListen() {
 zSocketBase::SocketError zSocketTCPServer::stopListen() {
   if (!_thread->running()) {
     _mustStop = true;
-    shutdown(_desc, SHUT_RDWR);
-    //_thread->stop();
+    close();
   }
   return _socketListening ? SOCKET_OK : SOCKET_ERROR_GENERIC;
 }

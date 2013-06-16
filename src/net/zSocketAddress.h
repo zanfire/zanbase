@@ -17,7 +17,7 @@
 #ifndef ZSOCKETADDRESS_H__
 #define ZSOCKETADDRESS_H__
 
-#include "zObject.h"
+#include "zCommon.h"
 #include "zString.h"
 
 #if HAVE_INTTYPES_H
@@ -43,15 +43,19 @@ public:
   zSocketAddress(AddressType type);
   virtual ~zSocketAddress(void);
 
-  AddressType getType(void) { return _type; }
+  AddressType get_type(void) { return _type; }
 
-  virtual sockaddr* getSocketAddr(void) const = 0;
-  virtual int getSocketAddrLen(void) const = 0;
+  virtual sockaddr* get_socket_addr(void) const = 0;
+  virtual int get_socket_addr_len(void) const = 0;
 
   virtual zSocketAddress* clone(void) const = 0;
-  virtual zString getAddressAsString(void) const = 0;
+  virtual zString get_address_as_string(void) const = 0;
 
-  static zSocketAddress* createSocketAddressFromString(zString const& str, int port);
+  ///
+  /// Factory methods
+  ///
+
+  static zSocketAddress* create_socket_address_from_string(zString const& str, int port);
 };
 
 

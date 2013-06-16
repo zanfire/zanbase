@@ -27,11 +27,11 @@ protected:
 
 public:
   /// Get current milliseconds (10^-3).
-  static uint32_t current_millis(void);
+  static uint64_t current_millis(void);
   /// Get current microseconds (10^-6).
-  static uint32_t current_micros(void);
+  static uint64_t current_micros(void);
   /// Get current nanoseconds (10^-9).
-  static uint32_t current_nanos(void);
+  static uint64_t current_nanos(void);
 
 
   /// Get time precision.

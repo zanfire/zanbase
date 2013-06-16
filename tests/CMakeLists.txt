@@ -10,7 +10,6 @@
 link_directories(${zanbase_BINARY_DIR}/)
 add_executable(tests_runner	
   main.cpp
-  trace.c
   base/zStringTest.cpp
   base/zStrTokTest.cpp
   base/zArrayTest.cpp
@@ -19,7 +18,10 @@ add_executable(tests_runner
   base/zTestTest.cpp
   base/zGetOptTest.cpp
   base/zBufferTest.cpp
+  net/zSocketUDPTest.cpp
 )
+
+# trace.c on Linux should be compiled and if tracing is enabled.
 
 target_link_libraries(tests_runner zanbase)
 target_link_libraries(tests_runner ${CMAKE_THREAD_LIBS_INIT} )

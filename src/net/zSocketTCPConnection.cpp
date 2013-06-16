@@ -23,7 +23,11 @@
 
 #include <errno.h>
 #include <sys/types.h>
-#include <sys/socket.h>
+
+#if HAVE_SYS_SOCKET_H
+#  include <sys/socket.h>
+#endif
+
 
 zSocketTCPConnection::zSocketTCPConnection(zSocketTCPClient* socket) : zObject(), zRunnable() {
   _socket = socket;
@@ -50,8 +54,8 @@ void zSocketTCPConnection::setListener(zSocketTCPConnectionListener* listener) {
 }
 
 
-int zSocketTCPConnection::writeBytes(unsigned char* buffer, int bufferSize) {
-  int res = send(_socket->getDescriptor(), buffer, bufferSize, 0);
+int zSocketTCPConnection::writeBytes(const unsigned char* buffer, int bufferSize) {
+  int res = send(_socket->getDescriptor(), (const char*)buffer, bufferSize, 0);
 
   if (res == -1) {
     if (errno == EADDRINUSE) {
@@ -75,7 +79,7 @@ int zSocketTCPConnection::run(void* param) {
   unsigned char buffer[64 * 1024];
 
   while (!_mustStop) {
-    int readBytes = recv(_socket->getDescriptor(), buffer, sizeof(buffer), 0);
+    int readBytes = recv(_socket->getDescriptor(), (char*)buffer, sizeof(buffer), 0);
     if (readBytes > 0) {
       zScopeMutex scope(_mtx);
       if (_listener != NULL) _listener->onIncomingData(buffer, readBytes);

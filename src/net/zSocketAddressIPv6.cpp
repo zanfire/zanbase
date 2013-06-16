@@ -17,8 +17,10 @@
 #include "zSocketAddressIPv6.h"
 
 #include <string.h>
-#include <arpa/inet.h>
 
+#if HAVE_ARPA_INET_H
+# include <arpa/inet.h>
+#endif
 
 zSocketAddressIPv6::zSocketAddressIPv6(in6_addr address) : zSocketAddress(ADDRESS_TYPE_IPv6) {
   memset(&_sockaddr, 0x0, sizeof(sockaddr_in6));

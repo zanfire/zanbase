@@ -31,7 +31,7 @@ class zSocketTCPClient : public zSocketTCP {
 protected:
   zSocketAddress* _remoteAddress;
 public:
-  zSocketTCPClient(SOCKET_DESC desc, zSocketAddress* localAddress, sockaddr const& fromAddr, socklen_t fromAddrLen);
+  zSocketTCPClient(SOCKET_DESC desc, zSocketAddress* localAddress, sockaddr const& fromAddr, int fromAddrLen);
   virtual ~zSocketTCPClient(void);
 };
 

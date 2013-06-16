@@ -15,12 +15,15 @@
  *****************************************************************************/
 
 #include "zSocketAddressIPv4.h"
-
 #include "zStringBuilder.h"
 
 #include <string.h>
-#include <arpa/inet.h>
 
+#include <Ws2tcpip.h>
+
+#if HAVE_ARPA_INET_H
+# include <arpa/inet.h>
+#endif
 
 zSocketAddressIPv4::zSocketAddressIPv4(uint32_t address, uint16_t port) : zSocketAddress(ADDRESS_TYPE_IPv4) {
   memset(&_sockaddr, 0x0, sizeof(sockaddr_in));

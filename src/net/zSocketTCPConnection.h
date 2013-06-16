@@ -41,7 +41,7 @@ public:
   virtual ~zSocketTCPConnection(void);
 
   void setListener(zSocketTCPConnectionListener* listener);
-  int writeBytes(unsigned char* buffer, int bufferSize);
+  int writeBytes(const unsigned char* buffer, int bufferSize);
 
 protected:
   // zRunnable implementation

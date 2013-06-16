@@ -25,9 +25,9 @@
 #if HAVE_SYS_SOCKET_H
 #  include <sys/socket.h>
 #endif
-
-#include <netinet/in.h>
-
+#if HAVE_NETINET_IN_H
+#  include <netinet/in.h>
+#endif
 
 class zSocketAddressIPv4 : public zSocketAddress {
 protected:

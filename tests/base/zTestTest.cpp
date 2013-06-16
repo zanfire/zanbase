@@ -2,13 +2,6 @@
 
 #include "zLogger.h"
 
-zTestTest::zTestTest(void) {
-}
-
-
-zTestTest::~zTestTest(void) {
-}
-
 
 bool zTestTest::execute(int index) {
   switch(index) {

@@ -43,11 +43,11 @@
 #include "base/zBufferTest.h"
 #include "base/zGetOptTest.h"
 
-#if defined(ENABLED_DMALLOC)
+#if ENABLED_DMALLOC
 #  include <dmalloc.h>
 #endif
 
-#if defined(WIN32) && defined(DEBUG)
+#if defined(WIN32) && DEBUG
 # define _CRTDBG_MAP_ALLOC
 # include <stdlib.h>
 # include <crtdbg.h>

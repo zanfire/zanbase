@@ -38,3 +38,5 @@ tags
 /Testing/
 /*.cmake
 /CMakeCache.txt
+/ipch/
+/Win32/

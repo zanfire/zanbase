@@ -9,9 +9,15 @@ zTime::~zTime(void) {
 }
 
 
-uint64_t zTime::current_nanos(void) {
+uint64_t zTime::current_millis(void) {
+  return 0;
+}
 
-{uint64_t zTime::current_nanos(void) {
+
+uint64_t zTime::current_micros(void) {
+  return 0;
+}
+  
 
 uint64_t zTime::current_nanos(void) {
   uint64_t res = 0;
@@ -21,7 +27,7 @@ uint64_t zTime::current_nanos(void) {
 
   res = t.tv_sec * 10e9 + t.tv_nsec;
 #else
-  Break the build !!!
+  // TODO: Impl.
 #endif
   return res;
 }

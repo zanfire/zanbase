@@ -3,15 +3,14 @@
 #include "zMutex.h"
 #include "zLogger.h"
 
-//#if HAVE_SYS_TIME_H
+#include <time.h>
+
+#if HAVE_SYS_TIME_H
 # include <sys/time.h>
-//#endif
+#endif
 
 
 zRandom::zRandom(void) {
-  struct timeval t;
-  gettimeofday(&t, NULL);
-
   // initstate_r(t.tv_sec, (char*)(&_randstate), sizeof(_randstate), &_randdata);
   //CHECK_FATAL(ret, "initstate_r");
 }

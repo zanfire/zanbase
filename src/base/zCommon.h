@@ -74,6 +74,9 @@
 #else
   #define ATOMIC_INC(X) __sync_fetch_and_add(&X, 1)
   #define ATOMIC_DEC(X) __sync_fetch_and_sub(&X, 1)
+
+  #define ATOMIC_TEST_AND_SET(X)__sync_lock_test_and_set(X, 1)
+  #define ATOMIC_CLEAR(X) __sync_lock_release(X)
 #endif
 
 

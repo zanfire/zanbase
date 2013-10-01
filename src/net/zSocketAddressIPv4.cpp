@@ -25,6 +25,18 @@
 # include <arpa/inet.h>
 #endif
 
+zSocketAddressIPv4::zSocketAddressIPv4(char const* address, uint16_t port) : zSocketAddress(ADDRESS_TYPE_IPv4) {
+  in_addr str_addr;
+  inet_pton(AF_INET, address, &str_addr);
+  // TODO: Handle error condition.
+
+  memset(&_sockaddr, 0x0, sizeof(sockaddr_in));
+  _sockaddr.sin_family = AF_INET;
+  _sockaddr.sin_addr.s_addr = str_addr.s_addr;
+  _sockaddr.sin_port = htons(port);
+}
+
+
 zSocketAddressIPv4::zSocketAddressIPv4(uint32_t address, uint16_t port) : zSocketAddress(ADDRESS_TYPE_IPv4) {
   memset(&_sockaddr, 0x0, sizeof(sockaddr_in));
   _sockaddr.sin_family = AF_INET;
@@ -64,4 +76,14 @@ zString zSocketAddressIPv4::getAddressAsString(void) const {
     return strb.to_string();
   }
   return zString("");
+}
+
+
+uint32_t zSocketAddressIPv4::get_address(void) {
+  return ntohl(_sockaddr.sin_addr.s_addr);
+}
+
+
+uint16_t zSocketAddressIPv4::get_port(void) {
+  return ntohs(_sockaddr.sin_port);
 }

@@ -27,7 +27,9 @@ public:
   zSocketIP(SocketType type);
   virtual ~zSocketIP(void);
 
-
+protected:
+  virtual SocketError impl_bind(void);
+  virtual SocketError impl_close(void);
 };
 
 #endif // ZSOCKETIP_H__

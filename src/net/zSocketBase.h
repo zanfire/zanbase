@@ -65,6 +65,8 @@ public:
   SocketType getType(void) const { return _type; }
   SOCKET_DESC getDescriptor(void) const { return _desc; }
 
+  bool set_non_blocking(bool blocking);
+
   static char const* getErrorDescription(SocketError error);
 
 protected:

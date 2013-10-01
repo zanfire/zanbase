@@ -22,8 +22,8 @@
 
 class zRunnable;
 class zThreadMain;
+class zMutex;
 
-#include "zMutex.h"
 #include "zEvent.h"
 
 /// A Thread wrapper over the system threads.
@@ -41,7 +41,7 @@ protected:
   // The thread ID.
   THREAD_ID _id;
   void* _app_param;
-  zMutex _mtx_running;
+  zMutex* _mtx_running;
   int _stack_size;
   /// It is the result code of the thread function.
   int _result;

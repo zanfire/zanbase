@@ -1,4 +1,6 @@
 #include "zThread.h"
+
+#include "zMutex.h"
 #include "zRunnable.h"
 
 #include <stdio.h>
@@ -19,14 +21,14 @@ public:
   virtual ~zThreadMain(void) {}
 
   void main(zThread* th) {
-    th->_mtx_running.lock();
+    th->_mtx_running->lock();
     th->_id = zThread::get_current_thread_id();
     th->_is_running = true;
     // Init finished.
     th->_ev_start.signal();
     th->_result = th->_runnable->run(th->_app_param);
     th->_is_running = false;
-    th->_mtx_running.unlock();
+    th->_mtx_running->unlock();
     // After this the th instance can be destroied. Pay attention.
   }
 };
@@ -52,6 +54,7 @@ namespace Protected  {
 
 
 zThread::zThread(zRunnable* runnable, int stack_size) : zObject() {
+  _mtx_running = new zMutex();
   _result = 0;
   _runnable = runnable;
   _app_param = NULL;
@@ -68,6 +71,8 @@ zThread::zThread(zRunnable* runnable, int stack_size) : zObject() {
 zThread::~zThread(void) {
   // Join to the main thread to avoid race-condition with internal data.
   join();
+
+  delete _mtx_running;
 }
 
 
@@ -121,7 +126,7 @@ bool zThread::start(void* param) {
 
 
 int zThread::join(void) { 
-  _mtx_running.sync();
+  _mtx_running->sync();
   return _result;
 }
 

@@ -18,6 +18,7 @@
 #define ZMUTEX_H__
 
 #include "zCommon.h"
+#include "zThread.h"
 
 #if defined(_WIN32)
   #define MUTEX_TYPE CRITICAL_SECTION
@@ -29,7 +30,10 @@
 class zMutex {
   
 private:
+  // recursion check.
   int _locked_count;
+  THREAD_ID _owner;
+
   MUTEX_TYPE _mutex;
 
 public:

@@ -10,7 +10,12 @@ zMutex::zMutex(void) {
 #else
   pthread_mutexattr_t mutexAttr;
   pthread_mutexattr_init(&mutexAttr);
-  pthread_mutexattr_settype(&mutexAttr, PTHREAD_MUTEX_RECURSIVE);
+  // Bad performance ...
+  //pthread_mutexattr_settype(&mutexAttr, PTHREAD_MUTEX_RECURSIVE);
+  
+  pthread_mutexattr_settype(&mutexAttr, PTHREAD_MUTEX_ADAPTIVE_NP);
+
+  
   pthread_mutex_init(&_mutex, &mutexAttr);
   pthread_mutexattr_destroy(&mutexAttr);
 #endif
@@ -32,8 +37,11 @@ void zMutex::lock() {
 #if defined(_WIN32)
   EnterCriticalSection(&_mutex);
 #else
-  pthread_mutex_lock(&_mutex);
+  if (_owner != zThread::get_current_thread_id()) {
+    pthread_mutex_lock(&_mutex);
+  }
 #endif
+  _owner = zThread::get_current_thread_id();
   _locked_count++;
 }
 
@@ -41,9 +49,14 @@ void zMutex::lock() {
 void zMutex::unlock() {
   _locked_count--;
 #if defined(_WIN32)
+  _owner = 0;
   LeaveCriticalSection(&_mutex);
 #else
-  pthread_mutex_unlock(&_mutex);
+  if (_locked_count == 0) {
+    _owner = 0;
+    pthread_mutex_unlock(&_mutex);
+  }
+  //pthread_mutex_unlock(&_mutex);
 #endif
 }
 

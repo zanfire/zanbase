@@ -35,6 +35,7 @@ protected:
 
 
 public:
+  zSocketAddressIPv4(char const* address, uint16_t port);
   zSocketAddressIPv4(uint32_t address, uint16_t port);
   zSocketAddressIPv4(sockaddr_in const& addr);
 
@@ -46,6 +47,9 @@ public:
   virtual int getSocketAddrLen(void) const { return sizeof(_sockaddr); }
 
   virtual zString getAddressAsString(void) const;
+
+  uint32_t get_address(void);
+  uint16_t get_port(void);
 };
 
 

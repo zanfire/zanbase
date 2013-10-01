@@ -26,6 +26,10 @@ public:
   zSocketUDP(void);
   virtual ~zSocketUDP(void);
 
+
+  int writeBytes(unsigned char* buffer, int bufferSize, uint32_t ip, uint16_t port);
+protected:
+  virtual zSocketBase::SocketError impl_create(void);
 };
 
 #endif // ZSOCKETUDP_H__

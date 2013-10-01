@@ -1,21 +1,7 @@
-/******************************************************************************
- * Copyright 2011 Matteo Valdina
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *****************************************************************************/
-
 #include "zSocketIP.h"
 
+
+#include <errno.h>
 
 zSocketIP::zSocketIP(SocketType type) : zSocketBase(type) {
 }
@@ -24,3 +10,31 @@ zSocketIP::zSocketIP(SocketType type) : zSocketBase(type) {
 zSocketIP::~zSocketIP(void) {
 }
 
+
+
+zSocketBase::SocketError zSocketIP::impl_bind(void) {
+  if (_desc == INVALID_DESCRIPTOR) return SOCKET_ERROR_CREATE_DESC;
+  if (_bindAddress->getType() != zSocketAddress::ADDRESS_TYPE_IPv4 &&
+      _bindAddress->getType() != zSocketAddress::ADDRESS_TYPE_IPv6) {
+    return SOCKET_ERROR_INVALID_ADDRESS;
+  }
+
+  int res = bind(_desc, _bindAddress->getSocketAddr(), _bindAddress->getSocketAddrLen());
+  if (res == 0) {
+    return SOCKET_OK;
+  }
+  else {
+    if (errno == EADDRINUSE) return SOCKET_ERROR_BINDTO_ADDRESS_ALREADY_IN_USE;
+    if (errno == EACCES) return SOCKET_ERROR_BINDTO_NO_PERMISSION;
+    return SOCKET_ERROR_BINDTO;
+  }
+}
+
+
+zSocketBase::SocketError zSocketIP::impl_close(void) {
+  int ret = shutdown(_desc, SHUT_RDWR);
+  if (ret == -1) {
+    // TODO: Handle errors.
+  }
+  return SOCKET_OK;
+}

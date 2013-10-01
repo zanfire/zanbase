@@ -42,6 +42,9 @@
 #include "base/zFileTest.h"
 #include "base/zBufferTest.h"
 #include "base/zGetOptTest.h"
+#include "base/zTimeTest.h"
+
+#include "net/zSenderTest.h"
 
 #if ENABLED_DMALLOC
 #  include <dmalloc.h>
@@ -144,6 +147,9 @@ int main(int argc, char const** argv) {
   tester->add(new zFileTest());
   tester->add(new zBufferTest());
   tester->add(new zGetOptTest());
+  tester->add(new zTimeTest());
+
+  tester->add(new zSenderTest());
 
   // Execute tests.
   bool result = false;

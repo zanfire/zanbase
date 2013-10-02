@@ -19,10 +19,12 @@
 
 #include <string.h>
 
-#include <Ws2tcpip.h>
+#if defined(WIN32)
+#  include <Ws2tcpip.h>
+#endif
 
 #if HAVE_ARPA_INET_H
-# include <arpa/inet.h>
+#  include <arpa/inet.h>
 #endif
 
 zSocketAddressIPv4::zSocketAddressIPv4(char const* address, uint16_t port) : zSocketAddress(ADDRESS_TYPE_IPv4) {
@@ -59,12 +61,12 @@ zSocketAddress* zSocketAddressIPv4::clone(void) const {
   return new zSocketAddressIPv4(_sockaddr);
 }
 
-sockaddr* zSocketAddressIPv4::getSocketAddr(void) const {
+sockaddr* zSocketAddressIPv4::get_socket_addr(void) const {
   return (sockaddr*)&_sockaddr;
 }
 
 
-zString zSocketAddressIPv4::getAddressAsString(void) const {
+zString zSocketAddressIPv4::get_address_as_string(void) const {
 
   char dst[1024];
   char const* res = inet_ntop(AF_INET, (void*)&(_sockaddr.sin_addr), dst, 1024);

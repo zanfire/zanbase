@@ -18,13 +18,17 @@ add_executable(tests_runner
   base/zTestTest.cpp
   base/zGetOptTest.cpp
   base/zBufferTest.cpp
-  net/zSocketUDPTest.cpp
+  base/zTimeTest.cpp
+  net/zSenderTest.cpp
 )
 
 # trace.c on Linux should be compiled and if tracing is enabled.
 
 target_link_libraries(tests_runner zanbase)
+target_link_libraries(tests_runner zannet)
 target_link_libraries(tests_runner ${CMAKE_THREAD_LIBS_INIT} )
 
-# Test
+if(UNIX AND NOT APPLE)
+  target_link_libraries(tests_runner rt)
+endif(UNIX AND NOT APPLE)
 

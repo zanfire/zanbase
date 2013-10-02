@@ -36,12 +36,12 @@ zSocketAddress* zSocketAddressIPv6::clone(void) const {
   return new zSocketAddressIPv6(_sockaddr.sin6_addr);
 }
 
-sockaddr* zSocketAddressIPv6::getSocketAddr(void) const {
+sockaddr* zSocketAddressIPv6::get_socket_addr(void) const {
   return (sockaddr*)&_sockaddr;
 }
 
 
-zString zSocketAddressIPv6::getAddressAsString(void) const {
+zString zSocketAddressIPv6::get_address_as_string(void) const {
 
   char dst[1024];
   char const* res = inet_ntop(AF_INET6, (void*)&(_sockaddr.sin6_addr), dst, 1024);

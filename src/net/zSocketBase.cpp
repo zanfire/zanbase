@@ -37,9 +37,12 @@ zSocketBase::SocketError zSocketBase::close(void) {
 
 
 bool zSocketBase::set_non_blocking(bool blocking) {
-  
-  fcntl(_desc, F_SETFL, O_NONBLOCK);
-  return true;
+  int flags = fcntl(_desc, F_GETFL);
+  if (flags != -1) {
+    flags = blocking ? flags & ~O_NONBLOCK : flags | O_NONBLOCK;
+    fcntl(_desc, F_SETFL, flags);
+  }
+  return false;
 }
 
 

@@ -10,12 +10,12 @@ zTime::~zTime(void) {
 
 
 uint64_t zTime::current_millis(void) {
-  return 0;
+  return current_nanos() / 10e9;
 }
 
 
 uint64_t zTime::current_micros(void) {
-  return 0;
+  return current_nanos() / 10e6;
 }
   
 
@@ -25,7 +25,7 @@ uint64_t zTime::current_nanos(void) {
   timespec t;
   clock_gettime(CLOCK_MONOTONIC, &t);
 
-  res = t.tv_sec * 10e9 + t.tv_nsec;
+  res = t.tv_sec * 10e12 + t.tv_nsec;
 #else
   // TODO: Impl.
 #endif

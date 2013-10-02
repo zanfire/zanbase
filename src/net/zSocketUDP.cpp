@@ -1,5 +1,7 @@
 #include "zSocketUDP.h"
 
+#include "zSocketAddress.h"
+
 #include <string.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
@@ -36,10 +38,10 @@ int zSocketUDP::writeBytes(unsigned char* buffer, int bufferSize, uint32_t ip, u
 
 zSocketBase::SocketError zSocketUDP::impl_create(void) {
   int domain = -1;
-  if (_bindAddress->getType() == zSocketAddress::ADDRESS_TYPE_IPv4) {
+  if (_bindAddress->get_type() == zSocketAddress::ADDRESS_TYPE_IPv4) {
     domain = AF_INET;
   }
-  else if (_bindAddress->getType() == zSocketAddress::ADDRESS_TYPE_IPv6) {
+  else if (_bindAddress->get_type() == zSocketAddress::ADDRESS_TYPE_IPv6) {
     domain = AF_INET6;
   }
   else {

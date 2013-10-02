@@ -24,7 +24,7 @@ zSocketAddress::~zSocketAddress() {
 }
 
 
-zSocketAddress* zSocketAddress::createSocketAddressFromString(zString const& str, int port) {
+zSocketAddress* zSocketAddress::create_socket_address_from_string(zString const& str, int port) {
   in_addr addr;
   int res = inet_pton(AF_INET, str.get_buffer(), &addr);
   if (res == 1) {

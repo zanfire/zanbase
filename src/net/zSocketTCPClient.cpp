@@ -7,7 +7,7 @@
 zSocketTCPClient::zSocketTCPClient(SOCKET_DESC desc, zSocketAddress* localAddress, sockaddr const& fromAddr, int fromAddrLen) {
   _desc = desc;
   _bindAddress = localAddress->clone();
-  if (localAddress->getType() == zSocketAddress::ADDRESS_TYPE_IPv4) {
+  if (localAddress->get_type() == zSocketAddress::ADDRESS_TYPE_IPv4) {
     sockaddr_in* addr = (sockaddr_in*)&fromAddr;
     _remoteAddress = new zSocketAddressIPv4(*addr);
   }

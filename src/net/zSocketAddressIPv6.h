@@ -29,7 +29,9 @@
 # include <netinet/in.h>
 #endif
 
-#include <Ws2tcpip.h>
+#if defined(WIN32)
+#  include <Ws2tcpip.h>
+#endif
 
 class zSocketAddressIPv6 : public zSocketAddress {
 protected:
@@ -42,10 +44,10 @@ public:
 
   virtual zSocketAddress* clone(void) const;
 
-  virtual sockaddr* getSocketAddr(void) const;
-  virtual int getSocketAddrLen(void) const { return sizeof(_sockaddr); }
+  virtual sockaddr* get_socket_addr(void) const;
+  virtual int get_socket_addr_len(void) const { return sizeof(_sockaddr); }
 
-  virtual zString getAddressAsString(void) const;
+  virtual zString get_address_as_string(void) const;
 };
 
 

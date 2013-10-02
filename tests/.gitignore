@@ -1,3 +1,4 @@
 /Makefile
 /CMakeFiles/
 /*.cmake
+/tests_runner
